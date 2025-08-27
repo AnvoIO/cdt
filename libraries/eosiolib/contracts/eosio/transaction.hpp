@@ -69,7 +69,7 @@ namespace eosio {
       /**
        * Construct a new transaction_header
        *
-       * @brief Construct a new transaction_header object initialising the transaction header expiration to now + 60 seconds
+       * @brief Construct a new transaction_header object
        */
       transaction_header( time_point_sec exp = time_point_sec{} )
          :expiration(exp)
