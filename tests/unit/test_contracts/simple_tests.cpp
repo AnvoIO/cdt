@@ -1,5 +1,5 @@
 #include <eosio/eosio.hpp>
-#include <eosio/transaction.hpp>
+#include <eosio/deferred_transaction.hpp>
 #include <eosio/bitset.hpp>
 
 #include "transfer.hpp" 
@@ -52,7 +52,7 @@ class [[eosio::contract]] simple_tests : public contract {
 
       [[eosio::action]] 
       void testd(name nm) {
-         transaction t;
+         deferred_transaction t;
          action act;
          act.account = "other"_n;
          act.name    = "testc"_n;
