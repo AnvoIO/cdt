@@ -38,9 +38,6 @@ using jsoncons::ojson;
 
 namespace core_net::cdt {
 
-   const version_t bitset_min_version{1,3};
-   const version_t sync_calls_min_version{1,3};
-
    class abigen : public generation_utils {
       std::set<std::string> checked_actions;
       public:

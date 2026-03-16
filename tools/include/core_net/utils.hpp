@@ -163,7 +163,6 @@ struct environment {
 namespace eosio { namespace cdt {
    using core_net::cdt::char_to_symbol;
    using core_net::cdt::string_to_name;
-   using core_net::cdt::to_hash_id;
    using core_net::cdt::environment;
    using core_net::cdt::whereami;
 }} // ns eosio::cdt
