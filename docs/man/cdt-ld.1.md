@@ -2,11 +2,11 @@
 title: CDT-LD
 section: 1
 header: Contract Development Toolkit (CDT)
-footer: AntelopeIO
+footer: Anvo-Network
 date: April 14, 2023
 ---
 # NAME
-cdt-ld - Antelope smart contract WebAssembly linker
+cdt-ld - Anvo Network smart contract WebAssembly linker
 
 # SYNOPSIS
 
@@ -15,7 +15,7 @@ cdt-ld - Antelope smart contract WebAssembly linker
 # DESCRIPTION
 
 **cdt-ld**  Is a compiled smart contract linker which creates WebAssemply code for 
-execution in Antelope block chain virtual machines.  
+execution in Anvo Network block chain virtual machines.  
 
 # OPTIONS
 
@@ -113,10 +113,10 @@ execution in Antelope block chain virtual machines.
 
 # BUGS
 
-Please submit bug reports online at https://github.com/AntelopeIO/cdt/issues
+Please submit bug reports online at https://github.com/Anvo-Network/cdt/issues
 
 # SEE ALSO
 
-For more details consult the full documentation and sources https://github.com/AntelopeIO/cdt
+For more details consult the full documentation and sources https://github.com/Anvo-Network/cdt
 
 

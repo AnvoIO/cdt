@@ -16,7 +16,7 @@ See the following code reference:
 
 Make sure you have the following prerequisites in place:
 
-* An Antelope development environment, for details consult the [Documentation Portal](https://docs.eosnetwork.com/docs/latest/).
+* An Anvo Network development environment, for details consult the [Documentation Portal](https://docs.eosnetwork.com/docs/latest/).
 
 ## Procedure
 
@@ -24,12 +24,12 @@ A singleton uses a single multi-index table to store named objects of various ty
 
 ### 1. Preparation And Initialization
 
-Include the `eosio.hpp` and `singleton.hpp` headers and declare the `eosio` namespace usage
+Include the `core_net.hpp` and `singleton.hpp` headers and declare the `core_net` namespace usage
 
    ```cpp
-   #include <eosio/eosio.hpp>
-   #include <eosio/singleton.hpp>
-   using namespace eosio;
+   #include <core_net/core_net.hpp>
+   #include <core_net/singleton.hpp>
+   using namespace core_net;
    ```
 
 ### 2. Define The Table Data Structure
@@ -45,14 +45,14 @@ Define the data structure for the multi-index table:
 
 ### 3. Define A Singleton Type Alias
 
-For ease of use, define a type alias `singleton_type` based on the `eosio::singleton` template type, parametarized with a random name `"testtable"` and the `testtable` data structure. The names must adhere to `Antelope` account name restrictions.
+For ease of use, define a type alias `singleton_type` based on the `core_net::singleton` template type, parametarized with a random name `"testtable"` and the `testtable` data structure. The names must adhere to Anvo Network account name restrictions.
 
    ```diff
    struct [[eosio::table]] testtable {
       name primary_value;
       uint64_t secondary_value;
    };
-   +using singleton_type = eosio::singleton<"testtable"_n, testtable>;
+   +using singleton_type = core_net::singleton<"testtable"_n, testtable>;
    ```
 
 ### 4. Define The Singleton Instance
@@ -65,7 +65,7 @@ Define the singleton table instance as a data member of type `singleton_type`.
       uint64_t secondary_value;
    };
 
-   using singleton_type = eosio::singleton<"testtable"_n, testtable>;
+   using singleton_type = core_net::singleton<"testtable"_n, testtable>;
    +singleton_type singleton_instance;
    ```
 
@@ -87,9 +87,9 @@ Now you have defined and initialized a singleton as a data member for the smart 
 __singleton_example.hpp__
 
 ```cpp
-#include <eosio/eosio.hpp>
-#include <eosio/singleton.hpp>
-using namespace eosio;
+#include <core_net/core_net.hpp>
+#include <core_net/singleton.hpp>
+using namespace core_net;
 
 class [[eosio::contract]] singleton_example : public contract {
    public:
@@ -110,7 +110,7 @@ class [[eosio::contract]] singleton_example : public contract {
          uint64_t primary_key() const { return primary_value.value; }
       } testtablerow;
 
-      using singleton_type = eosio::singleton<"testtable"_n, testtable>;
+      using singleton_type = core_net::singleton<"testtable"_n, testtable>;
       singleton_type singleton_instance;
 
       using set_action = action_wrapper<"set"_n, &singleton_example::set>;
@@ -134,19 +134,19 @@ __singleton_example.cpp__
 
 [[eosio::action]] void singleton_example::get( ) {
    if (singleton_instance.exists())
-      eosio::print(
+      core_net::print(
          "Value stored for: ", 
          name{singleton_instance.get().primary_value.value},
          " is ",
          singleton_instance.get().secondary_value,
          "\n");
    else
-      eosio::print("Singleton is empty\n");
+      core_net::print("Singleton is empty\n");
 }
 ```
 
 [[info | Full example location]]
-| A full example project demonstrating the instantiation and usage of singleton can be found [here](https://github.com/AntelopeIO/cdt/blob/main/examples/multi_index_example).
+| A full example project demonstrating the instantiation and usage of singleton can be found [here](https://github.com/Anvo-Network/cdt/blob/main/examples/multi_index_example).
 
 ## Summary
 

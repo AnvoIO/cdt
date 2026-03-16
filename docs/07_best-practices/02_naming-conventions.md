@@ -2,11 +2,11 @@
 content_title: Naming conventions
 ---
 
-When implementing Antelope smart contracts and when storing data in an Antelope blockchain, it is important to follow the established Antelope conventions for naming accounts, actions, tables, etc.
+When implementing Anvo Network smart contracts and when storing data in an Anvo Network blockchain, it is important to follow the established Anvo Network conventions for naming accounts, actions, tables, etc.
 
-## Antelope names
+## Anvo Network names
 
-*  Applies to all Antelope encoded names (accounts, actions, tables, etc.)
+*  Applies to all Anvo Network encoded names (accounts, actions, tables, etc.)
 *  Encoded as a 64-bit unsigned integer (`uint64_t`) on the blockchain.
 *  First 12 characters, if any, encoded in `base32` using characters: `.`, `1-5`, `a-z`
 *  13th character, if applicable, encoded in `base16` using characters: `.`, `1-5`, `a-j`
@@ -34,21 +34,21 @@ When implementing Antelope smart contracts and when storing data in an Antelope 
 
 The figure below showcases a 12 character string formatted into a 64-bit unsigned integer. Note: the 13th char, if any, contains 2<sup>4</sup> = 16 cases per 1 digit (char): 1 (`.`) + 5 (`1-5`) + 10 (`a-j`).
 
-![](naming-conventions-format.png "Antelope name format")
+![](naming-conventions-format.png "Anvo Network name format")
 
 ## Encoding and decoding
 
-Antelope name objects can be created, encoded, and decoded via the `eosio::name` class.
+Anvo Network name objects can be created, encoded, and decoded via the `core_net::name` class.
 
-1. To encode an `std::string` into an Antelope name object, use the appropriate `eosio::name()` constructor.
-2. To encode a `char *` string literal into an Antelope name object, you can also use the `""_n` operator.
-3. To decode an Antelope name object into an `std::string`, use the `eosio::to_string()` function.
+1. To encode an `std::string` into an Anvo Network name object, use the appropriate `core_net::name()` constructor.
+2. To encode a `char *` string literal into an Anvo Network name object, you can also use the `""_n` operator.
+3. To decode an Anvo Network name object into an `std::string`, use the `core_net::to_string()` function.
 
 ### Examples
 
 ```cpp
-auto eosio_user = eosio::name{user};  //encodes user string to eosio::name object
-auto user_str = user_name_obj.to_string(); //decodes eosio::name obj to string
-auto standard_account = "standardname"_n;  //encodes literal string to eosio::name
-auto non_standard_account = ".standard"_n; //encodes literal string to eosio::name
+auto eosio_user = core_net::name{user};  //encodes user string to core_net::name object
+auto user_str = user_name_obj.to_string(); //decodes core_net::name obj to string
+auto standard_account = "standardname"_n;  //encodes literal string to core_net::name
+auto non_standard_account = ".standard"_n; //encodes literal string to core_net::name
 ```

@@ -2,13 +2,13 @@
 content_title: Debugging a smart contract
 ---
 
-In order to be able to debug your smart contract, you will need to setup a local nodeos node. This local nodeos node can be run as separate private testnet or as an extension of a public testnet.  This local node also needs to be run with the contracts-console option on, either `--contracts-console` via the command line or `contracts-console = true` via the config.ini and/or by setting up logging on your running nodeos node and checking the output logs. See below for details on logging.
+In order to be able to debug your smart contract, you will need to setup a local core_netd node. This local core_netd node can be run as separate private testnet or as an extension of a public testnet.  This local node also needs to be run with the contracts-console option on, either `--contracts-console` via the command line or `contracts-console = true` via the config.ini and/or by setting up logging on your running core_netd node and checking the output logs. See below for details on logging.
 
-When you are creating your smart contract for the first time, it is recommended to test and debug your smart contract on a private testnet first, since you have full control of the whole blockchain and can easily add suitable logging. This enables you to have unlimited amount of eos needed and you can just reset the state of the blockchain whenever you want. When it is ready for production, debugging  on the public testnet (or official testnet) can be done by connecting your local nodeos to the public testnet (or official testnet) so you can see the log of the testnet in your local nodeos.
+When you are creating your smart contract for the first time, it is recommended to test and debug your smart contract on a private testnet first, since you have full control of the whole blockchain and can easily add suitable logging. This enables you to have unlimited amount of eos needed and you can just reset the state of the blockchain whenever you want. When it is ready for production, debugging  on the public testnet (or official testnet) can be done by connecting your local core_netd to the public testnet (or official testnet) so you can see the log of the testnet in your local core_netd.
 
 The concept is the same, so for the following guide, debugging on the private testnet will be covered.
 
-If you haven't set up your own local nodeos, follow the [DUNE setup guide](https://github.com/AntelopeIO/DUNE#readme). By default, your local nodeos will just run in a private testnet unless you modify the config.ini file to connect with public testnet (or official testnet) nodes.
+If you haven't set up your own local core_netd, follow the [DUNE setup guide](https://github.com/Anvo-Network/DUNE#readme). By default, your local core_netd will just run in a private testnet unless you modify the config.ini file to connect with public testnet (or official testnet) nodes.
 
 # Method
 
@@ -47,7 +47,7 @@ namespace debug {
         account_name to;
         uint64_t amount;
         void print() const {
-            eosio::print("Foo from ", eosio::name(from), " to ", eosio::name(to), " with amount ", amount, "\n");
+            core_net::print("Foo from ", core_net::name(from), " to ", core_net::name(to), " with amount ", amount, "\n");
         }
     };
 }
@@ -61,17 +61,17 @@ extern "C" {
 
     void apply( uint64_t code, uint64_t action ) {
         if (code == N(debug)) {
-            eosio::print("Code is debug\n");
+            core_net::print("Code is debug\n");
             if (action == N(foo)) {
-                 eosio::print("Action is foo\n");
-                debug::foo f = eosio::unpack_action_data<debug::foo>();
+                 core_net::print("Action is foo\n");
+                debug::foo f = core_net::unpack_action_data<debug::foo>();
                if (f.amount >= 100) {
-                    eosio::print("Amount is larger or equal than 100\n");
+                    core_net::print("Amount is larger or equal than 100\n");
                 } else {
-                    eosio::print("Amount is smaller than 100\n");
-                    eosio::print("Increase amount by 10\n");
+                    core_net::print("Amount is smaller than 100\n");
+                    core_net::print("Increase amount by 10\n");
                     f.amount += 10;
-                    eosio::print(f);
+                    core_net::print(f);
                 }
             }
         }
@@ -103,11 +103,11 @@ Deploy it and push an action to it. It is assumed you have a `debug` account cre
 
 ```bash
 $ cdt-cpp -abigen debug.cpp -o debug.wasm
-$ cleos set contract debug CONTRACT_DIR/debug -p youraccount@active
-$ cleos push action debug foo '{"from":"inita", "to":"initb", "amount":10}' --scope debug
+$ core-cli set contract debug CONTRACT_DIR/debug -p youraccount@active
+$ core-cli push action debug foo '{"from":"inita", "to":"initb", "amount":10}' --scope debug
 ```
 
-When you check your local `nodeos` node log, you will see the following lines after the above message is sent.
+When you check your local `core_netd` node log, you will see the following lines after the above message is sent.
 
 ```
 Code is debug

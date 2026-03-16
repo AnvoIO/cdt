@@ -37,7 +37,7 @@ Unexpected input encountered while processing struct 'action_name_here'
 __Possible solution__: You did not specify correctly the parameter when sending the action to the blockchain. When no parameter is needed the command should look like the one below
 
 ```sh
-cleos push action eostutorial1 get '[]' -p eostutorial1@active
+core-cli push action eostutorial1 get '[]' -p eostutorial1@active
 ```
 
 The command above is one way of sending correctly `get` action with no parameters to the blockchain.
@@ -59,7 +59,7 @@ or
 Error 3160009: No wasm file found
 ```
 
-__Possible solution__: Verify that `abi` and `wasm` files exist in the directory specified in the `cleos set contract` command, and that their names match the directory name.
+__Possible solution__: Verify that `abi` and `wasm` files exist in the directory specified in the `core-cli set contract` command, and that their names match the directory name.
 
 ## Action triggers a ram charge which cannot be initiated from a notification
 
@@ -74,7 +74,7 @@ assertion failure with message: singleton does not exist
 pending console output: 
 ```
 
-__Possible solution__: It is possible that you changed the table name? That is the first, of `eosio::name` type, parameter which you passed to the `eosio::template` type alias definition. Or did you change the table structure definition at all? If you need to change the table structure definition there are some limitations and a couple of ways to do it which are explained in the [Data Design and Migration](./07_best-practices/04_data-design-and-migration.md) section.
+__Possible solution__: It is possible that you changed the table name? That is the first, of `core_net::name` type, parameter which you passed to the `core_net::template` type alias definition. Or did you change the table structure definition at all? If you need to change the table structure definition there are some limitations and a couple of ways to do it which are explained in the [Data Design and Migration](./07_best-practices/04_data-design-and-migration.md) section.
 
 ## You successfully re-deployed the contract code, but when you query the table you get the fields of the row values swapped, that is, it appears the values stored in table rows are the same only that they are swapped between fields/columns
 
@@ -95,7 +95,7 @@ __Possible solution__: make sure you have at least 2 cores on the host that exec
 
 ## You can not find the `now()` time function, or the result of the `current_time_point` functions are not what you expected them to be
 
-__Possible solution__: The `now()` function has been replaced by `current_time_point().sec_since_epoch()`, it returns the time in microseconds from 1970 of the `current block` as a time_point. There's also available `current_block_time()` which returns the time in microseconds from 1970 of the `current block` as a `block_timestamp`. Be aware that for time base functions, the assumption is when you call something like `now()` or `current_time()` you will get the exact now/current time, however that is not the case with Antelope, you get __the block time__, and only ever get __the block time__ from the available `sec_since_epoch()` or `current_block_time()` no matter how many times you call it.
+__Possible solution__: The `now()` function has been replaced by `current_time_point().sec_since_epoch()`, it returns the time in microseconds from 1970 of the `current block` as a time_point. There's also available `current_block_time()` which returns the time in microseconds from 1970 of the `current block` as a `block_timestamp`. Be aware that for time base functions, the assumption is when you call something like `now()` or `current_time()` you will get the exact now/current time, however that is not the case with Anvo Network, you get __the block time__, and only ever get __the block time__ from the available `sec_since_epoch()` or `current_block_time()` no matter how many times you call it.
 
 ## You successfully re-deployed the contract code, but when you broadcast one of the contracts methods to the blockchain you get below error message
 
@@ -117,7 +117,7 @@ The below code will print just the first line of the iteration.
   auto index=0;
   for (auto& item : testtab)
   {
-    eosio::print_f("{item %}={%, %, %} \n", ++index, item.test_primary, item.secondary, item.datum);
+    core_net::print_f("{item %}={%, %, %} \n", ++index, item.test_primary, item.secondary, item.datum);
   }
 ```
 
@@ -127,13 +127,13 @@ The below code will print all lines of the iteration separated by `'|'` char.
   auto index=0;
   for (auto& item : testtab)
   {
-    eosio::print_f("{item %}={%, %, %} |", ++index, item.test_primary, item.secondary, item.datum);
+    core_net::print_f("{item %}={%, %, %} |", ++index, item.test_primary, item.secondary, item.datum);
   }
 ```
 
 ## Print statements from smart contract code are not shown in the `expected order`
 
-__Possible solution__: The key point here is the `expected order` and what you think it should be. Although the Antelope is single threaded, when looking at your smart contract action code implementation, which let's say it has a series of `print` (either `print_f` or `printf`) statements, they might not necessarily be outputted in the order the `apparent` code workflow is. One example is when inline transactions are sent from your smart contract action code, and you expect to see the `print` statements from within the inline action code outputted before the `print` statements made after the inline action `send` statement. For better exemplification let's look at the code below:
+__Possible solution__: The key point here is the `expected order` and what you think it should be. Although the Anvo Network runtime is single threaded, when looking at your smart contract action code implementation, which let's say it has a series of `print` (either `print_f` or `printf`) statements, they might not necessarily be outputted in the order the `apparent` code workflow is. One example is when inline transactions are sent from your smart contract action code, and you expect to see the `print` statements from within the inline action code outputted before the `print` statements made after the inline action `send` statement. For better exemplification let's look at the code below:
 
 ```cpp
 [[eosio::action]] void multi_index_example::mod( name user, uint64_t n ) {
@@ -154,7 +154,7 @@ The code above has one `print` statement before the `singleton_set.send` and ano
 ## Assertion failure while creating an account after eosio.system was installed
 
 ```sh
-cleos create account eosio bob EOS5HUanbay86UUnr1d4fuBsQ3ksjfgZYoLUVvrYVLy6pj4i8xqVY
+core-cli create account eosio bob EOS5HUanbay86UUnr1d4fuBsQ3ksjfgZYoLUVvrYVLy6pj4i8xqVY
 ```
 
 ```console
@@ -164,7 +164,7 @@ assertion failure with message: system contract must first be initialized
 ```
 
 The failure is stating that `eosio.system` `init` action was not called yet. The `init` action is implemented by the `void init(uint64_t, symbol)` function. The first parameter is the version, this should always be `0` for now, until a new version of `init` will be created that handles more information.
-The second parameter is the system's symbol (i.e. for main net this is `EOS`). If you followed the [BIOS Boot Sequence](https://docs.eosnetwork.com/docs/latest/tutorials/bios-boot-sequence) tutorial and created a system with the default symbol `SYS` then `SYS` shall be used as the system's symbol in the `init` action. It is whatever symbol you as the chain creator want to use in your `Antelope` based blockchain.
+The second parameter is the system's symbol (i.e. for main net this is `EOS`). If you followed the [BIOS Boot Sequence](https://docs.eosnetwork.com/docs/latest/tutorials/bios-boot-sequence) tutorial and created a system with the default symbol `SYS` then `SYS` shall be used as the system's symbol in the `init` action. It is whatever symbol you as the chain creator want to use in your `Anvo Network` based blockchain.
 
 ## Backward incompatible change in generating abi for maps
 

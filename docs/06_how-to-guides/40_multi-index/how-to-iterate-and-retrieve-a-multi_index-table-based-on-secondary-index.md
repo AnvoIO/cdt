@@ -17,8 +17,8 @@ See the following code reference:
 
 Make sure you have the following prerequisites in place:
 
-* An Antelope development environment, for details consult the [Documentation Portal](https://docs.eosnetwork.com/docs/latest/).
-* A multi-index `testab` table instance which stores `user` objects indexed by the primary key which is of type `eosio::name` and a secondary index for data member `secondary` of type `eosio::name` accessible through `by_secondary()` method. Consult the section [How to define a secondary index](./how-to-define-a-secondary-index) to learn how to set it up.
+* An Anvo Network development environment, for details consult the [Documentation Portal](https://docs.eosnetwork.com/docs/latest/).
+* A multi-index `testab` table instance which stores `user` objects indexed by the primary key which is of type `core_net::name` and a secondary index for data member `secondary` of type `core_net::name` accessible through `by_secondary()` method. Consult the section [How to define a secondary index](./how-to-define-a-secondary-index) to learn how to set it up.
 
 ## Procedure
 
@@ -52,7 +52,7 @@ Search for the `user` name in the multi-index table using the secondary index. I
   // iterate through secondary index
   for ( auto itr = idx.begin(); itr != idx.end(); itr++ ) {
     // print each row's values
-    eosio::print_f("Test Table : {%, %, %}\n", itr->test_primary, itr->secondary, itr->datum);
+    core_net::print_f("Test Table : {%, %, %}\n", itr->test_primary, itr->secondary, itr->datum);
   }
 }
 ```
@@ -64,8 +64,8 @@ The full definition and implementation files for the contract should look like t
 __multi_index_example.hpp__
 
 ```cpp
-#include <eosio/eosio.hpp>
-using namespace eosio;
+#include <core_net/core_net.hpp>
+using namespace core_net;
 
 // multi-index example contract class
 class [[eosio::contract]] multi_index_example : public contract {
@@ -93,10 +93,10 @@ class [[eosio::contract]] multi_index_example : public contract {
         uint64_t by_secondary( ) const { return secondary.value; }
       };
 
-      // the multi-index type definition, for ease of use define a type alias `test_table_t`, 
-      // based on the multi_index template type, parametarized with a random name, the 
+      // the multi-index type definition, for ease of use define a type alias `test_table_t`,
+      // based on the multi_index template type, parametarized with a random name, the
       // test_table data structure, and the secondary index
-      typedef eosio::multi_index<"testtaba"_n, test_table, eosio::indexed_by<"secid"_n, eosio::const_mem_fun<test_table, uint64_t, &test_table::by_secondary>>> test_table_t;
+      typedef core_net::multi_index<"testtaba"_n, test_table, core_net::indexed_by<"secid"_n, core_net::const_mem_fun<test_table, uint64_t, &test_table::by_secondary>>> test_table_t;
 
       // the multi-index table instance declared as a data member of type test_table_t
       test_table_t testtab;
@@ -138,7 +138,7 @@ __multi_index_example.cpp__
   check( itr != testtab.end(), "user does not exist in table" );
 
   // prints the test_primary and datum fields stored for user parameter
-  eosio::print_f("Test Table : {%, %}\n", itr->test_primary, itr->datum);
+  core_net::print_f("Test Table : {%, %}\n", itr->test_primary, itr->datum);
 }
 
 // iterates the multi-index table rows using the secondary index and prints the row's values
@@ -149,13 +149,13 @@ __multi_index_example.cpp__
   // iterate through secondary index
   for ( auto itr = idx.begin(); itr != idx.end(); itr++ ) {
     // print each row's values
-    eosio::print_f("Test Table : {%, %, %}\n", itr->test_primary, itr->secondary, itr->datum);
+    core_net::print_f("Test Table : {%, %, %}\n", itr->test_primary, itr->secondary, itr->datum);
   }
 }
 ```
 
 [[info | Full example location]]
-| A full example project demonstrating the instantiation and usage of multi-index table can be found [here](https://github.com/AntelopeIO/cdt/blob/main/examples/multi_index_example).
+| A full example project demonstrating the instantiation and usage of multi-index table can be found [here](https://github.com/Anvo-Network/cdt/blob/main/examples/multi_index_example).
 
 ## Summary
 
