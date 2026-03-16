@@ -1,75 +1,56 @@
-# LLVM 16 Migration — Bootstrap for Next Session
+# LLVM 16 Migration — Status
 
 ## Status
-Branch `llvm16-migration` at `/opt/dev/cdt`. LLVM 16.0.6 builds, all CDT tools compile, but wasm-ld crashes when linking contracts.
+Branch `llvm16-migration` at `/opt/dev/cdt`. LLVM 16.0.6 builds, all CDT tools compile, **wasm-ld linking works** — contracts compile and link to valid WASM with the `apply` export.
 
-## The Blocker
-`wasm-ld` crashes at `FunctionSymbol::getFunctionIndex()` during the WASM section write phase. The synthetic `apply` function we create in Driver.cpp doesn't get a proper function index because it's not integrated through the standard `WasmSym` pipeline.
+**Remaining blocker:** `eosio-pp` (post-processor) segfaults on the LLVM 16 WASM output. This is a separate binary from wasm-ld that strips BSS segments and does other post-processing on the .wasm file. It needs to be debugged/fixed for the full cdt-cpp pipeline to work end-to-end.
 
-Our debug `llvm::errs()` output in `createDispatchFunction()` never appears — the crash happens BEFORE our Writer code runs, during the WASM output phase when it tries to emit the synthetic apply function that has no proper index.
+## What Was Fixed (wasm-ld crash)
+Three bugs in the LLVM 16 port of the synthetic apply dispatch function:
 
-## The Fix (not yet implemented)
-Follow exactly how `WasmSym::callCtors` works end-to-end in LLVM 16:
+### Bug 1: Dangling signature reference
+`Driver.cpp` created the synthetic apply function with a **local** `WasmSignature` variable, but `InputFunction` stores the signature as a `const WasmSignature &` (reference). When the local went out of scope, the reference dangled, causing a crash in `TypeSection::registerType` when writing the WASM output.
 
-### Step 1: Declare in Symbols.h
-```
-// File: llvm/lld/wasm/Symbols.h
-// Look for: static DefinedFunction *callCtors;
-// Add:      static DefinedFunction *applyDispatch;
-```
+**Fix:** Made the signature `static` so it persists for the lifetime of the link.
 
-### Step 2: Initialize in Symbols.cpp
-```
-// File: llvm/lld/wasm/Symbols.cpp
-// Look for: DefinedFunction *WasmSym::callCtors;
-// Add:      DefinedFunction *WasmSym::applyDispatch;
-```
+### Bug 2: GC'd runtime symbols
+The dispatch function calls `eosio_assert_code` and `eosio_set_contract_name`, but these were not marked live before the `--gc-sections` pass. They were stripped, then `getFunctionIndex()` crashed on the dead symbols.
 
-### Step 3: Create in Writer.cpp createSyntheticInitFunctions()
-```
-// File: cdt-llvm-extensions/lld/wasm/Writer.cpp
-// In createSyntheticInitFunctions(), after callCtors creation:
-// Create the apply dispatch function with (i64,i64,i64)->void signature
-// This runs BEFORE assignIndexes(), so it gets a proper function index
-```
+**Fix:** Added a loop in `Driver.cpp` to mark `eosio_assert_code`, `eosio_set_contract_name`, and `__cxa_finalize` as live before the GC pass.
 
-### Step 4: Fill body in createDispatchFunction()
-```
-// In Writer::createDispatchFunction(), use WasmSym::applyDispatch
-// instead of looking up "apply" by name
-// Call createFunction(WasmSym::applyDispatch, bodyContent)
-```
+### Bug 3: Missing hasFunctionIndex guards
+Several `getFunctionIndex()` calls in `createDispatchFunction()` had no `hasFunctionIndex()` check, causing assertions/crashes on symbols without assigned indexes.
 
-### Step 5: Remove the ad-hoc creation from Driver.cpp
-The Driver.cpp synthetic apply creation (lines ~1133-1142) should be replaced with a reference to WasmSym::applyDispatch.
+**Fix:** Added `hasFunctionIndex()` guards, changed unsafe `cast<>` to `dyn_cast_or_null<>`.
 
-## Key Files to Read
-1. `llvm/lld/wasm/Symbols.h` — WasmSym static members (pattern to follow)
-2. `llvm/lld/wasm/Symbols.cpp` — WasmSym initialization
-3. `cdt-llvm-extensions/lld/wasm/Writer.cpp:1063` — createSyntheticInitFunctions (where to create)
-4. `cdt-llvm-extensions/lld/wasm/Writer.cpp:1584` — createDispatchFunction (our dispatch code)
-5. `cdt-llvm-extensions/lld/wasm/Driver.cpp:1125` — current synthetic apply (to be refactored)
+## Changed Files
+- `cdt-llvm-extensions/lld/wasm/Driver.cpp` — static signature, mark runtime symbols live
+- `cdt-llvm-extensions/lld/wasm/Writer.cpp` — safety guards, remove debug output
 
-## Also Need Extension Files For
-- `cdt-llvm-extensions/lld/wasm/Symbols.h` — add WasmSym::applyDispatch
-- `cdt-llvm-extensions/lld/wasm/Symbols.cpp` — add initialization
-- Update `LLVMPatch.txt` to copy these two new files
+## Next Steps
+1. **Fix eosio-pp** — the post-processor crashes on LLVM 16 WASM output. Debug with:
+   ```bash
+   /opt/dev/cdt/build/bin/eosio-pp /tmp/test.wasm -o /tmp/test_pp.wasm
+   ```
+   The WASM file is valid (verified by section parsing), so eosio-pp likely has format assumptions that changed between LLVM 9→16.
 
-## How to Test
+2. Run toolchain tests end-to-end once eosio-pp is fixed
+3. Test on ARM: push branch, pull on ubuntu@34.213.225.55, rebuild, test
+4. Apply rebrand (core_net:: headers, docs) on top of the llvm16 branch
+5. Merge to main
+
+## How to Rebuild After Changes
 ```bash
 cd /opt/dev/cdt
-git checkout llvm16-migration
-# After changes, patch manually since cmake configure already ran:
 cp cdt-llvm-extensions/lld/wasm/Writer.cpp llvm/lld/wasm/Writer.cpp
 cp cdt-llvm-extensions/lld/wasm/Driver.cpp llvm/lld/wasm/Driver.cpp
-cp cdt-llvm-extensions/lld/wasm/Symbols.h llvm/lld/wasm/Symbols.h
-cp cdt-llvm-extensions/lld/wasm/Symbols.cpp llvm/lld/wasm/Symbols.cpp
 cd build/llvm/llvm && make -j$(nproc) lld
-# Then test:
-/opt/dev/cdt/build/bin/cdt-cpp -abigen -contract hello -o /tmp/test.wasm /tmp/test_llvm16_hello.cpp
+# Important: copy the rebuilt binary to the install location
+cp /opt/dev/cdt/build/llvm/llvm/bin/lld /opt/dev/cdt/build/bin/lld
+cp /opt/dev/cdt/build/bin/lld /opt/dev/cdt/build/bin/wasm-ld
 ```
 
-## Test Contract (already at /tmp/test_llvm16_hello.cpp)
+## Test Contract (at /tmp/test_llvm16_hello.cpp)
 ```cpp
 #include <eosio/eosio.hpp>
 using namespace eosio;
@@ -80,15 +61,6 @@ public:
    void hi(name user) { print("Hello, ", user); }
 };
 ```
-
-## After It Links Successfully
-1. Verify WASM output is valid: `wasm-objdump -h /tmp/test.wasm`
-2. Compare with LLVM 9 output: should have apply export
-3. Run CDT unit tests: `cd build && ctest -L unit_tests`
-4. Run toolchain tests: `cd build && ctest -L toolchain_tests`
-5. Test on ARM: push branch, pull on ubuntu@34.213.225.55, rebuild, test
-6. Apply our rebrand (core_net:: headers, docs) on top of the llvm16 branch
-7. Merge to main
 
 ## AWS ARM Machine
 - `ssh -i ~/.ssh/id_ed25519 ubuntu@34.213.225.55`

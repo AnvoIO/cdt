@@ -1584,11 +1584,8 @@ void Writer::createSyntheticSectionsPostLayout() {
 void Writer::createDispatchFunction() {
    // Find the synthetic apply function created by Driver.cpp
    auto *applyFunc = dyn_cast_or_null<DefinedFunction>(symtab->find("apply"));
-   if (!applyFunc) {
-      llvm::errs() << "CDT createDispatchFunction: no apply symbol found, skipping\n";
+   if (!applyFunc)
       return;
-   }
-   llvm::errs() << "CDT createDispatchFunction: found apply, building dispatch\n";
 
    // Count actions/notifications
    int total_actions = 0, total_notifs = 0;
@@ -1596,9 +1593,7 @@ void Writer::createDispatchFunction() {
       total_actions += file->getEosioActions().size();
       total_notifs += file->getEosioNotify().size();
    }
-   llvm::errs() << "CDT: " << total_actions << " actions, " << total_notifs << " notifications\n";
    if (total_actions == 0 && total_notifs == 0) {
-      llvm::errs() << "CDT: no actions or notifications, creating empty apply body\n";
       // Create an empty function body (just return)
       std::string bodyContent;
       raw_string_ostream OS(bodyContent);
@@ -1637,8 +1632,8 @@ void Writer::createDispatchFunction() {
          error("CDT dispatch: not a function symbol: " + sym_name);
          return;
       }
-      if (!func_sym->isLive()) {
-         error("CDT dispatch: symbol not live: " + sym_name);
+      if (!func_sym->isLive() || !func_sym->hasFunctionIndex()) {
+         error("CDT dispatch: symbol not live or has no index: " + sym_name);
          return;
       }
       uint32_t index = func_sym->getFunctionIndex();
@@ -1647,7 +1642,7 @@ void Writer::createDispatchFunction() {
 
    auto assert_sym = dyn_cast_or_null<FunctionSymbol>(symtab->find("eosio_assert_code"));
    uint32_t assert_idx = UINT32_MAX;
-   if (assert_sym)
+   if (assert_sym && assert_sym->hasFunctionIndex())
      assert_idx = assert_sym->getFunctionIndex();
    auto post_sym = dyn_cast_or_null<FunctionSymbol>(symtab->find("post_dispatch"));
 
@@ -1832,7 +1827,12 @@ void Writer::createDispatchFunction() {
       raw_string_ostream OS(bodyContent);
       writeUleb128(OS, 0, "num locals");
 
-      auto contract_sym = cast<FunctionSymbol>(symtab->find("eosio_set_contract_name"));
+      auto *contract_sym = dyn_cast_or_null<FunctionSymbol>(
+          symtab->find("eosio_set_contract_name"));
+      if (!contract_sym || !contract_sym->hasFunctionIndex()) {
+         error("CDT dispatch: eosio_set_contract_name not found or has no index");
+         return;
+      }
       uint32_t contract_idx = contract_sym->getFunctionIndex();
       writeU8(OS, OPCODE_GET_LOCAL, "GET_LOCAL");
       writeUleb128(OS, 0, "receiver");
