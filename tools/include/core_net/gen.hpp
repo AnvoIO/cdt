@@ -192,21 +192,18 @@ struct generation_utils {
          return tmp.str();
       return decl->getNameAsString();
    }
-   // TODO: sync_call support — requires EosioCallAttr in clang (see _tmp/SYNC_CALL_PORT.md)
-#ifdef CDT_SYNC_CALL_SUPPORT
    static inline std::string get_call_name( const clang::CXXMethodDecl* decl ) {
       auto tmp = decl->getEosioCallAttr()->getName();
       if (!tmp.empty())
-         return tmp;
+         return tmp.str();
       return decl->getNameAsString();
    }
    static inline std::string get_call_name( const clang::CXXRecordDecl* decl ) {
       auto tmp = decl->getEosioCallAttr()->getName();
       if (!tmp.empty())
-         return tmp;
-      return decl->getName();
+         return tmp.str();
+      return decl->getName().str();
    }
-#endif
    static inline std::string get_notify_pair( const clang::CXXMethodDecl* decl ) {
       std::string notify_pair = "";
       auto tmp = decl->getEosioNotifyAttr()->getName();

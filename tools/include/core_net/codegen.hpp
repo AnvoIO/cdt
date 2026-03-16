@@ -212,12 +212,9 @@ namespace core_net { namespace cdt {
                ss << decl->getParent()->getQualifiedNameAsString()
                   << " obj {eosio::name{r},eosio::name{c},ds};\n";
 
-               // TODO: sync_call support — set_exec_type requires sync_call-aware eosio::contract
-#ifdef CDT_SYNC_CALL_SUPPORT
                if (base_is_eosio_contract_class(decl)) {
                   ss << "obj.set_exec_type(eosio::contract::exec_type_t::action);\n";
                }
-#endif
 
                const auto& call_action = [&]() {
                   ss << "obj." << decl->getNameAsString() << "(";
@@ -251,7 +248,6 @@ namespace core_net { namespace cdt {
             create_dispatch("eosio_wasm_notify", "__eosio_notify_", func, decl);
          }
 
-#ifdef CDT_SYNC_CALL_SUPPORT
          // Generate sync call dispatcher
          void create_call_dispatch(CXXMethodDecl* decl) {
             const std::string attr = "eosio_wasm_call";
@@ -295,11 +291,9 @@ namespace core_net { namespace cdt {
                ss << decl->getParent()->getQualifiedNameAsString()
                   << " obj {eosio::name{receiver},eosio::name{receiver},ds};\n";
 
-#ifdef CDT_SYNC_CALL_SUPPORT
                if (base_is_eosio_contract_class(decl)) {
                   ss << "obj.set_exec_type(eosio::contract::exec_type_t::call);\n";
                }
-#endif
 
                const auto& call_function = [&]() {
                   ss << "obj." << decl->getNameAsString() << "(";
@@ -352,7 +346,6 @@ namespace core_net { namespace cdt {
             ss << "return data;\n";
             ss << "}}\n";
          }
-#endif // CDT_SYNC_CALL_SUPPORT
 
          virtual bool VisitCXXMethodDecl(CXXMethodDecl* decl) {
             std::string name = decl->getNameAsString();
@@ -408,8 +401,6 @@ namespace core_net { namespace cdt {
                }
             }
 
-            // TODO: sync_call support — requires EosioCallAttr in clang (see _tmp/SYNC_CALL_PORT.md)
-#ifdef CDT_SYNC_CALL_SUPPORT
             // We allow a method to be tagged as both `action` and `call`
             if (decl->isEosioCall()) {
                static std::unordered_map<uint64_t, std::string> _call_id_map;
@@ -432,7 +423,7 @@ namespace core_net { namespace cdt {
                   _call_id_map.insert({id, name});
                }
 
-               // Genereate create_get_sync_call_data and create_get_sync_call_data_header only once
+               // Generate create_get_sync_call_data and create_get_sync_call_data_header only once
                if (_call_set.empty()) {
                   create_get_sync_call_data(ss);
                   create_get_sync_call_data_header(ss);
@@ -450,7 +441,6 @@ namespace core_net { namespace cdt {
                   cg.calls.insert(full_call_name); // insert the sync call method name, so we don't create the dispatcher twice
                }
             }
-#endif // CDT_SYNC_CALL_SUPPORT
 
             return true;
          }

@@ -131,6 +131,30 @@ namespace core_net::cdt {
          }
       }
 
+      void add_call( const clang::CXXMethodDecl* decl ) {
+         abi_call ret;
+
+         auto call_name = decl->getEosioCallAttr()->getName();
+
+         if (call_name.empty()) {
+            validate_hash_id( decl->getNameAsString(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
+            ret.name = decl->getNameAsString();
+         }
+         else {
+            validate_hash_id( call_name.str(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
+            ret.name = call_name.str();
+         }
+         ret.type = decl->getNameAsString();
+         ret.id   = to_hash_id(ret.name);
+         if (translate_type(decl->getReturnType()) != "void") {
+            add_type(decl->getReturnType());
+            ret.result_type = translate_type(decl->getReturnType());
+         }
+         _abi.calls.insert(ret);
+         // bump ABI version to 1.3 when calls are present
+         _abi.version.set_min(version_t{1, 3});
+      }
+
       void add_tuple(const clang::QualType& type) {
          auto pt = llvm::dyn_cast<clang::ElaboratedType>(type.getTypePtr());
          auto tst = llvm::dyn_cast<clang::TemplateSpecializationType>((pt) ? pt->desugar().getTypePtr() : type.getTypePtr());
@@ -551,6 +575,15 @@ namespace core_net::cdt {
          return o;
       }
 
+      ojson call_to_json( const abi_call& c ) {
+         ojson o;
+         o["name"] = c.name;
+         o["type"] = c.type;
+         o["id"]   = c.id;
+         o["result_type"] = c.result_type;
+         return o;
+      }
+
       ojson clause_to_json( const abi_ricardian_clause_pair& clause ) {
          ojson o;
          o["id"] = clause.id;
@@ -593,7 +626,7 @@ namespace core_net::cdt {
             set_of_tables.insert(t);
          }
 
-         return _abi.structs.empty() && _abi.typedefs.empty() && _abi.actions.empty() && set_of_tables.empty() && _abi.ricardian_clauses.empty() && _abi.variants.empty();
+         return _abi.structs.empty() && _abi.typedefs.empty() && _abi.actions.empty() && _abi.calls.empty() && set_of_tables.empty() && _abi.ricardian_clauses.empty() && _abi.variants.empty();
       }
 
       ojson to_json() {
@@ -657,6 +690,12 @@ namespace core_net::cdt {
             }
             for ( auto a : _abi.actions ) {
                if (as.name == _translate_type(a.type))
+                  return true;
+            }
+            for ( auto c : _abi.calls ) {
+               if (as.name == _translate_type(c.type))
+                  return true;
+               if (!c.result_type.empty() && as.name == _translate_type(c.result_type))
                   return true;
             }
             for( auto t : set_of_tables ) {
@@ -737,6 +776,12 @@ namespace core_net::cdt {
                o["action_results"].push_back(action_result_to_json( ar ));
             }
          }
+         if (!_abi.calls.empty()) {
+            o["calls"]  = ojson::array();
+            for ( auto c : _abi.calls ) {
+               o["calls"].push_back(call_to_json( c ));
+            }
+         }
          return o;
       }
 
@@ -773,6 +818,13 @@ namespace core_net::cdt {
             if (decl->isEosioAction() && ag.is_eosio_contract(decl, ag.get_contract_name())) {
                ag.add_struct(decl);
                ag.add_action(decl);
+               for (auto param : decl->parameters()) {
+                  ag.add_type( param->getType() );
+               }
+            }
+            if (decl->isEosioCall() && ag.is_eosio_contract(decl, ag.get_contract_name())) {
+               ag.add_struct(decl);
+               ag.add_call(decl);
                for (auto param : decl->parameters()) {
                   ag.add_type( param->getType() );
                }

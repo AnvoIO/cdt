@@ -4,7 +4,7 @@
       "compile_flags": [],
       "expected" : {
         "exit-code": 255,
-        "stderr": "error: static_assert failed due to requirement 'sizeof"
+        "stderr": "error: static assertion failed due to requirement 'sizeof"
       }
     }
   ]

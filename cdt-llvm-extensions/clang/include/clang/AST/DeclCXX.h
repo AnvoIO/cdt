@@ -506,11 +506,13 @@ public:
   using base_class_const_iterator = const CXXBaseSpecifier *;
   bool isEosioContract() const { return hasAttr<EosioContractAttr>(); }
   bool isEosioAction() const { return hasAttr<EosioActionAttr>(); }
+  bool isEosioCall() const { return hasAttr<EosioCallAttr>(); }
   bool isEosioTable() const { return hasAttr<EosioTableAttr>(); }
   bool isEosioIgnore() const { return hasAttr<EosioIgnoreAttr>(); }
   bool hasEosioRicardian() const { return hasAttr<EosioRicardianAttr>(); }
   bool isEosioReadOnly() const { return hasAttr<EosioReadOnlyAttr>(); }
   EosioActionAttr* getEosioActionAttr() const { return getAttr<EosioActionAttr>(); }
+  EosioCallAttr* getEosioCallAttr() const { return getAttr<EosioCallAttr>(); }
   EosioTableAttr*  getEosioTableAttr() const { return getAttr<EosioTableAttr>(); }
   EosioContractAttr*  getEosioContractAttr() const { return getAttr<EosioContractAttr>(); }
   EosioRicardianAttr*  getEosioRicardianAttr() const { return getAttr<EosioRicardianAttr>(); }
@@ -2033,11 +2035,13 @@ public:
   bool isStatic() const;
   bool isInstance() const { return !isStatic(); }
   bool isEosioAction() const { return hasAttr<EosioActionAttr>(); }
+  bool isEosioCall() const { return hasAttr<EosioCallAttr>(); }
   bool isEosioNotify() const { return hasAttr<EosioNotifyAttr>(); }
   bool isEosioContract() const { return hasAttr<EosioContractAttr>(); }
   bool hasEosioRicardian() const { return hasAttr<EosioRicardianAttr>(); }
   bool isEosioReadOnly() const { return hasAttr<EosioReadOnlyAttr>(); }
   EosioActionAttr* getEosioActionAttr() const { return getAttr<EosioActionAttr>(); }
+  EosioCallAttr* getEosioCallAttr() const { return getAttr<EosioCallAttr>(); }
   EosioNotifyAttr* getEosioNotifyAttr() const { return getAttr<EosioNotifyAttr>(); }
   EosioContractAttr* getEosioContractAttr() const { return getAttr<EosioContractAttr>(); }
   EosioRicardianAttr* getEosioRicardianAttr() const { return getAttr<EosioRicardianAttr>(); }
