@@ -27,6 +27,21 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(EOSIO_STACK_SIZE 8192)
 
+# Detect host architecture for native compilation mode
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")
+   set(CDT_NATIVE_TARGET_LINUX "aarch64-unknown-linux-gnu")
+   set(CDT_NATIVE_TARGET_APPLE "arm64-apple-macosx11.0")
+   set(CDT_NATIVE_ARCH_FLAG "")
+   set(CDT_NATIVE_LD_ARCH "arm64")
+   set(CDT_NATIVE_MACOS_MIN_VERSION "11.0")
+else()
+   set(CDT_NATIVE_TARGET_LINUX "x86_64-unknown-linux-gnu")
+   set(CDT_NATIVE_TARGET_APPLE "x86_64-unknown-darwin-macho")
+   set(CDT_NATIVE_ARCH_FLAG "-m64")
+   set(CDT_NATIVE_LD_ARCH "x86_64")
+   set(CDT_NATIVE_MACOS_MIN_VERSION "10.13")
+endif()
+
 macro (add_tool name)
    set(LLVM_LINK_COMPONENTS support)
 

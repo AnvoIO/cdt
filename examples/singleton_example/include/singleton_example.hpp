@@ -1,6 +1,6 @@
-#include <eosio/eosio.hpp>
-#include <eosio/singleton.hpp>
-using namespace eosio;
+#include <core_net/core_net.hpp>
+#include <core_net/singleton.hpp>
+using namespace core_net;
 
 class [[eosio::contract]] singleton_example : public contract {
    public:
@@ -21,7 +21,7 @@ class [[eosio::contract]] singleton_example : public contract {
          uint64_t primary_key() const { return primary_value.value; }
       } testtablerow;
 
-      using singleton_type = eosio::singleton<"testtable"_n, testtable>;
+      using singleton_type = core_net::singleton<"testtable"_n, testtable>;
       singleton_type singleton_instance;
 
       using set_action = action_wrapper<"set"_n, &singleton_example::set>;

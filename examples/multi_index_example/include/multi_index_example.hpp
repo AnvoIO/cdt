@@ -1,5 +1,5 @@
-#include <eosio/eosio.hpp>
-using namespace eosio;
+#include <core_net/core_net.hpp>
+using namespace core_net;
 
 class [[eosio::contract]] multi_index_example : public contract {
    public:
@@ -15,9 +15,9 @@ class [[eosio::contract]] multi_index_example : public contract {
          uint64_t by_secondary()const { return secondary.value; }
       };
 
-      typedef eosio::multi_index<"testtaba"_n, test_table, 
-         eosio::indexed_by<"secid"_n, 
-         eosio::const_mem_fun<test_table, uint64_t, &test_table::by_secondary>>> 
+      typedef core_net::multi_index<"testtaba"_n, test_table,
+         core_net::indexed_by<"secid"_n,
+         core_net::const_mem_fun<test_table, uint64_t, &test_table::by_secondary>>>
          test_tables;
 
       test_tables testtab;

@@ -1,5 +1,5 @@
-#include <eosio/eosio.hpp>
-using namespace eosio;
+#include <core_net/core_net.hpp>
+using namespace core_net;
 
 class [[eosio::contract]] send_inline : public contract {
    public:

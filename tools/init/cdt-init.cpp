@@ -9,10 +9,10 @@
 #include "clang/AST/Expr.h"
 #include "clang/Basic/Builtins.h"
 #include "llvm/Support/FileSystem.h"
-#include "eosio/utils.hpp"
-#include "eosio/gen.hpp"
-#include "eosio/whereami/whereami.hpp"
-#include "eosio/abi.hpp"
+#include "core_net/utils.hpp"
+#include "core_net/gen.hpp"
+#include "core_net/whereami/whereami.hpp"
+#include "core_net/abi.hpp"
 
 #include <exception>
 #include <iostream>
@@ -28,8 +28,8 @@
 using namespace clang::tooling;
 using namespace clang::ast_matchers;
 using namespace llvm;
-using namespace eosio;
-using namespace eosio::cdt;
+using namespace core_net;
+using namespace core_net::cdt;
 
 struct project {
    std::string project_name;
@@ -53,8 +53,8 @@ struct project {
                            "   print_f(\"Name : %\\n\",nm);\n"
                            "}";
 
-   const std::string hpp = "#include <eosio/eosio.hpp>\n"
-                           "using namespace eosio;\n\n"
+   const std::string hpp = "#include <core_net/core_net.hpp>\n"
+                           "using namespace core_net;\n\n"
                            "CONTRACT @ : public contract {\n"
                            "   public:\n"
                            "      using contract::contract;\n\n"

@@ -1,27 +1,30 @@
 cmake_minimum_required( VERSION 3.5 )
 
-set(EOSIO_VERSION_MIN "1.0")
-set(EOSIO_VERSION_SOFT_MAX "5.0")
-#set(EOSIO_VERSION_HARD_MAX "")
+set(CORE_NET_VERSION_MIN "1.0")
+set(CORE_NET_VERSION_SOFT_MAX "5.0")
+#set(CORE_NET_VERSION_HARD_MAX "")
 
-find_package(spring)
+find_package(core_net QUIET)
+if (NOT core_net_FOUND)
+   find_package(spring)
+endif()
 
 find_path(GMP_INCLUDE_DIR NAMES gmp.h)
 find_library(GMP_LIBRARY gmp)
 
-### Check the version of eosio
+### Check the version of core_net node
 set(VERSION_MATCH_ERROR_MSG "")
-EOSIO_CHECK_VERSION(VERSION_OUTPUT "${EOSIO_VERSION}"
-                                   "${EOSIO_VERSION_MIN}"
-                                   "${EOSIO_VERSION_SOFT_MAX}"
-                                   "${EOSIO_VERSION_HARD_MAX}"
-                                   VERSION_MATCH_ERROR_MSG)
+CORE_NET_CHECK_VERSION(VERSION_OUTPUT "${CORE_NET_VERSION}"
+                                      "${CORE_NET_VERSION_MIN}"
+                                      "${CORE_NET_VERSION_SOFT_MAX}"
+                                      "${CORE_NET_VERSION_HARD_MAX}"
+                                      VERSION_MATCH_ERROR_MSG)
 if(VERSION_OUTPUT STREQUAL "MATCH")
-   message(STATUS "Using Spring version ${EOSIO_VERSION}")
+   message(STATUS "Using Anvo Core version ${CORE_NET_VERSION}")
 elseif(VERSION_OUTPUT STREQUAL "WARN")
-   message(WARNING "Using Spring version ${EOSIO_VERSION} even though it exceeds the maximum supported version of ${EOSIO_VERSION_SOFT_MAX}; continuing with configuration, however build may fail.\nIt is recommended to use Spring version ${EOSIO_VERSION_SOFT_MAX}.x")
+   message(WARNING "Using Anvo Core version ${CORE_NET_VERSION} even though it exceeds the maximum supported version of ${CORE_NET_VERSION_SOFT_MAX}; continuing with configuration, however build may fail.\nIt is recommended to use Anvo Core version ${CORE_NET_VERSION_SOFT_MAX}.x")
 else() # INVALID OR MISMATCH
-   message(FATAL_ERROR "Found Spring version ${EOSIO_VERSION} but it does not satisfy version requirements: ${VERSION_MATCH_ERROR_MSG}\nPlease use Spring version ${EOSIO_VERSION_SOFT_MAX}.x")
+   message(FATAL_ERROR "Found Anvo Core version ${CORE_NET_VERSION} but it does not satisfy version requirements: ${VERSION_MATCH_ERROR_MSG}\nPlease use Anvo Core version ${CORE_NET_VERSION_SOFT_MAX}.x")
 endif(VERSION_OUTPUT STREQUAL "MATCH")
 
 

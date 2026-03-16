@@ -16,9 +16,12 @@ ExternalProject_Add(
 )
 
 
-find_package(spring QUIET)
+find_package(core_net QUIET)
+if (NOT core_net_FOUND)
+   find_package(spring QUIET)
+endif()
 
-if (spring_FOUND)
+if (core_net_FOUND OR spring_FOUND)
    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
       set(TEST_BUILD_TYPE "Debug")
    else()
@@ -32,7 +35,7 @@ if (spring_FOUND)
      CDTIntegrationTests
      SOURCE_DIR "${CMAKE_SOURCE_DIR}/tests/integration"
      BINARY_DIR "${CMAKE_BINARY_DIR}/tests/integration"
-     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${TEST_BUILD_TYPE} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_FRAMEWORK_PATH=${TEST_FRAMEWORK_PATH} -DCMAKE_MODULE_PATH=${TEST_MODULE_PATH} -Dspring_DIR=${spring_DIR} -Deosio_DIR=${eosio_DIR} -DLLVM_DIR=${LLVM_DIR} -DBOOST_ROOT=${BOOST_ROOT}
+     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${TEST_BUILD_TYPE} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_FRAMEWORK_PATH=${TEST_FRAMEWORK_PATH} -DCMAKE_MODULE_PATH=${TEST_MODULE_PATH} -Dcore_net_DIR=${core_net_DIR} -Dspring_DIR=${spring_DIR} -Deosio_DIR=${eosio_DIR} -DLLVM_DIR=${LLVM_DIR} -DBOOST_ROOT=${BOOST_ROOT}
      UPDATE_COMMAND ""
      PATCH_COMMAND  ""
      TEST_COMMAND   ""
@@ -40,5 +43,5 @@ if (spring_FOUND)
      BUILD_ALWAYS 1
    )
 else()
-   message(STATUS "spring package not found, skipping building integration tests")
+   message(STATUS "core_net/spring package not found, skipping building integration tests")
 endif()

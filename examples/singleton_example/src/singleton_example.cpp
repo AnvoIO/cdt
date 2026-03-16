@@ -11,12 +11,12 @@ void singleton_example::set( name user, uint64_t value ) {
 [[eosio::action]]
 void singleton_example::get( ) {
    if (singleton_instance.exists())
-      eosio::print(
-         "Value stored for: ", 
+      core_net::print(
+         "Value stored for: ",
          name{singleton_instance.get().primary_value.value},
          " is ",
          singleton_instance.get().secondary_value,
          "\n");
    else
-      eosio::print("Singleton is empty.\n");
+      core_net::print("Singleton is empty.\n");
 }

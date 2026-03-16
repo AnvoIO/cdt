@@ -1,6 +1,6 @@
 #pragma once
 
-namespace eosio { namespace cdt {
+namespace core_net { namespace cdt {
 enum sys {
    _win,
    _linux,
@@ -57,4 +57,4 @@ struct whereami {
    }
 };
 
-}} // ns eosio::cdt
+}} // ns core_net::cdt
