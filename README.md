@@ -4,6 +4,17 @@ Contract Development Toolkit (CDT) is a C/C++ toolchain targeting WebAssembly (W
 
 In addition to being a general purpose WebAssembly toolchain, specific features and optimizations are available to support building smart contracts. This toolchain is built around [Clang 9](https://github.com/AntelopeIO/cdt-llvm), which means that CDT inherits the optimizations and analyses from that version of LLVM, but as the WASM target is still considered experimental, some optimizations are incomplete or not available.
 
+## Which CDT version should I use?
+
+| Scenario | CDT Version | Headers |
+|----------|-------------|---------|
+| New contracts targeting **Anvo Network** | **CDT 5.x** (this repo) | `#include <core_net/core_net.hpp>` |
+| Contracts on chains using `eosio.*` system accounts (EOS, Telos, WAX, UX, or any chain running in EOSIO/Antelope compatibility mode) | **[AntelopeIO CDT 4.x](https://github.com/AntelopeIO/cdt)** | `#include <eosio/eosio.hpp>` |
+
+CDT 5.x provides the `core_net::` namespace and `#include <core_net/...>` headers for Anvo Network. The legacy `eosio::` namespace and `#include <eosio/...>` headers continue to work for backward compatibility, but new contracts targeting Anvo Network should use `core_net::`.
+
+Chains still running with `eosio.*` system accounts and the original EOSIO/Antelope protocol naming should continue to use [AntelopeIO CDT 4.x](https://github.com/AntelopeIO/cdt/releases). The WASM bytecode produced by both CDT versions is identical — only the SDK headers and build system differ.
+
 ## Repo organization
 
 The `main` branch is the development branch: do not use this for production. Refer to the [release page](https://github.com/Anvo-Network/cdt/releases) for current information on releases, pre-releases, and obsolete releases as well as the corresponding tags for those releases.

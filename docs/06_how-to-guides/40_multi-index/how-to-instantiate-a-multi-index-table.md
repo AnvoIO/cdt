@@ -16,7 +16,7 @@ See the following code reference:
 
 Make sure you have the following prerequisites in place:
 
-* An Antelope development environment, for details consult the [Documentation Portal](https://docs.eosnetwork.com/docs/latest/).
+* An Anvo Network development environment, for details consult the [Documentation Portal](https://docs.eosnetwork.com/docs/latest/).
 
 ## Procedure
 
@@ -24,11 +24,11 @@ Complete the following steps to instantiate a multi-index table `testtab`.
 
 ### 1. Preparation And Initialization
 
-Include the `eosio.hpp` header and use the `using` directive to access the `eosio` namespace.
+Include the `core_net.hpp` header and use the `using` directive to access the `core_net` namespace.
 
 ```cpp
-#include <eosio/eosio.hpp>
-using namespace eosio;
+#include <core_net/core_net.hpp>
+using namespace core_net;
 ```
 
 ### 2. Define The Table Data Structure
@@ -40,7 +40,7 @@ Define the data structure for the multi-index table.
   };
 ```
 
-Add the data structure data members. Each data member corresponds to a field of the multi-index table. A primary key is required when defining a multi-index table structure, therefore you need to know which is the multi-index table field that is the primary key for your multi-index table. The corresponding data member for the primary key field must store unique values. In this case it is the `test_primary` data member of type `eosio::name`.
+Add the data structure data members. Each data member corresponds to a field of the multi-index table. A primary key is required when defining a multi-index table structure, therefore you need to know which is the multi-index table field that is the primary key for your multi-index table. The corresponding data member for the primary key field must store unique values. In this case it is the `test_primary` data member of type `core_net::name`.
 
   ```diff
     // the data structure which defines each row of the table
@@ -73,7 +73,7 @@ Add the definition of the primary index for the multi-index table. The primary i
 
 ### 4. Define A Multi-Index Type Alias
 
-For ease of use, define a type alias `test_table_t` based on the `eosio::multi_index` template type, parametarized with a random name `"testtaba"` and the `test_table` data structure. The names must adhere to `Antelope` account name restrictions.
+For ease of use, define a type alias `test_table_t` based on the `core_net::multi_index` template type, parametarized with a random name `"testtaba"` and the `test_table` data structure. The names must adhere to Anvo Network account name restrictions.
 
 ```diff
   // the data structure which defines each row of the table
@@ -86,7 +86,7 @@ For ease of use, define a type alias `test_table_t` based on the `eosio::multi_i
     uint64_t primary_key( ) const { return test_primary.value; }
   };
   
-+  typedef eosio::multi_index<"testtaba"_n, test_table> test_table_t;
++  typedef core_net::multi_index<"testtaba"_n, test_table> test_table_t;
 ```
 
 ### 5. Instantiate The Multi-Index Table
@@ -103,8 +103,8 @@ Declare the `testtab` multi-index table as a data member of type `test_table_t`.
     // mandatory definition for primary key getter
     uint64_t primary_key( ) const { return test_primary.value; }
   };
-  
-  typedef eosio::multi_index<"testtaba"_n, test_table> test_table_t;
+
+  typedef core_net::multi_index<"testtaba"_n, test_table> test_table_t;
 +  test_table_t testtab;
 ```
 
@@ -129,8 +129,8 @@ Here is how the definition of a `multi_index_example` contract containing a mult
 __multi_index_example.hpp__
 
 ```cpp
-#include <eosio/eosio.hpp>
-using namespace eosio;
+#include <core_net/core_net.hpp>
+using namespace core_net;
 
 // multi-index example contract class
 class [[eosio::contract]] multi_index_example : public contract {
@@ -156,10 +156,10 @@ class [[eosio::contract]] multi_index_example : public contract {
         uint64_t primary_key( ) const { return test_primary.value; }
       };
 
-      // the multi-index type definition, for ease of use define a type alias `test_table_t`, 
-      // based on the multi_index template type, parametarized with a random name and 
+      // the multi-index type definition, for ease of use define a type alias `test_table_t`,
+      // based on the multi_index template type, parametarized with a random name and
       // the test_table data structure
-      typedef eosio::multi_index<"testtaba"_n, test_table> test_table_t;
+      typedef core_net::multi_index<"testtaba"_n, test_table> test_table_t;
 
       // the multi-index table instance declared as a data member of type test_table_t
       test_table_t testtab;
@@ -173,7 +173,7 @@ class [[eosio::contract]] multi_index_example : public contract {
 ```
 
 [[info | Full example location]]
-| A full example project demonstrating the instantiation and usage of multi-index table can be found [here](https://github.com/AntelopeIO/cdt/blob/main/examples/multi_index_example).
+| A full example project demonstrating the instantiation and usage of multi-index table can be found [here](https://github.com/Anvo-Network/cdt/blob/main/examples/multi_index_example).
 
 ## Summary
 

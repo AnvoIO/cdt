@@ -32,7 +32,7 @@ struct __attribute__((eosio_action)) testa {
 };
 ```
 
-If your action name is not a valid [Antelope name](../02_naming-conventions.md) you can explicitly specify the name in the attribute ```c++ [[eosio::action("<valid action name>")]]```
+If your action name is not a valid [Anvo Network name](../02_naming-conventions.md) you can explicitly specify the name in the attribute ```c++ [[eosio::action("<valid action name>")]]```
 
 ## [[eosio::table]]
 Example (two ways to declare a table for ABI generation):
@@ -47,18 +47,18 @@ struct __attribute__((eosio_table)) testtable {
    /* all other fields */
 };
 
-typedef eosio::multi_index<"tablename"_n, testtable> testtable_t;
+typedef core_net::multi_index<"tablename"_n, testtable> testtable_t;
 ```
 
 If you don't want to use the multi-index you can explicitly specify the name in the attribute ```c++ [[eosio::table("<valid action name>")]]```.
 
 ## [[eosio::contract("ANY_NAME_YOU_LIKE")]]
 ```cpp
-class [[eosio::contract("ANY_NAME_YOU_LIKE")]] test_contract : public eosio::contract {
+class [[eosio::contract("ANY_NAME_YOU_LIKE")]] test_contract : public core_net::contract {
 };
 ```
 
-The code above will mark this `class` as being an `Antelope` contract, this allows for namespacing of contracts, i.e. you can include headers like `eosio::token` and not have `eosio::token`'s actions/tables wind up in you ABI or generated dispatcher.
+The code above will mark this `class` as being an `Anvo Network` contract, this allows for namespacing of contracts, i.e. you can include headers like `core_net::token` and not have `core_net::token`'s actions/tables wind up in you ABI or generated dispatcher.
 
 ## [[eosio::on_notify("VALID_EOSIO_ACCOUNT_NAME::VALID_EOSIO_ACTION_NAME")]]
 ```cpp

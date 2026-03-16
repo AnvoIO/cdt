@@ -17,8 +17,8 @@ See the following code reference:
 
 Make sure you have the following prerequisites in place:
 
-* An Antelope development environment, for details consult the [Documentation Portal](https://docs.eosnetwork.com/docs/latest/).
-* A multi-index `testab` table instance which stores `user` objects indexed by the primary key which is of type `eosio::name`. Consult the section [How to instantiate a multi-index table](./how-to-instantiate-a-multi-index-table) to learn how to set it up.
+* An Anvo Network development environment, for details consult the [Documentation Portal](https://docs.eosnetwork.com/docs/latest/).
+* A multi-index `testab` table instance which stores `user` objects indexed by the primary key which is of type `core_net::name`. Consult the section [How to instantiate a multi-index table](./how-to-instantiate-a-multi-index-table) to learn how to set it up.
 
 ## Procedure
 
@@ -53,7 +53,7 @@ Search for the `user` name in the multi-index table using the primary index. If 
     check( itr != testtab.end(), "user does not exist in table" );
 
     // prints the test_primary and datum fields stored for user parameter
-    eosio::print_f("Test Table : {%, %}\n", itr->test_primary, itr->datum);
+    core_net::print_f("Test Table : {%, %}\n", itr->test_primary, itr->datum);
 }
 ```
 
@@ -64,8 +64,8 @@ The full definition and implementation files for the contract should look like t
 __multi_index_example.hpp__
 
 ```cpp
-#include <eosio/eosio.hpp>
-using namespace eosio;
+#include <core_net/core_net.hpp>
+using namespace core_net;
 
 // multi-index example contract class
 class [[eosio::contract]] multi_index_example : public contract {
@@ -91,10 +91,10 @@ class [[eosio::contract]] multi_index_example : public contract {
         uint64_t primary_key( ) const { return test_primary.value; }
       };
 
-      // the multi-index type definition, for ease of use define a type alias `test_table_t`, 
-      // based on the multi_index template type, parametarized with a random name and 
+      // the multi-index type definition, for ease of use define a type alias `test_table_t`,
+      // based on the multi_index template type, parametarized with a random name and
       // the test_table data structure
-      typedef eosio::multi_index<"testtaba"_n, test_table> test_table_t;
+      typedef core_net::multi_index<"testtaba"_n, test_table> test_table_t;
 
       // the multi-index table instance declared as a data member of type test_table_t
       test_table_t testtab;
@@ -134,12 +134,12 @@ __multi_index_example.cpp__
   check( itr != testtab.end(), "user does not exist in table" );
 
   // prints the test_primary and datum fields stored for user parameter
-  eosio::print_f("Test Table : {%, %}\n", itr->test_primary, itr->datum);
+  core_net::print_f("Test Table : {%, %}\n", itr->test_primary, itr->datum);
 }
 ```
 
 [[info | Full example location]]
-| A full example project demonstrating the instantiation and usage of multi-index table can be found [here](https://github.com/AntelopeIO/cdt/blob/main/examples/multi_index_example).
+| A full example project demonstrating the instantiation and usage of multi-index table can be found [here](https://github.com/Anvo-Network/cdt/blob/main/examples/multi_index_example).
 
 ## Summary
 

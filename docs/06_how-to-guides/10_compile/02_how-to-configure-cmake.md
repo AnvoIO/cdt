@@ -51,10 +51,10 @@ To create manually the CMake configuration, the template `CMakeLists.txt` in the
 2. In `test.cpp`:
 
    ```c++
-   #include <eosio/eosio.hpp>
-   using namespace eosio;
+   #include <core_net/core_net.hpp>
+   using namespace core_net;
 
-   class [[eosio::contract]] test : public eosio::contract {
+   class [[eosio::contract]] test : public core_net::contract {
    public:
       using contract::contract;
 

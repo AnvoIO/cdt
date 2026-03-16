@@ -17,7 +17,7 @@ See the following code reference guide for action wrapper:
 
 Make sure you have the following prerequisites in place:
 
-* An Antelope development environment, for details consult the [Documentation Portal](https://docs.eosnetwork.com/docs/latest/).
+* An Anvo Network development environment, for details consult the [Documentation Portal](https://docs.eosnetwork.com/docs/latest/).
 * A smart contract named `multi_index_example`, defined in file `multi_index_example.hpp`.
 * An action `mod` which modifies the integer value `n` stored for row with key `user`.
 
@@ -43,7 +43,7 @@ Complete the following steps to create and use `mod_action` action wrapper for t
 
 ### 1. Define The Action Wrapper
 
-To define an action wrapper for the `mod` action, use the `eosio::action_wrapper` template, with  the first parameter the action name as a `eosio::name` and second parameter as the reference to the action method:
+To define an action wrapper for the `mod` action, use the `core_net::action_wrapper` template, with  the first parameter the action name as a `core_net::name` and second parameter as the reference to the action method:
 
 ```diff
 class [[eosio::contract]] multi_index_example : public contract {
@@ -87,7 +87,7 @@ multi_index_example::mod_action modaction("multiindexex"_n, {get_self(), 1});
 +modaction.send("eostutorial"_n, 1);
 ```
 
-For a full example see the [multi_index example contract](https://github.com/AntelopeIO/cdt/blob/main/examples/multi_index_example).
+For a full example see the [multi_index example contract](https://github.com/Anvo-Network/cdt/blob/main/examples/multi_index_example).
 
 ## Summary
 

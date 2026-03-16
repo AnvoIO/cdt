@@ -1,55 +1,55 @@
 ---
-content_title: eosio::binary_extension
+content_title: core_net::binary_extension
 ---
 
-You can find the implementation of `eosio::binary_extension` within the CDT repository in the file [binary_extension.hpp](https://github.com/AntelopeIO/cdt/blob/main/libraries/eosiolib/core/eosio/binary_extension.hpp).
+You can find the implementation of `core_net::binary_extension` within the CDT repository in the file [binary_extension.hpp](https://github.com/Anvo-Network/cdt/blob/main/libraries/eosiolib/core/eosio/binary_extension.hpp).
 
-The primary concern when using this type is when you are adding a new field to a smart contract's data structure that is currently utilized in an `eosio::multi_index` type (AKA a _table_), or when adding a new parameter to an action declaration.
+The primary concern when using this type is when you are adding a new field to a smart contract's data structure that is currently utilized in an `core_net::multi_index` type (AKA a _table_), or when adding a new parameter to an action declaration.
 
-By wrapping the new field in an `eosio::binary_extension`, you are enabling your contract to be backwards compatible for future use. Note that this new field/parameter **MUST** be appended at the end of a data structure (this is due to implementation details in `eosio::multi_index`, which relies on the `boost::multi_index` type), or at the end of the parameter list in an action declaration.
+By wrapping the new field in an `core_net::binary_extension`, you are enabling your contract to be backwards compatible for future use. Note that this new field/parameter **MUST** be appended at the end of a data structure (this is due to implementation details in `core_net::multi_index`, which relies on the `boost::multi_index` type), or at the end of the parameter list in an action declaration.
 
-If you don't wrap the new field in an `eosio::binary_extension`, the `eosio::multi_index` table will be reformatted in such a way that disallows reads to the former datum; or in an action's case, the function will be un-callable.
+If you don't wrap the new field in an `core_net::binary_extension`, the `core_net::multi_index` table will be reformatted in such a way that disallows reads to the former datum; or in an action's case, the function will be un-callable.
 
-<hr>How the `eosio::binary_extension` type works
+<hr>How the `core_net::binary_extension` type works
 
 Take a moment to study this smart contract and its corresponding `.abi`.
 
-This contract not only serves as a good example to the `eosio::binary_extension` type, but can also be used as a gateway for developing smart contracts on the eosio protocol.
+This contract not only serves as a good example to the `core_net::binary_extension` type, but can also be used as a gateway for developing smart contracts on the Anvo Network protocol.
 
 **binary_extension_contract.hpp**
 
 ```c++
-#include <eosio/contract.hpp>         // eosio::contract
-#include <eosio/binary_extension.hpp> // eosio::binary_extension
-#include <eosio/datastream.hpp>       // eosio::datastream
-#include <eosio/name.hpp>             // eosio::name
-#include <eosio/multi_index.hpp>      // eosio::indexed_by, eosio::multi_index
-#include <eosio/print.hpp>            // eosio::print_f
+#include <core_net/contract.hpp>         // core_net::contract
+#include <core_net/binary_extension.hpp> // core_net::binary_extension
+#include <core_net/datastream.hpp>       // core_net::datastream
+#include <core_net/name.hpp>             // core_net::name
+#include <core_net/multi_index.hpp>      // core_net::indexed_by, core_net::multi_index
+#include <core_net/print.hpp>            // core_net::print_f
 
-class [[eosio::contract]] binary_extension_contract : public eosio::contract {
+class [[core_net::contract]] binary_extension_contract : public core_net::contract {
 public:
    using contract::contract;
-   binary_extension_contract(eosio::name receiver, eosio::name code, eosio::datastream<const char*> ds)
+   binary_extension_contract(core_net::name receiver, core_net::name code, core_net::datastream<const char*> ds)
       : contract{receiver, code, ds}, _table{receiver, receiver.value}
    { }
 
-   [[eosio::action]] void regpkey (eosio::name primary_key);                ///< Register primary key.
-   [[eosio::action]] void printbyp(eosio::name primary_key);                ///< Print by primary key.
-   [[eosio::action]] void printbys(eosio::name secondary_key);              ///< Print by secondary key.
-   [[eosio::action]] void modifyp (eosio::name primary_key, eosio::name n); ///< Modify primary key by primary key.
-   [[eosio::action]] void modifys (eosio::name primary_key, eosio::name n); ///< Modify secondary key by primary key.
+   [[eosio::action]] void regpkey (core_net::name primary_key);                ///< Register primary key.
+   [[eosio::action]] void printbyp(core_net::name primary_key);                ///< Print by primary key.
+   [[eosio::action]] void printbys(core_net::name secondary_key);              ///< Print by secondary key.
+   [[eosio::action]] void modifyp (core_net::name primary_key, core_net::name n); ///< Modify primary key by primary key.
+   [[eosio::action]] void modifys (core_net::name primary_key, core_net::name n); ///< Modify secondary key by primary key.
 
    struct [[eosio::table]] structure {
-      eosio::name _primary_key;
-      eosio::name _secondary_key;
+      core_net::name _primary_key;
+      core_net::name _secondary_key;
          
       uint64_t primary_key()   const { return _primary_key.value;   }
       uint64_t secondary_key() const { return _secondary_key.value; }
    };
 
-   using index1 = eosio::indexed_by<"index1"_n, eosio::const_mem_fun<structure, uint64_t, &structure::primary_key>>;
-   using index2 = eosio::indexed_by<"index2"_n, eosio::const_mem_fun<structure, uint64_t, &structure::secondary_key>>;
-   using table  = eosio::multi_index<"table"_n, structure, index1, index2>;
+   using index1 = core_net::indexed_by<"index1"_n, core_net::const_mem_fun<structure, uint64_t, &structure::primary_key>>;
+   using index2 = core_net::indexed_by<"index2"_n, core_net::const_mem_fun<structure, uint64_t, &structure::secondary_key>>;
+   using table  = core_net::multi_index<"table"_n, structure, index1, index2>;
 
 private:
    table _table;
@@ -62,98 +62,98 @@ private:
 ```c++
 #include "binary_extension_contract.hpp"
 
-using eosio::name;
+using core_net::name;
 
 [[eosio::action]] void binary_extension_contract::regpkey(name primary_key) {
-   eosio::print_f("`regpkey` executing.\n");
+   core_net::print_f("`regpkey` executing.\n");
    
    auto index{_table.get_index<"index1"_n>()}; ///< `index` represents `_table` organized by `index1`.
    auto iter {index.find(primary_key.value) }; ///< Note: the type returned by `index.find` is different than the type returned by `_table.find`.
    
    if (iter == _table.get_index<"index1"_n>().end()) {
-      eosio::print_f("`_primary_key`: % not found; registering.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % not found; registering.\n", primary_key.to_string());
       _table.emplace(_self, [&](auto& row) {
          row._primary_key   = primary_key;
          row._secondary_key = "nothin"_n;
       });
    }
    else {
-      eosio::print_f("`_primary_key`: % found; not registering.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % found; not registering.\n", primary_key.to_string());
    }
 
-   eosio::print_f("`regpkey` finished executing.\n");
+   core_net::print_f("`regpkey` finished executing.\n");
 }
 
-[[eosio::action]] void binary_extension_contract::printbyp(eosio::name primary_key) {
-   eosio::print_f("`printbyp` executing.\n");
+[[eosio::action]] void binary_extension_contract::printbyp(core_net::name primary_key) {
+   core_net::print_f("`printbyp` executing.\n");
    
    auto index{_table.get_index<"index1"_n>()};
    auto iter {index.find(primary_key.value) };
    
    if (iter != _table.get_index<"index1"_n>().end()) {
-      eosio::print_f("`_primary_key`: % found; printing.\n", primary_key.to_string());
-      eosio::print_f("{%, %}\n", iter->_primary_key, iter->_secondary_key);
+      core_net::print_f("`_primary_key`: % found; printing.\n", primary_key.to_string());
+      core_net::print_f("{%, %}\n", iter->_primary_key, iter->_secondary_key);
    }
    else {
-      eosio::print_f("`_primary_key`: % not found; not printing.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % not found; not printing.\n", primary_key.to_string());
    }
 
-   eosio::print_f("`printbyp` finished executing.\n");
+   core_net::print_f("`printbyp` finished executing.\n");
 }
 
-[[eosio::action]] void binary_extension_contract::printbys(eosio::name secondary_key) {
-   eosio::print_f("`printbys` executing.\n");
+[[eosio::action]] void binary_extension_contract::printbys(core_net::name secondary_key) {
+   core_net::print_f("`printbys` executing.\n");
    
    auto index{_table.get_index<"index2"_n>()};
    auto iter {index.find(secondary_key.value)};
    
    if (iter != _table.get_index<"index2"_n>().end()) {
-      eosio::print_f("`_secondary_key`: % found; printing.\n", secondary_key.to_string());
+      core_net::print_f("`_secondary_key`: % found; printing.\n", secondary_key.to_string());
       printbyp(iter->_primary_key);
    }
    else {
-      eosio::print_f("`_secondary_key`: % not found; not printing.\n", secondary_key.to_string());
+      core_net::print_f("`_secondary_key`: % not found; not printing.\n", secondary_key.to_string());
    }
 
-   eosio::print_f("`printbys` finished executing.\n");
+   core_net::print_f("`printbys` finished executing.\n");
 }
 
-[[eosio::action]] void binary_extension_contract::modifyp(eosio::name primary_key, name n) {
-   eosio::print_f("`modifyp` executing.\n");
+[[eosio::action]] void binary_extension_contract::modifyp(core_net::name primary_key, name n) {
+   core_net::print_f("`modifyp` executing.\n");
    
    auto index{_table.get_index<"index1"_n>()};
    auto iter {index.find(primary_key.value)};
    
    if (iter != _table.get_index<"index1"_n>().end()) {
-      eosio::print_f("`_primary_key`: % found; modifying `_primary_key`.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % found; modifying `_primary_key`.\n", primary_key.to_string());
       index.modify(iter, _self, [&](auto& row) {
          row._primary_key = n;
       });
    }
    else {
-      eosio::print_f("`_primary_key`: % not found; not modifying `_primary_key`.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % not found; not modifying `_primary_key`.\n", primary_key.to_string());
    }
 
-   eosio::print_f("`modifyp` finished executing.\n");
+   core_net::print_f("`modifyp` finished executing.\n");
 }
 
-[[eosio::action]] void binary_extension_contract::modifys(eosio::name primary_key, name n) {
-   eosio::print_f("`modifys` executing.\n");
+[[eosio::action]] void binary_extension_contract::modifys(core_net::name primary_key, name n) {
+   core_net::print_f("`modifys` executing.\n");
    
    auto index{_table.get_index<"index1"_n>()};
    auto iter {index.find(primary_key.value)};
    
    if (iter != _table.get_index<"index1"_n>().end()) {
-      eosio::print_f("`_primary_key`: % found; modifying `_secondary_key`.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % found; modifying `_secondary_key`.\n", primary_key.to_string());
       index.modify(iter, _self, [&](auto& row) {
          row._secondary_key = n;
       });
    }
    else {
-      eosio::print_f("`_primary_key`: % not found; not modifying `_secondary_key`.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % not found; not modifying `_secondary_key`.\n", primary_key.to_string());
    }
 
-   eosio::print_f("`modifys` finished executing.\n");
+   core_net::print_f("`modifys` finished executing.\n");
 }
 ```
 
@@ -286,13 +286,13 @@ Take note of the action `regpkey`, and the struct `structure` in `con.hpp` and `
 **binary_extension_contract.hpp**
 
 ```c++
-[[eosio::action]] void regpkey (eosio::name primary_key);
+[[eosio::action]] void regpkey (core_net::name primary_key);
 ```
 
 ```c++
 struct [[eosio::table]] structure {
-    eosio::name _primary_key;
-    eosio::name _secondary_key;
+    core_net::name _primary_key;
+    core_net::name _secondary_key;
 
     uint64_t primary_key()   const { return _primary_key.value;   }
     uint64_t secondary_key() const { return _secondary_key.value; }
@@ -303,23 +303,23 @@ struct [[eosio::table]] structure {
 
 ```c++
 [[eosio::action]] void binary_extension_contract::regpkey(name primary_key) {
-   eosio::print_f("`regpkey` executing.\n");
+   core_net::print_f("`regpkey` executing.\n");
    
    auto index{_table.get_index<"index1"_n>()}; ///< `index` represents `_table` organized by `index1`.
    auto iter {index.find(primary_key.value) }; ///< Note: the type returned by `index.find` is different than the type returned by `_table.find`.
    
    if (iter == _table.get_index<"index1"_n>().end()) {
-      eosio::print_f("`_primary_key`: % not found; registering.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % not found; registering.\n", primary_key.to_string());
       _table.emplace(_self, [&](auto& row) {
          row._primary_key   = primary_key;
          row._secondary_key = "nothin"_n;
       });
    }
    else {
-      eosio::print_f("`_primary_key`: % found; not registering.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % found; not registering.\n", primary_key.to_string());
    }
 
-   eosio::print_f("`regpkey` finished executing.\n");
+   core_net::print_f("`regpkey` finished executing.\n");
 }
 ```
 
@@ -364,7 +364,7 @@ Find below their corresponding sections in the `.abi` files:
 ```
 
 ```
-~/binary_extension_contract $ cleos set contract eosio ./
+~/binary_extension_contract $ core-cli set contract eosio ./
 ```
 
 ```
@@ -379,7 +379,7 @@ warning: transaction executed locally, but may not be confirmed by the network y
 Next, push some data to the contract defined.
 
 ```
-~/binary_extension_contract $ cleos push action eosio regpkey '{"primary_key":"eosio.name"}' -p eosio
+~/binary_extension_contract $ core-cli push action eosio regpkey '{"primary_key":"eosio.name"}' -p eosio
 ```
 
 ```
@@ -396,7 +396,7 @@ warning: transaction executed locally, but may not be confirmed by the network y
 Finally, read back the data you have just written.
 
 ```
-~/binary_extension_contract $ cleos push action eosio printbyp '{"primary_key":"eosio.name"}' -p eosio
+~/binary_extension_contract $ core-cli push action eosio printbyp '{"primary_key":"eosio.name"}' -p eosio
 ```
 
 ```
@@ -411,20 +411,20 @@ executed transaction: e9b77d3cfba322a7a3a93970c0c883cb8b67e2072a26d714d46eef9d79
 warning: transaction executed locally, but may not be confirmed by the network yet
 ```
 
-<hr>Upgrade the smart contract by adding a new field to the table and a new parameter to an action while **NOT** wrapping the new field/parameter in an `eosio::binary_extension` type and see what happens:
+<hr>Upgrade the smart contract by adding a new field to the table and a new parameter to an action while **NOT** wrapping the new field/parameter in an `core_net::binary_extension` type and see what happens:
 
 **binary_extension_contract.hpp**
 
 ```diff
-+[[eosio::action]] void regpkey (eosio::name primary_key, eosio::name secondary_key);
--[[eosio::action]] void regpkey (eosio::name primary_key);
++[[eosio::action]] void regpkey (core_net::name primary_key, core_net::name secondary_key);
+-[[eosio::action]] void regpkey (core_net::name primary_key);
 ```
 
 ```diff
 struct [[eosio::table]] structure {
-    eosio::name _primary_key;
-    eosio::name _secondary_key;
-+   eosio::name _non_binary_extension_key;
+    core_net::name _primary_key;
+    core_net::name _secondary_key;
++   core_net::name _non_binary_extension_key;
 
     uint64_t primary_key()   const { return _primary_key.value;   }
     uint64_t secondary_key() const { return _secondary_key.value; }
@@ -436,13 +436,13 @@ struct [[eosio::table]] structure {
 ```diff
 +[[eosio::action]] void binary_extension_contract::regpkey(name primary_key, name secondary_key) {
 -[[eosio::action]] void binary_extension_contract::regpkey(name primary_key) {
-   eosio::print_f("`regpkey` executing.\n");
+   core_net::print_f("`regpkey` executing.\n");
    
    auto index{_table.get_index<"index1"_n>()}; ///< `index` represents `_table` organized by `index1`.
    auto iter {index.find(primary_key.value) }; ///< Note: the type returned by `index.find` is different than the type returned by `_table.find`.
    
    if (iter == _table.get_index<"index1"_n>().end()) {
-      eosio::print_f("`_primary_key`: % not found; registering.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % not found; registering.\n", primary_key.to_string());
       _table.emplace(_self, [&](auto& row) {
          row._primary_key   = primary_key;
 +        if (secondary_key) {
@@ -454,10 +454,10 @@ struct [[eosio::table]] structure {
       });
    }
    else {
-      eosio::print_f("`_primary_key`: % found; not registering.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % found; not registering.\n", primary_key.to_string());
    }
 
-   eosio::print_f("`regpkey` finished executing.\n");
+   core_net::print_f("`regpkey` finished executing.\n");
 }
 ```
 
@@ -507,7 +507,7 @@ Next, upgrade the contract and try to read from table and write to table the ori
 ```
 
 ```
-~/binary_extension_contract $ cleos set contract eosio ./
+~/binary_extension_contract $ core-cli set contract eosio ./
 ```
 
 ```
@@ -520,7 +520,7 @@ warning: transaction executed locally, but may not be confirmed by the network y
 ```
 
 ```
-~/binary_extension_contract $ cleos push action eosio printbyp '{"primary_key":"eosio.name"}' -p eosio
+~/binary_extension_contract $ core-cli push action eosio printbyp '{"primary_key":"eosio.name"}' -p eosio
 ```
 
 ```
@@ -532,7 +532,7 @@ assertion failure with message: read
 Whoops, you aren't able to read the data you've previously written to table.
 
 ```
-~/binary_extension_contract $ cleos push action eosio regpkey '{"primary_key":"eosio.name2"}' -p eosio
+~/binary_extension_contract $ core-cli push action eosio regpkey '{"primary_key":"eosio.name2"}' -p eosio
 ```
 
 ```
@@ -543,21 +543,21 @@ Missing field 'secondary_key' in input object while processing struct 'regpkey'
 
 Whoops, you aren't able to write to table the original way with the upgraded action either.
 
-<hr>Ok, back up and wrap the new field and the new action parameter in an `eosio::binary_extension` type:
+<hr>Ok, back up and wrap the new field and the new action parameter in an `core_net::binary_extension` type:
 
 **binary_extension_contract.hpp**
 
 ```diff
-+[[eosio::action]] void regpkey (eosio::name primary_key. eosio::binary_extension<eosio::name> secondary_key);
--[[eosio::action]] void regpkey (eosio::name primary_key, eosio::name secondary_key);
++[[eosio::action]] void regpkey (core_net::name primary_key. core_net::binary_extension<core_net::name> secondary_key);
+-[[eosio::action]] void regpkey (core_net::name primary_key, core_net::name secondary_key);
 ```
 
 ```diff
 struct [[eosio::table]] structure {
-    eosio::name                          _primary_key;
-    eosio::name                          _secondary_key;
-+   eosio::binary_extension<eosio::name> _binary_extension_key;
--   eosio::name                          _non_binary_extension_key;
+    core_net::name                          _primary_key;
+    core_net::name                          _secondary_key;
++   core_net::binary_extension<core_net::name> _binary_extension_key;
+-   core_net::name                          _non_binary_extension_key;
 
     uint64_t primary_key()   const { return _primary_key.value;   }
     uint64_t secondary_key() const { return _secondary_key.value; }
@@ -569,13 +569,13 @@ struct [[eosio::table]] structure {
 ```diff
 +[[eosio::action]] void binary_extension_contract::regpkey(name primary_key, binary_extension<name> secondary_key) {
 -[[eosio::action]] void binary_extension_contract::regpkey(name primary_key, name secondary_key) {
-   eosio::print_f("`regpkey` executing.\n");
+   core_net::print_f("`regpkey` executing.\n");
    
    auto index{_table.get_index<"index1"_n>()}; ///< `index` represents `_table` organized by `index1`.
    auto iter {index.find(primary_key.value) }; ///< Note: the type returned by `index.find` is different than the type returned by `_table.find`.
    
    if (iter == _table.get_index<"index1"_n>().end()) {
-      eosio::print_f("`_primary_key`: % not found; registering.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % not found; registering.\n", primary_key.to_string());
       _table.emplace(_self, [&](auto& row) {
          row._primary_key   = primary_key;
          if (secondary_key) {
@@ -588,10 +588,10 @@ struct [[eosio::table]] structure {
       });
    }
    else {
-      eosio::print_f("`_primary_key`: % found; not registering.\n", primary_key.to_string());
+      core_net::print_f("`_primary_key`: % found; not registering.\n", primary_key.to_string());
    }
 
-   eosio::print_f("`regpkey` finished executing.\n");
+   core_net::print_f("`regpkey` finished executing.\n");
 }
 ```
 
@@ -637,7 +637,7 @@ struct [[eosio::table]] structure {
 }
 ```
 
-Note the `$` after the types now; this indicates that this type is an `eosio::binary_extension` type field.
+Note the `$` after the types now; this indicates that this type is an `core_net::binary_extension` type field.
 ```diff
 {
     "name": "secondary_key",
@@ -657,7 +657,7 @@ Note the `$` after the types now; this indicates that this type is an `eosio::bi
 Now, upgrade the contract again and try to read/write from/to table:
 
 ```
-~/binary_extension_contract $ cleos set contract eosio ./
+~/binary_extension_contract $ core-cli set contract eosio ./
 ```
 
 ```
@@ -670,7 +670,7 @@ warning: transaction executed locally, but may not be confirmed by the network y
 ```
 
 ```
-~/binary_extension_contract $ cleos push action eosio printbyp '{"primary_key":"eosio.name"}' -p eosio
+~/binary_extension_contract $ core-cli push action eosio printbyp '{"primary_key":"eosio.name"}' -p eosio
 ```
 
 ```
@@ -686,7 +686,7 @@ warning: transaction executed locally, but may not be confirmed by the network y
 ```
 
 ```
-~/binary_extension_contract $ cleos push action eosio regpkey '{"primary_key":"eosio.name2"}' -p eosio
+~/binary_extension_contract $ core-cli push action eosio regpkey '{"primary_key":"eosio.name2"}' -p eosio
 ```
 
 ```
@@ -705,9 +705,9 @@ Nice! The smart contract is now backwards compatible for the future use of its t
 <hr>
 
 Just keep these simple rules in mind when upgrading a smart contract.
-If you are adding a new field to a struct currently in use by a `eosio::multi_index` be **SURE** to:
+If you are adding a new field to a struct currently in use by a `core_net::multi_index` be **SURE** to:
 - add the field at the end of the struct,
-- and wrap the type using an `eosio::binary_extension` type.
+- and wrap the type using an `core_net::binary_extension` type.
 
 # There are a few restrictions you have to be aware of, and they are outlined below
 

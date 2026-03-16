@@ -2,11 +2,11 @@
 title: CDT-CPP
 section: 1
 header: Contract Development Toolkit (CDT)
-footer: AntelopeIO
+footer: Anvo-Network
 date: April 08, 2023
 ---
 # NAME
-cdt-cpp - Antelope smart contract C++ to WebAssembly compiler
+cdt-cpp - Anvo Network smart contract C++ to WebAssembly compiler
 
 # SYNOPSIS
 
@@ -15,7 +15,7 @@ cdt-cpp - Antelope smart contract C++ to WebAssembly compiler
 # DESCRIPTION
 
 **cdt-cpp**  Is a C++ compiler which converts C++ smart contract code to WebAssemply for 
-execution in Antelope block chain virtual machines.  
+execution in Anvo Network block chain virtual machines.  
 
 # OPTIONS
 
@@ -434,10 +434,10 @@ execution in Antelope block chain virtual machines.
 
 # BUGS
 
-Please submit bug reports online at https://github.com/AntelopeIO/cdt/issues
+Please submit bug reports online at https://github.com/Anvo-Network/cdt/issues
 
 # SEE ALSO
 
-For more details consult the full documentation and sources https://github.com/AntelopeIO/cdt
+For more details consult the full documentation and sources https://github.com/Anvo-Network/cdt
 
 
