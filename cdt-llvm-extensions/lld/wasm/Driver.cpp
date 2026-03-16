@@ -1252,7 +1252,9 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
         sym->markLive();
     }
     for (auto notify : file->getEosioNotify()) {
-      std::string symName = notify.str().substr(notify.str().find(":") + 1);
+      // Notify format: code_name::action:symbol_name — extract after last ':'
+      std::string snotif = notify.str();
+      std::string symName = snotif.substr(snotif.rfind(":") + 1);
       if (Symbol *sym = symtab->find(symName))
         sym->markLive();
     }
