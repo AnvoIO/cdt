@@ -109,8 +109,8 @@ namespace eosio {
    inline void print( T num ) {
       if constexpr(std::is_same<T, int128_t>::value)
         internal_use_do_not_use::printi128(&num);
-      else if constexpr(std::is_same<T, char>::value)
-        internal_use_do_not_use::prints_l( &num, 1 );
+      else if constexpr(std::is_same<T, char>::value || std::is_same<T, signed char>::value)
+        internal_use_do_not_use::prints_l( reinterpret_cast<const char*>(&num), 1 );
       else
         internal_use_do_not_use::printi(num);
    }
@@ -127,6 +127,8 @@ namespace eosio {
          internal_use_do_not_use::printui128(&num);
       else if constexpr(std::is_same<T, bool>::value)
          internal_use_do_not_use::prints(num?"true":"false");
+      else if constexpr(std::is_same<T, char>::value)
+        internal_use_do_not_use::prints_l( reinterpret_cast<const char*>(&num), 1 );
       else
         internal_use_do_not_use::printui(num);
    }
