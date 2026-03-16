@@ -1,6 +1,6 @@
 {
-    "antelope-spring-dev":{
-       "target":"release/2.0",
+    "anvo-core-dev":{
+       "target":"main",
        "prerelease":false
     }
- }
+}
