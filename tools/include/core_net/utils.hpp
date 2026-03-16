@@ -97,6 +97,29 @@ std::string name_to_string( uint64_t nm ) {
    return str;
 }
 
+static constexpr uint32_t max_string_length_for_hash_id = 128;
+
+template <typename Lambda>
+void validate_hash_id( const std::string& str, Lambda&& error_handler ) {
+   if (str.empty())
+      return error_handler("string is empty");
+   if ( str.length() > max_string_length_for_hash_id )
+      return error_handler(std::string("string {") + str + "} is more than " + std::to_string(max_string_length_for_hash_id) + " characters long");
+   if (!(std::isalpha(str[0]) || str[0] == '_'))
+      return error_handler(std::string("string {") + str + "} does not start with letter or underscore");
+   for (char ch : str.substr(1)) {
+      if (!(std::isalnum(static_cast<unsigned char>(ch)) || ch == '_'))
+         return error_handler(std::string("string {") + str + "} has a character {" + ch + "} which is not a number, letter, or _");
+   }
+}
+
+uint64_t to_hash_id(std::string str) {
+   uint64_t hash = 5381;
+   for (char c : str)
+      hash = ((hash << 5) + hash) + static_cast<uint8_t>(c);
+   return hash;
+}
+
 struct environment {
    static llvm::ArrayRef<llvm::StringRef> get() {
       static std::vector<llvm::StringRef> env_table;
@@ -163,6 +186,7 @@ struct environment {
 namespace eosio { namespace cdt {
    using core_net::cdt::char_to_symbol;
    using core_net::cdt::string_to_name;
+   using core_net::cdt::to_hash_id;
    using core_net::cdt::environment;
    using core_net::cdt::whereami;
 }} // ns eosio::cdt

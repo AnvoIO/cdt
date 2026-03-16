@@ -1901,10 +1901,17 @@ void Writer::createDispatchFunction() {
 // Generate sync_call entry function.
 // The parameters of sync_call() are `sender`, `receiver`, `data_size`.
 void Writer::createCallDispatchFunction() {
-   // sync_call dispatch not yet ported to LLVM 16
-   // Requires getEosioCalls() and to_hash_id() support
-   return;
-#if 0
+   // Check if any sync calls exist
+   bool hasCalls = false;
+   for (ObjFile *file : symtab->objectFiles) {
+      if (!file->getEosioCalls().empty()) {
+         hasCalls = true;
+         break;
+      }
+   }
+   if (!hasCalls)
+      return;
+
    // Generate an `if` block for each method marked as `call`
    auto create_if = [&](raw_string_ostream& os, std::string call_name, bool& need_else) {
       if (need_else) {
@@ -1913,7 +1920,11 @@ void Writer::createCallDispatchFunction() {
       need_else = true;
 
       // Retrieve payload data
-      auto get_call_data_sym = cast<FunctionSymbol>(symtab->find("__eos_get_sync_call_data_"));
+      auto *get_call_data_sym = dyn_cast_or_null<FunctionSymbol>(symtab->find("__eos_get_sync_call_data_"));
+      if (!get_call_data_sym || !get_call_data_sym->hasFunctionIndex()) {
+         error("CDT sync_call dispatch: __eos_get_sync_call_data_ not found");
+         return;
+      }
       uint32_t get_call_data_idx = get_call_data_sym->getFunctionIndex();
       writeU8(os, OPCODE_GET_LOCAL, "GET_LOCAL");
       writeUleb128(os, 2, "data_size");
@@ -1925,7 +1936,11 @@ void Writer::createCallDispatchFunction() {
       writeUleb128(os, 3, "data");
 
       // Retrieve data header
-      auto get_header_sym = cast<FunctionSymbol>(symtab->find("__eos_get_sync_call_data_header_"));
+      auto *get_header_sym = dyn_cast_or_null<FunctionSymbol>(symtab->find("__eos_get_sync_call_data_header_"));
+      if (!get_header_sym || !get_header_sym->hasFunctionIndex()) {
+         error("CDT sync_call dispatch: __eos_get_sync_call_data_header_ not found");
+         return;
+      }
       uint32_t get_header_idx = get_header_sym->getFunctionIndex();
       writeU8(os, OPCODE_GET_LOCAL, "GET_LOCAL");
       writeUleb128(os, 3, "data");
@@ -1984,7 +1999,12 @@ void Writer::createCallDispatchFunction() {
       writeU8(os, OPCODE_GET_LOCAL, "GET_LOCAL");
       writeUleb128(os, 3, "data");
       writeU8(os, OPCODE_CALL, "CALL");
-      auto func_sym = cast<FunctionSymbol>(symtab->find(call_name.substr(call_name.find(":")+1)));
+      std::string sym_name = call_name.substr(call_name.find(":")+1);
+      auto *func_sym = dyn_cast_or_null<FunctionSymbol>(symtab->find(sym_name));
+      if (!func_sym || !func_sym->hasFunctionIndex()) {
+         error("CDT sync_call dispatch: symbol not found or has no index: " + sym_name);
+         return;
+      }
       uint32_t index = func_sym->getFunctionIndex();
       writeUleb128(os, index, "index");
    };
@@ -2067,8 +2087,6 @@ void Writer::createCallDispatchFunction() {
       writeU8(OS, OPCODE_END, "END");
    }
 
-   // TODO: sync_call dispatch not yet ported
-#endif
 }
 
 void Writer::run() {

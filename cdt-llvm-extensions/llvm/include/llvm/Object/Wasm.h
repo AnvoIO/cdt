@@ -151,6 +151,7 @@ public:
   ArrayRef<wasm::WasmDebugName> debugNames() const { return DebugNames; }
   ArrayRef<StringRef> actions() const { return Actions; }
   ArrayRef<StringRef> notify() const { return Notify; }
+  ArrayRef<StringRef> calls() const { return Calls; }
   StringRef get_eosio_abi() const { return eosio_abi; }
   uint32_t startFunction() const { return StartFunction; }
   uint32_t getNumImportedGlobals() const { return NumImportedGlobals; }
@@ -272,6 +273,7 @@ private:
   Error parseTargetFeaturesSection(ReadContext &Ctx);
   Error parseRelocSection(StringRef Name, ReadContext &Ctx);
   Error parseEosioABISection(ReadContext &Ctx);
+  Error parseCallsSection(ReadContext &Ctx);
 
   wasm::WasmObjectHeader Header;
   std::vector<WasmSection> Sections;
@@ -287,6 +289,7 @@ private:
   std::vector<StringRef> AllowedImports;
   std::vector<StringRef> Actions;
   std::vector<StringRef> Notify;
+  std::vector<StringRef> Calls;
   std::vector<wasm::WasmExport> Exports;
   std::vector<wasm::WasmElemSegment> ElemSegments;
   std::vector<WasmSegment> DataSegments;

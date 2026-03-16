@@ -416,6 +416,18 @@ Error WasmObjectFile::parseNotifySection(ReadContext& Ctx) {
    return Error::success();
 }
 
+Error WasmObjectFile::parseCallsSection(ReadContext& Ctx) {
+   while (Ctx.Ptr < Ctx.End) {
+    StringRef Name = readString(Ctx);
+    Calls.push_back(Name);
+   }
+
+   if (Ctx.Ptr != Ctx.End)
+      return make_error<GenericBinaryError>("calls section ended prematurely",
+                                          object_error::parse_failed);
+   return Error::success();
+}
+
 Error WasmObjectFile::parseDylinkSection(ReadContext &Ctx) {
   // Legacy "dylink" section support.
   // See parseDylink0Section for the current "dylink.0" section parsing.
@@ -1111,6 +1123,9 @@ Error WasmObjectFile::parseCustomSection(WasmSection &Sec, ReadContext &Ctx) {
         return Err;
   } else if (Sec.Name == ".eosio_notify") {
      if (Error Err = parseNotifySection(Ctx))
+        return Err;
+  } else if (Sec.Name == ".eosio_calls") {
+     if (Error Err = parseCallsSection(Ctx))
         return Err;
   } else if (Sec.Name == "dylink") {
     if (Error Err = parseDylinkSection(Ctx))

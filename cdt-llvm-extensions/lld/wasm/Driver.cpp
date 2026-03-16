@@ -1263,9 +1263,20 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
   // CDT: Mark runtime symbols needed by the dispatch function as live.
   // These are called from the synthetic apply body generated in Writer.cpp.
   for (const char *name : {"eosio_assert_code", "eosio_set_contract_name",
-                           "__cxa_finalize"}) {
+                           "__cxa_finalize",
+                           "__eos_get_sync_call_data_",
+                           "__eos_get_sync_call_data_header_"}) {
     if (Symbol *sym = symtab->find(name))
       sym->markLive();
+  }
+
+  // CDT: Mark sync_call handler symbols as live (same pattern as actions/notify)
+  for (ObjFile *file : symtab->objectFiles) {
+    for (auto call : file->getEosioCalls()) {
+      std::string symName = call.str().substr(call.str().find(":") + 1);
+      if (Symbol *sym = symtab->find(symName))
+        sym->markLive();
+    }
   }
 
   // Do size optimizations: garbage collection

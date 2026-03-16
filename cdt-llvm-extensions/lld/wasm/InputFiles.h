@@ -154,6 +154,7 @@ public:
   std::string getEosioABI() const { return eosioABI; }
   ArrayRef<StringRef> getEosioActions() const { return eosioActions; }
   ArrayRef<StringRef> getEosioNotify() const { return eosioNotify; }
+  ArrayRef<StringRef> getEosioCalls() const { return eosioCalls; }
 
 private:
   Symbol *createDefined(const WasmSymbol &sym);
@@ -166,6 +167,7 @@ private:
   std::string eosioABI;
   ArrayRef<StringRef> eosioActions;
   ArrayRef<StringRef> eosioNotify;
+  ArrayRef<StringRef> eosioCalls;
 };
 
 // .so file.
