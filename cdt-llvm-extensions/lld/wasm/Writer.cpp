@@ -1585,10 +1585,28 @@ void Writer::createDispatchFunction() {
    // Find the synthetic apply function created by Driver.cpp
    auto *applyFunc = dyn_cast_or_null<DefinedFunction>(symtab->find("apply"));
    if (!applyFunc) {
-      log("-- createDispatchFunction: no apply symbol found, skipping");
+      llvm::errs() << "CDT createDispatchFunction: no apply symbol found, skipping\n";
       return;
    }
-   log("-- createDispatchFunction: building apply dispatch");
+   llvm::errs() << "CDT createDispatchFunction: found apply, building dispatch\n";
+
+   // Count actions/notifications
+   int total_actions = 0, total_notifs = 0;
+   for (ObjFile *file : symtab->objectFiles) {
+      total_actions += file->getEosioActions().size();
+      total_notifs += file->getEosioNotify().size();
+   }
+   llvm::errs() << "CDT: " << total_actions << " actions, " << total_notifs << " notifications\n";
+   if (total_actions == 0 && total_notifs == 0) {
+      llvm::errs() << "CDT: no actions or notifications, creating empty apply body\n";
+      // Create an empty function body (just return)
+      std::string bodyContent;
+      raw_string_ostream OS(bodyContent);
+      writeUleb128(OS, 0, "num locals");
+      writeU8(OS, OPCODE_END, "END");
+      createFunction(applyFunc, bodyContent);
+      return;
+   }
 
    auto create_if = [&](raw_string_ostream& os, std::string str, bool& need_else) {
       if (need_else) {
@@ -1608,7 +1626,21 @@ void Writer::createDispatchFunction() {
       writeU8(os, OPCODE_GET_LOCAL, "GET_LOCAL");
       writeUleb128(os, 1, "code");
       writeU8(os, OPCODE_CALL, "CALL");
-      auto func_sym = cast<FunctionSymbol>(symtab->find(str.substr(str.find(":")+1)));
+      std::string sym_name = str.substr(str.find(":")+1);
+      auto *sym = symtab->find(sym_name);
+      if (!sym) {
+         error("CDT dispatch: symbol not found: " + sym_name);
+         return;
+      }
+      auto *func_sym = dyn_cast<FunctionSymbol>(sym);
+      if (!func_sym) {
+         error("CDT dispatch: not a function symbol: " + sym_name);
+         return;
+      }
+      if (!func_sym->isLive()) {
+         error("CDT dispatch: symbol not live: " + sym_name);
+         return;
+      }
       uint32_t index = func_sym->getFunctionIndex();
       writeUleb128(os, index, "index");
    };

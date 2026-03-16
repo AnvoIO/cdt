@@ -877,7 +877,9 @@ static Options CreateOptions(bool add_defaults=true) {
          ldopts.emplace_back("--allow-undefined-file="+imports_opt);
       }
       else {
-         ldopts.emplace_back("--allow-undefined-file="+eosio::cdt::whereami::where()+"/../cdt.imports");
+         // Allow all undefined symbols — they are WASM host function imports
+         // provided by the blockchain runtime at execution time
+         ldopts.emplace_back("--allow-undefined");
       }
 #endif
    }
