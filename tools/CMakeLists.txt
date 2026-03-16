@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
+project(cdt-tools)
 find_package(LLVM REQUIRED CONFIG)
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
@@ -16,14 +17,13 @@ else()
 endif()
 
 include_directories(${LLVM_INCLUDE_DIRS})
-include_directories(${LLVM_SRCDIR}/tools/clang/include)
+include_directories(${LLVM_SRCDIR}/clang/include)
 include_directories(${LLVM_BINDIR}/tools/clang/include)
-include_directories(${LLVM_SRCDIR}/include)
+include_directories(${LLVM_SRCDIR}/llvm/include)
 include_directories(${LLVM_BINDIR}/include)
 link_directories(${LLVM_LIBRARY_DIRS})
 add_definitions(${LLVM_DEFINITIONS})
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
 
 set(EOSIO_STACK_SIZE 8192)
 
@@ -42,6 +42,7 @@ else()
    set(CDT_NATIVE_MACOS_MIN_VERSION "10.13")
 endif()
 
+# linked in ClangSupport and LLVMWindowsDriver with LLVM 16
 macro (add_tool name)
    set(LLVM_LINK_COMPONENTS support)
 
@@ -62,6 +63,7 @@ macro (add_tool name)
      clangSerialization
      clangParse
      clangSema
+     clangSupport
      clangAnalysis
      clangAST
      clangLex
@@ -82,6 +84,7 @@ macro (add_tool name)
      LLVMCore
      LLVMSupport
      LLVMDemangle
+     LLVMWindowsDriver
    )
 
    add_custom_command( TARGET ${name} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${name}> ${CMAKE_BINARY_DIR}/bin/ )

@@ -212,15 +212,18 @@ int ProgramMain(int argc, char** argv) {
 
     if (Succeeded(result)) {
       size_t fixup = 0;
-      auto pre_memory =  FillFromSegments(module.data_segments);
-      auto segments   = CreateSegments(pre_memory);
-      if (pre_memory != FillFromSegments(segments)) {
-        std::cerr << "Fractured Memory Failed, not applying optimizations" << std::endl;
-        module.data_segments = StripZeroedData(std::move(module.data_segments), fixup);
-      } else {
-        module.data_segments = StripZeroedData(std::move(segments), fixup);
+      if (!module.data_segments.empty()) {
+        auto pre_memory =  FillFromSegments(module.data_segments);
+        auto segments   = CreateSegments(pre_memory);
+        if (pre_memory != FillFromSegments(segments)) {
+          std::cerr << "Fractured Memory Failed, not applying optimizations" << std::endl;
+          module.data_segments = StripZeroedData(std::move(module.data_segments), fixup);
+        } else {
+          module.data_segments = StripZeroedData(std::move(segments), fixup);
+        }
       }
-      AddHeapPointerData(module, fixup, file_data, _hds);
+      if (module.globals.size() > 1)
+        AddHeapPointerData(module, fixup, file_data, _hds);
      if (Succeeded(result)) {
       MemoryStream stream(s_log_stream.get());
       result =

@@ -212,14 +212,12 @@ namespace core_net { namespace cdt {
                ss << decl->getParent()->getQualifiedNameAsString()
                   << " obj {eosio::name{r},eosio::name{c},ds};\n";
 
-               // Call `set_exec_type()` only for contracts dervied from `eosio::contract`.
-               // A contract class can have only `eosio::contract` attribute
-               // but does not inherit from the `eosio::contract` class;
-               // it may not have `set_exec_type()`. We need to make sure the class derives
-               // from `eosio::contract` before calling set_exec_type().
+               // TODO: sync_call support — set_exec_type requires sync_call-aware eosio::contract
+#ifdef CDT_SYNC_CALL_SUPPORT
                if (base_is_eosio_contract_class(decl)) {
                   ss << "obj.set_exec_type(eosio::contract::exec_type_t::action);\n";
                }
+#endif
 
                const auto& call_action = [&]() {
                   ss << "obj." << decl->getNameAsString() << "(";
@@ -253,6 +251,7 @@ namespace core_net { namespace cdt {
             create_dispatch("eosio_wasm_notify", "__eosio_notify_", func, decl);
          }
 
+#ifdef CDT_SYNC_CALL_SUPPORT
          // Generate sync call dispatcher
          void create_call_dispatch(CXXMethodDecl* decl) {
             const std::string attr = "eosio_wasm_call";
@@ -296,14 +295,11 @@ namespace core_net { namespace cdt {
                ss << decl->getParent()->getQualifiedNameAsString()
                   << " obj {eosio::name{receiver},eosio::name{receiver},ds};\n";
 
-               // Call `set_exec_type()` only for contracts dervied from `eosio::contract`.
-               // A contract class can have only `eosio::contract` attribute
-               // but does not inherit from the `eosio::contract` class;
-               // it may not have `set_exec_type()`. We need to make sure the class derives
-               // from `eosio::contract` before calling set_exec_type().
+#ifdef CDT_SYNC_CALL_SUPPORT
                if (base_is_eosio_contract_class(decl)) {
                   ss << "obj.set_exec_type(eosio::contract::exec_type_t::call);\n";
                }
+#endif
 
                const auto& call_function = [&]() {
                   ss << "obj." << decl->getNameAsString() << "(";
@@ -356,6 +352,7 @@ namespace core_net { namespace cdt {
             ss << "return data;\n";
             ss << "}}\n";
          }
+#endif // CDT_SYNC_CALL_SUPPORT
 
          virtual bool VisitCXXMethodDecl(CXXMethodDecl* decl) {
             std::string name = decl->getNameAsString();
@@ -411,6 +408,8 @@ namespace core_net { namespace cdt {
                }
             }
 
+            // TODO: sync_call support — requires EosioCallAttr in clang (see _tmp/SYNC_CALL_PORT.md)
+#ifdef CDT_SYNC_CALL_SUPPORT
             // We allow a method to be tagged as both `action` and `call`
             if (decl->isEosioCall()) {
                static std::unordered_map<uint64_t, std::string> _call_id_map;
@@ -451,6 +450,7 @@ namespace core_net { namespace cdt {
                   cg.calls.insert(full_call_name); // insert the sync call method name, so we don't create the dispatcher twice
                }
             }
+#endif // CDT_SYNC_CALL_SUPPORT
 
             return true;
          }
@@ -632,9 +632,9 @@ namespace core_net { namespace cdt {
             auto& f_mgr = src_mgr.getFileManager();
             auto main_fe = f_mgr.getFile(main_file);
             if (main_fe) {
-               auto fid = src_mgr.getOrCreateFileID(f_mgr.getFile(main_file), SrcMgr::CharacteristicKind::C_User);
+               auto fid = src_mgr.getOrCreateFileID(*main_fe, SrcMgr::CharacteristicKind::C_User);
                visitor->set_main_fid(fid);
-               visitor->set_main_name(main_fe->getName());
+               visitor->set_main_name((*main_fe)->getName());
                visitor->TraverseDecl(Context.getTranslationUnitDecl());
                visitor->process_read_only_actions();
 
@@ -654,7 +654,7 @@ namespace core_net { namespace cdt {
 
                   std::ofstream out(fn.c_str());
                   {
-                     llvm::SmallString<64> abs_file_path(main_fe->getName());
+                     llvm::SmallString<64> abs_file_path((*main_fe)->getName());
                      llvm::sys::fs::make_absolute(abs_file_path);
                      out << "#include \"" << abs_file_path.c_str() << "\"\n";
                   }
@@ -697,7 +697,7 @@ namespace core_net { namespace cdt {
       public:
          virtual std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI, StringRef file) {
             CI.getPreprocessor().addPPCallbacks(std::make_unique<eosio_ppcallbacks>(CI.getSourceManager(), file.str()));
-            return std::make_unique<eosio_codegen_consumer>(&CI, file);
+            return std::make_unique<eosio_codegen_consumer>(&CI, file.str());
          }
    };
 

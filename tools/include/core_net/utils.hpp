@@ -99,34 +99,24 @@ std::string name_to_string( uint64_t nm ) {
 
 static constexpr uint32_t max_string_length_for_hash_id = 128;
 
-// Validate the input `str` is a valid C/C++ identifier
 template <typename Lambda>
 void validate_hash_id( const std::string& str, Lambda&& error_handler ) {
-   if (str.empty()) {
+   if (str.empty())
       return error_handler("string is empty");
-   }
-
-   const auto len = str.length();
-   if ( len > max_string_length_for_hash_id ) {
+   if ( str.length() > max_string_length_for_hash_id )
       return error_handler(std::string("string {") + str + "} is more than " + std::to_string(max_string_length_for_hash_id) + " characters long");
-   }
-
-   if (!(std::isalpha(str[0]) || str[0] == '_')) {
+   if (!(std::isalpha(str[0]) || str[0] == '_'))
       return error_handler(std::string("string {") + str + "} does not start with letter or underscore");
-   }
-
    for (char ch : str.substr(1)) {
-      if (!(std::isalnum(static_cast<unsigned char>(ch)) || ch == '_')) {
-         return error_handler(std::string("string {") + str + "} has a character {" + ch +  "} which is not a number, letter, or _");
-      }
+      if (!(std::isalnum(static_cast<unsigned char>(ch)) || ch == '_'))
+         return error_handler(std::string("string {") + str + "} has a character {" + ch + "} which is not a number, letter, or _");
    }
 }
 
 uint64_t to_hash_id(std::string str) {
    uint64_t hash = 5381;
-   for (char c : str) {
-      hash = ((hash << 5) + hash) + static_cast<uint8_t>(c); // hash * 33 + c
-   }
+   for (char c : str)
+      hash = ((hash << 5) + hash) + static_cast<uint8_t>(c);
    return hash;
 }
 
@@ -166,8 +156,8 @@ struct environment {
      return env_table;
    }
    static bool exec_subprogram(const std::string prog, std::vector<std::string> options, bool root=false,
-                               llvm::Optional<std::string> stdin_file = llvm::None,
-                               llvm::Optional<std::string> stdout_file = llvm::None) {
+                               std::optional<std::string> stdin_file = std::nullopt,
+                               std::optional<std::string> stdout_file = std::nullopt) {
       std::vector<llvm::StringRef> args;
       args.push_back(prog);
       args.insert(args.end(), options.begin(), options.end());
@@ -175,9 +165,9 @@ struct environment {
       if (root)
          find_path = "/usr/bin";
       if ( const auto& path = llvm::sys::findProgramByName(prog.c_str(), {find_path}) ) {
-         std::vector<llvm::Optional<llvm::StringRef>> redirects;
+         std::vector<std::optional<llvm::StringRef>> redirects;
          if(stdin_file || stdout_file)
-            redirects = { llvm::None, llvm::None, llvm::None };
+            redirects = { std::nullopt, std::nullopt, std::nullopt };
          if(stdin_file)
             redirects[0] = llvm::StringRef{*stdin_file};
          if(stdout_file)

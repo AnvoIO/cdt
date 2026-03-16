@@ -26,7 +26,6 @@
 #include <sstream>
 #include <memory>
 #include <set>
-#include <tuple>
 #include <map>
 #include <array>
 #include <jsoncons/json.hpp>
@@ -38,9 +37,6 @@ using jsoncons::json;
 using jsoncons::ojson;
 
 namespace core_net::cdt {
-
-   const version_t bitset_min_version{1,3};
-   const version_t sync_calls_min_version{1,3};
 
    class abigen : public generation_utils {
       std::set<std::string> checked_actions;
@@ -135,50 +131,6 @@ namespace core_net::cdt {
          }
       }
 
-      void add_call( const clang::CXXRecordDecl* decl ) {
-         abi_call ret;
-         auto call_name = decl->getEosioCallAttr()->getName();
-
-         if (call_name.empty()) {
-            validate_name(decl->getName().str(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); });
-            ret.name = decl->getName().str();
-         }
-         else {
-            validate_name( call_name.str(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); });
-            ret.name = call_name.str();
-         }
-         ret.type = decl->getName().str();
-         ret.id = to_hash_id(ret.name);
-         _abi.calls.insert(ret);
-
-         _abi.version.set_min(sync_calls_min_version);
-      }
-
-      void add_call( const clang::CXXMethodDecl* decl ) {
-         abi_call ret;
-
-         auto call_name = decl->getEosioCallAttr()->getName();
-
-         if (call_name.empty()) {
-            validate_hash_id( decl->getNameAsString(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
-            ret.name = decl->getNameAsString();
-         }
-         else {
-            validate_hash_id( call_name.str(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
-            ret.name = call_name.str();
-         }
-         ret.type = decl->getNameAsString();
-         ret.id = to_hash_id(ret.name);
-         auto result_type = translate_type(decl->getReturnType());
-         if (result_type != "void") {
-            add_type(decl->getReturnType());
-            ret.result_type = result_type;
-         }
-         _abi.calls.insert(ret);
-
-         _abi.version.set_min(sync_calls_min_version);
-      }
-
       void add_tuple(const clang::QualType& type) {
          auto pt = llvm::dyn_cast<clang::ElaboratedType>(type.getTypePtr());
          auto tst = llvm::dyn_cast<clang::TemplateSpecializationType>((pt) ? pt->desugar().getTypePtr() : type.getTypePtr());
@@ -187,7 +139,7 @@ namespace core_net::cdt {
          }
          abi_struct tup;
          tup.name = get_type(type);
-         for (int i = 0; i < tst->getNumArgs(); ++i) {
+         for (int i = 0; i < tst->template_arguments().size(); ++i) {
             clang::QualType ftype = std::get<clang::QualType>(get_template_argument(type, i));
             add_type(ftype);
             tup.fields.push_back( {"field_"+std::to_string(i),
@@ -199,6 +151,7 @@ namespace core_net::cdt {
       void add_pair(const clang::QualType& type) {
          for (int i = 0; i < 2; ++i) {
             clang::QualType ftype = std::get<clang::QualType>(get_template_argument(type, i));
+            std::string ty = translate_type(ftype);
             add_type(ftype);
          }
          abi_struct pair;
@@ -263,7 +216,6 @@ namespace core_net::cdt {
       void add_struct( const clang::CXXMethodDecl* decl ) {
          abi_struct new_struct;
          new_struct.name = decl->getNameAsString();
-
          for (auto param : decl->parameters() ) {
             auto param_type = param->getType().getNonReferenceType().getUnqualifiedType();
             new_struct.fields.push_back({param->getNameAsString(), get_type(param_type)});
@@ -313,7 +265,7 @@ namespace core_net::cdt {
          auto pt = llvm::dyn_cast<clang::ElaboratedType>(t.getTypePtr());
          auto tst = llvm::dyn_cast<clang::TemplateSpecializationType>((pt) ? pt->desugar().getTypePtr() : t.getTypePtr());
          var.name = get_type(t);
-         for (int i=0; i < tst->getNumArgs(); ++i) {
+         for (int i=0; i < tst->template_arguments().size(); ++i) {
             var.types.push_back(get_template_argument_as_string( t, i ));
             add_type(std::get<clang::QualType>(get_template_argument( t, i )));
          }
@@ -495,12 +447,12 @@ namespace core_net::cdt {
                   } else if (tname == "pair" ) {
                      add_explicit_nested_pair(type, depth, abidef, ret, tname, gottype);
                   } else if (tname == "tuple")  {
-                     int argcnt = tst->getNumArgs();
+                     int argcnt = tst->template_arguments().size();
                      add_explicit_nested_tuple(type, argcnt, depth, abidef, ret, tname, gottype);
                   } else if (tname == "array")  {
                      add_explicit_nested_array(type, depth, abidef, ret, tname, gottype);
                   } else if (tname == "variant") {
-                     int argcnt = tst->getNumArgs();
+                     int argcnt = tst->template_arguments().size();
                      add_explicit_nested_variant(type, argcnt, depth, abidef, ret, tname, gottype);
                   }
                }
@@ -528,8 +480,7 @@ namespace core_net::cdt {
             add_explicit_nested_type(t.getNonReferenceType());
             return;
          }
-         auto type_str = translate_type(type);
-         if (!is_builtin_type(type_str)) {
+         if (!is_builtin_type(translate_type(type))) {
             if (is_aliasing(type)) {
                add_typedef(type);
             }
@@ -551,13 +502,6 @@ namespace core_net::cdt {
             }
             else if (type.getTypePtr()->isRecordType())
                add_struct(type.getTypePtr()->getAsCXXRecordDecl());
-         } else {
-            static std::unordered_map<std::string, version_t> versioned_types {
-               { "bitset", bitset_min_version }
-            };
-
-            if (auto it = versioned_types.find(type_str); it != versioned_types.end())
-               _abi.version.set_min(it->second);
          }
       }
 
@@ -607,15 +551,6 @@ namespace core_net::cdt {
          return o;
       }
 
-      ojson call_to_json( const abi_call& c ) {
-         ojson o;
-         o["name"] = c.name;
-         o["type"] = c.type;
-         o["id"]   = c.id;
-         o["result_type"]   = c.result_type;
-         return o;
-      }
-
       ojson clause_to_json( const abi_ricardian_clause_pair& clause ) {
          ojson o;
          o["id"] = clause.id;
@@ -658,15 +593,14 @@ namespace core_net::cdt {
             set_of_tables.insert(t);
          }
 
-         return _abi.structs.empty() && _abi.typedefs.empty() && _abi.actions.empty() && _abi.calls.empty()  && set_of_tables.empty() && _abi.ricardian_clauses.empty() && _abi.variants.empty();
+         return _abi.structs.empty() && _abi.typedefs.empty() && _abi.actions.empty() && set_of_tables.empty() && _abi.ricardian_clauses.empty() && _abi.variants.empty();
       }
 
       ojson to_json() {
          ojson o;
          o["____comment"] = generate_json_comment();
-
          o["version"]     = _abi.version_string();
-
+         o["types"]       = ojson::array();
          o["structs"]     = ojson::array();
          auto remove_suffix = [&]( std::string name ) {
             int i = name.length()-1;
@@ -725,10 +659,6 @@ namespace core_net::cdt {
                if (as.name == _translate_type(a.type))
                   return true;
             }
-            for ( auto a : _abi.calls ) {
-               if (as.name == _translate_type(a.type))
-                  return true;
-            }
             for( auto t : set_of_tables ) {
                if (as.name == _translate_type(t.type))
                   return true;
@@ -766,9 +696,6 @@ namespace core_net::cdt {
             for ( auto a : _abi.actions )
                if ( a.type == td.new_type_name )
                   return true;
-            for ( auto a : _abi.calls )
-               if ( a.type == td.new_type_name )
-                  return true;
             for ( auto _td : _abi.typedefs )
                if ( remove_suffix(_td.type) == td.new_type_name )
                   return true;
@@ -784,7 +711,6 @@ namespace core_net::cdt {
             if (res)
                o["structs"].push_back(struct_to_json(s));
          }
-         o["types"]       = ojson::array();
          for ( auto t : _abi.typedefs ) {
             if (validate_types(t))
                o["types"].push_back(typedef_to_json( t ));
@@ -792,12 +718,6 @@ namespace core_net::cdt {
          o["actions"]     = ojson::array();
          for ( auto a : _abi.actions ) {
             o["actions"].push_back(action_to_json( a ));
-         }
-         if (!_abi.calls.empty()) {  // add calls section only when sync calls are used
-            o["calls"] = ojson::array();
-            for ( auto a : _abi.calls ) {
-               o["calls"].push_back(call_to_json( a ));
-            }
          }
          o["tables"]     = ojson::array();
          for ( auto t : set_of_tables ) {
@@ -807,17 +727,15 @@ namespace core_net::cdt {
          for ( auto rc : _abi.ricardian_clauses ) {
             o["ricardian_clauses"].push_back(clause_to_json( rc ));
          }
-
          o["variants"]   = ojson::array();
          for ( auto v : _abi.variants ) {
             o["variants"].push_back(variant_to_json( v ));
          }
-
-         o["abi_extensions"]     = ojson::array();
-
-         o["action_results"]  = ojson::array();
-         for ( auto ar : _abi.action_results ) {
-            o["action_results"].push_back(action_result_to_json( ar ));
+         if (_abi.version.major >= 1 && _abi.version.minor >= 2) {
+            o["action_results"]  = ojson::array();
+            for ( auto ar : _abi.action_results ) {
+               o["action_results"].push_back(action_result_to_json( ar ));
+            }
          }
          return o;
       }
@@ -859,14 +777,6 @@ namespace core_net::cdt {
                   ag.add_type( param->getType() );
                }
             }
-
-            if (decl->isEosioCall() && ag.is_eosio_contract(decl, ag.get_contract_name())) {
-               ag.add_struct(decl);
-               ag.add_call(decl);
-               for (auto param : decl->parameters()) {
-                  ag.add_type( param->getType() );
-               }
-            }
             return true;
          }
          virtual bool VisitCXXRecordDecl(clang::CXXRecordDecl* decl) {
@@ -875,12 +785,10 @@ namespace core_net::cdt {
                ag.add_contracts(ag.parse_contracts());
                has_added_clauses = true;
             }
-            if ((decl->isEosioAction() || decl->isEosioCall() || decl->isEosioTable()) && ag.is_eosio_contract(decl, ag.get_contract_name())) {
+            if ((decl->isEosioAction() || decl->isEosioTable()) && ag.is_eosio_contract(decl, ag.get_contract_name())) {
                ag.add_struct(decl);
                if (decl->isEosioAction())
                   ag.add_action(decl);
-               if (decl->isEosioCall())
-                  ag.add_call(decl);
                if (decl->isEosioTable())
                   ag.add_table(decl);
                for (auto field : decl->fields()) {
@@ -1010,7 +918,7 @@ namespace core_net::cdt {
       public:
          virtual std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI, StringRef file) {
             CI.getPreprocessor().addPPCallbacks(std::make_unique<eosio_ppcallbacks>(CI.getSourceManager(), file.str()));
-            return std::make_unique<eosio_abigen_consumer>(&CI, file);
+            return std::make_unique<eosio_abigen_consumer>(&CI, file.str());
          }
    };
 } // ns core_net::cdt
