@@ -1,7 +1,11 @@
 project(native LANGUAGES CXX ASM)
 
 if (NOT __APPLE)
-   set(CRT_ASM elf_crt.s)
+   if(CDT_HOST_PROCESSOR MATCHES "aarch64|arm64|ARM64")
+      set(CRT_ASM elf_crt_aarch64.s)
+   else()
+      set(CRT_ASM elf_crt.s)
+   endif()
 else()
    set(CRT_ASM macho_crt.s)
 endif()
