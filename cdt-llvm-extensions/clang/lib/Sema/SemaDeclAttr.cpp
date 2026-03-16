@@ -414,6 +414,16 @@ static void handleEosioWasmNotifyAttribute(Sema &S, Decl *D, const ParsedAttr &A
   D->addAttr(EosioWasmNotifyAttr::Create(S.Context, Str, {AL.getRange()}));
 }
 
+static void handleEosioWasmCallAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+  // Handle the cases where the attribute has a text message.
+  StringRef Str;
+  if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
+      !S.checkStringLiteralArgumentAttr(AL, 0, Str))
+    return;
+
+  D->addAttr(EosioWasmCallAttr::Create(S.Context, Str, {AL.getRange()}));
+}
+
 static void handleEosioActionAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
   // Handle the cases where the attribute has a text message.
   StringRef Str;
@@ -422,6 +432,16 @@ static void handleEosioActionAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
     return;
 
   D->addAttr(EosioActionAttr::Create(S.Context, Str, {AL.getRange()}));
+}
+
+static void handleEosioCallAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+  // Handle the cases where the attribute has a text message.
+  StringRef Str;
+  if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
+      !S.checkStringLiteralArgumentAttr(AL, 0, Str))
+    return;
+
+  D->addAttr(EosioCallAttr::Create(S.Context, Str, {AL.getRange()}));
 }
 
 static void handleEosioReadOnlyAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
@@ -8785,6 +8805,9 @@ ProcessDeclAttribute(Sema &S, Scope *scope, Decl *D, const ParsedAttr &AL,
   case ParsedAttr::AT_EosioAction:
     handleEosioActionAttribute(S, D, AL);
     break;
+  case ParsedAttr::AT_EosioCall:
+    handleEosioCallAttribute(S, D, AL);
+    break;
   case ParsedAttr::AT_EosioReadOnly:
     handleEosioReadOnlyAttribute(S, D, AL);
     break;
@@ -8799,6 +8822,9 @@ ProcessDeclAttribute(Sema &S, Scope *scope, Decl *D, const ParsedAttr &AL,
     break;
   case ParsedAttr::AT_EosioWasmNotify:
     handleEosioWasmNotifyAttribute(S, D, AL);
+    break;
+  case ParsedAttr::AT_EosioWasmCall:
+    handleEosioWasmCallAttribute(S, D, AL);
     break;
   case ParsedAttr::AT_EosioContract:
     handleEosioContractAttribute(S, D, AL);

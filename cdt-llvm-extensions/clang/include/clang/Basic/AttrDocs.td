@@ -570,6 +570,13 @@ The ``eosio::action`` attribute marks a method as being an eosio action.
   }];
 }
 
+def EosioCallDocs : Documentation {
+  let Category = DocCatFunction;
+  let Content = [{
+The ``eosio::call`` attribute marks a method as being an eosio sync call handler.
+  }];
+}
+
 def EosioReadOnlyDocs : Documentation {
   let Category = DocCatFunction;
   let Content = [{

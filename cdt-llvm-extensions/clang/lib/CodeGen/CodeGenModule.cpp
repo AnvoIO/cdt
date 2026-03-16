@@ -4008,6 +4008,7 @@ llvm::Constant *CodeGenModule::GetOrCreateLLVMFunction(
   bool isWasmABI    = false;
   bool isWasmAction = false;
   bool isWasmNotify = false;
+  bool isWasmCall   = false;
 
   // Any attempts to use a MultiVersion function should result in retrieving
   // the iFunc instead. Name Mangling will handle the rest of the changes.
@@ -4022,6 +4023,8 @@ llvm::Constant *CodeGenModule::GetOrCreateLLVMFunction(
         isWasmAction = true;
     if (FD->hasAttr<EosioWasmNotifyAttr>())
         isWasmNotify = true;
+    if (FD->hasAttr<EosioWasmCallAttr>())
+        isWasmCall = true;
     // For the device mark the function as one that should be emitted.
     if (getLangOpts().OpenMPIsDevice && OpenMPRuntime &&
         !OpenMPRuntime->markAsGlobalTarget(GD) && FD->isDefined() &&
@@ -4158,6 +4161,10 @@ llvm::Constant *CodeGenModule::GetOrCreateLLVMFunction(
   if (isWasmNotify)
      if (const FunctionDecl *FD = cast_or_null<FunctionDecl>(D)) {
         F->addFnAttr("eosio_wasm_notify", FD->getEosioWasmNotify());
+     }
+  if (isWasmCall)
+     if (const FunctionDecl *FD = cast_or_null<FunctionDecl>(D)) {
+        F->addFnAttr("eosio_wasm_call", FD->getEosioWasmCall());
      }
 
   if (!DontDefer) {

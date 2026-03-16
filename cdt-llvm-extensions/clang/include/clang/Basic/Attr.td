@@ -1307,6 +1307,13 @@ def EosioWasmNotify : InheritableAttr {
    let Documentation = [EosioWasmImportDocs];
 }
 
+def EosioWasmCall : InheritableAttr {
+   let Spellings = [CXX11<"eosio", "wasm_call">, GNU<"eosio_wasm_call">];
+   let Args = [StringArgument<"name", 1>];
+   let Subjects = SubjectList<[Function]>;
+   let Documentation = [EosioWasmImportDocs];
+}
+
 def EosioWasmABI : InheritableAttr {
    let Spellings = [CXX11<"eosio", "wasm_abi">, GNU<"eosio_wasm_abi">];
    let Args = [StringArgument<"abi", 1>];
@@ -1331,6 +1338,13 @@ def EosioAction : InheritableAttr {
    let Args = [StringArgument<"name", 1>];
    let Subjects = SubjectList<[CXXRecord, CXXMethod]>;
    let Documentation = [EosioActionDocs];
+}
+
+def EosioCall : InheritableAttr {
+   let Spellings = [CXX11<"eosio", "call">, GNU<"eosio_call">];
+   let Args = [StringArgument<"name", 1>];
+   let Subjects = SubjectList<[CXXRecord, CXXMethod]>;
+   let Documentation = [EosioCallDocs];
 }
 
 def EosioReadOnly : InheritableAttr {

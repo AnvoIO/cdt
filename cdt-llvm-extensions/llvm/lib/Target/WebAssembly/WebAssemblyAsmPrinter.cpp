@@ -421,6 +421,7 @@ void WebAssemblyAsmPrinter::emitEndOfAsmFile(Module &M) {
   bool has_abi    = false;
   bool has_eosio_action = false;
   bool has_eosio_notify = false;
+  bool has_eosio_call   = false;
 
   // When a function's address is taken, a TABLE_INDEX relocation is emitted
   // against the function symbol at the use site.  However the relocation
@@ -443,6 +444,8 @@ void WebAssemblyAsmPrinter::emitEndOfAsmFile(Module &M) {
       has_eosio_action = true;
     if (F.hasFnAttribute("eosio_wasm_notify"))
       has_eosio_notify = true;
+    if (F.hasFnAttribute("eosio_wasm_call"))
+      has_eosio_call = true;
   }
 
   if (has_import) {
@@ -500,6 +503,21 @@ void WebAssemblyAsmPrinter::emitEndOfAsmFile(Module &M) {
            StringRef name = F.getFnAttribute("eosio_wasm_notify").getValueAsString();
            OutStreamer->emitULEB128IntValue(name.size());
            OutStreamer->emitBytes(name);
+        }
+     }
+     OutStreamer->popSection();
+  }
+  if (has_eosio_call) {
+     OutStreamer->pushSection();
+     std::string SectionName = ".eosio_calls";
+     MCSectionWasm *mySection =
+         OutContext.getWasmSection(SectionName, SectionKind::getMetadata());
+     OutStreamer->switchSection(mySection);
+     for (const auto &F : M) {
+        if (F.hasFnAttribute("eosio_wasm_call")) {
+           StringRef call_name = F.getFnAttribute("eosio_wasm_call").getValueAsString();
+           OutStreamer->emitULEB128IntValue(call_name.size());
+           OutStreamer->emitBytes(call_name);
         }
      }
      OutStreamer->popSection();

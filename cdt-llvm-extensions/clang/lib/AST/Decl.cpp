@@ -4754,6 +4754,8 @@ bool FunctionDecl::isEosioWasmAction()const { return hasAttr<EosioWasmActionAttr
 StringRef FunctionDecl::getEosioWasmAction()const { return getAttr<EosioWasmActionAttr>()->getName(); }
 bool FunctionDecl::isEosioWasmNotify()const { return hasAttr<EosioWasmNotifyAttr>(); }
 StringRef FunctionDecl::getEosioWasmNotify()const { return getAttr<EosioWasmNotifyAttr>()->getName(); }
+bool FunctionDecl::isEosioWasmCall()const { return hasAttr<EosioWasmCallAttr>(); }
+StringRef FunctionDecl::getEosioWasmCall()const { return getAttr<EosioWasmCallAttr>()->getName(); }
 
 bool RecordDecl::isCapturedRecord() const {
   return hasAttr<CapturedRecordAttr>();

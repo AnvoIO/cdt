@@ -2131,6 +2131,8 @@ public:
   StringRef getEosioWasmAction()const;
   bool isEosioWasmNotify()const;
   StringRef getEosioWasmNotify()const;
+  bool isEosioWasmCall()const;
+  StringRef getEosioWasmCall()const;
 
   /// Returns the location of the ellipsis of a variadic function.
   SourceLocation getEllipsisLoc() const {
