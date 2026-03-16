@@ -18,7 +18,7 @@
 #include <variant>
 #include <iostream>
 
-namespace eosio { namespace cdt {
+namespace core_net { namespace cdt {
 
 struct simple_ricardian_tokenizer {
    simple_ricardian_tokenizer( const std::string& src ) : source(src), index(0) {}
@@ -923,4 +923,4 @@ struct generation_utils {
       return inline_action_funcs.count(t) >= 1;
    }
 };
-}} // ns eosio::cdt
+}} // ns core_net::cdt

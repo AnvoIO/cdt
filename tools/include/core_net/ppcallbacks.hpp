@@ -10,10 +10,10 @@ using namespace clang;
 using namespace clang::driver;
 using namespace clang::tooling;
 using namespace llvm;
-using namespace eosio;
-using namespace eosio::cdt;
+using namespace core_net;
+using namespace core_net::cdt;
 
-namespace eosio { namespace cdt {
+namespace core_net { namespace cdt {
    struct include_double {
       include_double(std::string fn, SourceRange sr) : file_name(fn), range(sr) {}
       std::string    file_name;

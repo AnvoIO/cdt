@@ -31,12 +31,16 @@
 #include <jsoncons/json.hpp>
 
 using namespace llvm;
-using namespace eosio;
-using namespace eosio::cdt;
+using namespace core_net;
+using namespace core_net::cdt;
 using jsoncons::json;
 using jsoncons::ojson;
 
-namespace eosio { namespace cdt {
+namespace core_net::cdt {
+
+   const version_t bitset_min_version{1,3};
+   const version_t sync_calls_min_version{1,3};
+
    class abigen : public generation_utils {
       std::set<std::string> checked_actions;
       public:
@@ -921,4 +925,4 @@ namespace eosio { namespace cdt {
             return std::make_unique<eosio_abigen_consumer>(&CI, file.str());
          }
    };
-}} // ns eosio::cdt
+} // ns core_net::cdt

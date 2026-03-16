@@ -1,10 +1,13 @@
-AntelopeIO/cdt
+Anvo Network CDT
+Copyright (c) 2026 Stratovera LLC and its contributors. All rights reserved.
 
-Copyright (c) 2021-2022 EOS Network Foundation (ENF) and its contributors.  All rights reserved. 
-This ENF software is based upon:
+This software is based upon:
+
+AntelopeIO/cdt
+Copyright (c) 2021-2022 EOS Network Foundation (ENF) and its contributors.
 
 EOSIO/eosio.cdt
-Copyright (c) 2017-2021 block.one and its contributors.  All rights reserved.
+Copyright (c) 2017-2021 block.one and its contributors.
 
 The MIT License
 

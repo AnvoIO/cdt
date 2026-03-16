@@ -16,7 +16,7 @@ extern char **environ;
 #include <vector>
 #include <sstream>
 
-namespace eosio { namespace cdt {
+namespace core_net { namespace cdt {
 
 uint64_t char_to_symbol( char c ) {
    if( c >= 'a' && c <= 'z' )
@@ -138,7 +138,7 @@ struct environment {
       std::vector<llvm::StringRef> args;
       args.push_back(prog);
       args.insert(args.end(), options.begin(), options.end());
-      std::string find_path = eosio::cdt::whereami::where();
+      std::string find_path = core_net::cdt::whereami::where();
       if (root)
          find_path = "/usr/bin";
       if ( const auto& path = llvm::sys::findProgramByName(prog.c_str(), {find_path}) ) {
@@ -157,4 +157,4 @@ struct environment {
    }
 
 };
-}} // ns eosio::cdt
+}} // ns core_net::cdt
