@@ -12,11 +12,16 @@ CDT 5.0 introduces the following changes as part of the Anvo Network project:
 4. **SDK macros unchanged**: `EOSIO_DISPATCH`, `EOSIO_TEST_BEGIN`, `EOSIO_TEST_END`, and `EOSIO_TEST` retain their original names.
 5. **Node software**: CDT 5.0 targets [Anvo Core](https://github.com/Anvo-Network/core) (formerly Spring / nodeos). Use core-cli (formerly cleos) for contract deployment and interaction.
 
-### Compatibility mode: when to use CDT 4.x instead
+### Universal compatibility
 
-Chains still running with the original EOSIO/Antelope protocol naming — using `eosio.*` system accounts (`eosio.token`, `eosio.system`, etc.) and the `eosio::` intrinsic names — should continue to use [AntelopeIO CDT 4.x](https://github.com/AntelopeIO/cdt/releases). This includes EOS, Telos, WAX, UX Network, and any other chain that has not migrated to the Anvo Network protocol naming.
+CDT 5.x compiles contracts for **all** Antelope-compatible chains. Both `core_net::` and `eosio::` headers are included and produce byte-identical WASM bytecode. The choice of header is a developer preference — what determines chain compatibility is which system account names you use in your contract code:
 
-CDT 5.x is specifically for contracts targeting Anvo Network, which uses `core.*` system accounts and the `core_net::` namespace. The WASM bytecode produced by both CDT versions is identical — only the SDK headers and build system differ — so contracts compiled with either version execute correctly on any compatible chain.
+- **Anvo Network (native mode)**: Use `"core.token"_n`, `"core.system"_n`, etc.
+- **Compatibility mode chains** (EOS, Telos, WAX, UX, Libre, etc.): Use `"eosio.token"_n`, `"eosio.system"_n`, etc.
+
+You can use either header style with either account naming. For example, `#include <core_net/core_net.hpp>` with `"eosio.token"_n` works perfectly for developers who prefer the newer `core_net::` API surface but are targeting a compatibility-mode chain.
+
+There is no need to use a separate CDT version for compatibility-mode chains.
 
 ---
 

@@ -4,16 +4,16 @@ Contract Development Toolkit (CDT) is a C/C++ toolchain targeting WebAssembly (W
 
 In addition to being a general purpose WebAssembly toolchain, specific features and optimizations are available to support building smart contracts. This toolchain is built around [Clang 9](https://github.com/AntelopeIO/cdt-llvm), which means that CDT inherits the optimizations and analyses from that version of LLVM, but as the WASM target is still considered experimental, some optimizations are incomplete or not available.
 
-## Which CDT version should I use?
+## Universal Compatibility
 
-| Scenario | CDT Version | Headers |
-|----------|-------------|---------|
-| New contracts targeting **Anvo Network** | **CDT 5.x** (this repo) | `#include <core_net/core_net.hpp>` |
-| Contracts on chains using `eosio.*` system accounts (EOS, Telos, WAX, UX, or any chain running in EOSIO/Antelope compatibility mode) | **[AntelopeIO CDT 4.x](https://github.com/AntelopeIO/cdt)** | `#include <eosio/eosio.hpp>` |
+CDT 5.x compiles contracts for **all** Antelope-compatible chains — whether running native Anvo Network naming (`core.*` system accounts) or EOSIO/Antelope compatibility mode (`eosio.*` system accounts). Both header styles produce byte-identical WASM output:
 
-CDT 5.x provides the `core_net::` namespace and `#include <core_net/...>` headers for Anvo Network. The legacy `eosio::` namespace and `#include <eosio/...>` headers continue to work for backward compatibility, but new contracts targeting Anvo Network should use `core_net::`.
+| Target chain | Recommended headers | System accounts in code |
+|---|---|---|
+| Anvo Network (native) | `#include <core_net/core_net.hpp>` | `"core.token"_n` |
+| Compatibility mode (EOS, Telos, WAX, UX, Libre, etc.) | `#include <eosio/eosio.hpp>` | `"eosio.token"_n` |
 
-Chains still running with `eosio.*` system accounts and the original EOSIO/Antelope protocol naming should continue to use [AntelopeIO CDT 4.x](https://github.com/AntelopeIO/cdt/releases). The WASM bytecode produced by both CDT versions is identical — only the SDK headers and build system differ.
+Both `core_net::` and `eosio::` headers are included in CDT 5.x and compile to identical bytecode. The choice of header determines your namespace (`core_net::` or `eosio::`), while the account names you use in your contract code (`"core.token"_n` vs `"eosio.token"_n`) determine which chain the contract targets. You can even mix — use `core_net::` headers with `"eosio.token"_n` account names if you prefer the newer API surface on a compatibility-mode chain.
 
 ## Repo organization
 
