@@ -600,6 +600,7 @@ namespace eosio { namespace cdt {
          ojson o;
          o["____comment"] = generate_json_comment();
          o["version"]     = _abi.version_string();
+         o["types"]       = ojson::array();
          o["structs"]     = ojson::array();
          auto remove_suffix = [&]( std::string name ) {
             int i = name.length()-1;
@@ -710,7 +711,6 @@ namespace eosio { namespace cdt {
             if (res)
                o["structs"].push_back(struct_to_json(s));
          }
-         o["types"]       = ojson::array();
          for ( auto t : _abi.typedefs ) {
             if (validate_types(t))
                o["types"].push_back(typedef_to_json( t ));
@@ -731,7 +731,6 @@ namespace eosio { namespace cdt {
          for ( auto v : _abi.variants ) {
             o["variants"].push_back(variant_to_json( v ));
          }
-         o["abi_extensions"]     = ojson::array();
          if (_abi.version_major == 1 && _abi.version_minor >= 2) {
             o["action_results"]  = ojson::array();
             for ( auto ar : _abi.action_results ) {

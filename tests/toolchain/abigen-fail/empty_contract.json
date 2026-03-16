@@ -3,19 +3,19 @@
     {
       "compile_flags": ["--abigen", "--contract=hello"],
       "expected" : {
-        "stderr": "wasm-ld: error"
+        "stderr": "contract is empty"
       }
     },
     {
       "compile_flags": ["--abigen", "-o=hello.wasm"],
       "expected" : {
-        "stderr": "wasm-ld: error"
+        "stderr": "contract is empty"
       }
     },
     {
       "compile_flags": ["--abigen"],
       "expected" : {
-        "stderr": "wasm-ld: error"
+        "stderr": "contract is empty"
       }
     }
   ]
