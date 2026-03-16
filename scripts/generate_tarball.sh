@@ -12,8 +12,6 @@ mkdir -p ${CDT_PREFIX}/cmake
 mkdir -p ${CDT_PREFIX}/scripts
 mkdir -p ${CDT_PREFIX}/licenses
 
-#echo "${PREFIX} ** ${SUBPREFIX} ** ${CDT_PREFIX}"
-
 # install binaries
 cp -R ${BUILD_DIR}/bin/* ${CDT_PREFIX}/bin || exit 1
 cp -R ${BUILD_DIR}/licenses/* ${CDT_PREFIX}/licenses || exit 1
@@ -35,17 +33,6 @@ cp -R ${BUILD_DIR}/include/* ${CDT_PREFIX}/include || exit 1
 # install wasm libs
 cp ${BUILD_DIR}/lib/*.a ${CDT_PREFIX}/lib || exit 1
 
-# install libc++.so
-if [[ "$OS" == "ubuntu-16.04" ]]; then
-    cp /usr/lib/libc++.so.1.0 ${CDT_PREFIX}/lib || exit 1
-    cp /usr/lib/libc++abi.so.1.0 ${CDT_PREFIX}/lib || exit 1
-    DIR=`pwd`
-    cd ${CDT_PREFIX}/lib || exit 1
-    ln -sf libc++.so.1.0 libc++.so.1 || exit 1
-    ln -sf libc++abi.so.1.0 libc++abi.so.1 || exit 1
-    cd ${DIR} || exit 1
-fi
-
 # make symlinks
 pushd ${PREFIX}/lib/cmake/${PROJECT} &> /dev/null
 ln -sf ../../../${SUBPREFIX}/lib/cmake/${PROJECT}/${PROJECT}-config.cmake ${PROJECT}-config.cmake || exit 1
@@ -60,12 +47,7 @@ create_symlink() {
 create_symlink cdt-cc cdt-cc
 create_symlink cdt-cpp cdt-cpp
 create_symlink cdt-ld cdt-ld
-create_symlink eosio-pp eosio-pp
 create_symlink cdt-init cdt-init
-create_symlink eosio-wasm2wast eosio-wasm2wast
-create_symlink eosio-wast2wasm eosio-wast2wasm
-create_symlink eosio-wasm2wast cdt-wasm2wast
-create_symlink eosio-wast2wasm cdt-wast2wasm
 create_symlink cdt-ar cdt-ar
 create_symlink cdt-abidiff cdt-abidiff
 create_symlink cdt-nm cdt-nm
@@ -74,6 +56,12 @@ create_symlink cdt-objdump cdt-objdump
 create_symlink cdt-ranlib cdt-ranlib
 create_symlink cdt-readelf cdt-readelf
 create_symlink cdt-strip cdt-strip
+# Legacy tool names (built by cdt-llvm, kept for backward compat)
+create_symlink eosio-pp eosio-pp
+create_symlink eosio-wasm2wast eosio-wasm2wast
+create_symlink eosio-wast2wasm eosio-wast2wasm
+create_symlink eosio-wasm2wast cdt-wasm2wast
+create_symlink eosio-wast2wasm cdt-wast2wasm
 
 echo "Generating Tarball $NAME.tar.gz..."
 tar -cvzf $NAME.tar.gz ./${PREFIX}/* || exit 1
