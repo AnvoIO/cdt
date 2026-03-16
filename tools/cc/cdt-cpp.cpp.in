@@ -155,7 +155,7 @@ int main(int argc, const char **argv) {
             outputs.push_back(output);
          }
 
-         llvm::Optional<std::string> stdin_redirect;
+         std::optional<std::string> stdin_redirect;
          llvm::SmallString<64> abs_input(input.c_str());
          llvm::sys::fs::make_absolute(abs_input);
          auto file_iter = codegen::get().tmp_files.find(abs_input.c_str());

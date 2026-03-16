@@ -468,15 +468,15 @@ static void GetLdDefaults(std::vector<std::string>& ldopts) {
       if (fquery_opt || fquery_server_opt || fquery_client_opt) {
          ldopts.emplace_back("--export-table");
          ldopts.emplace_back("-other-model");
-         ldopts.insert(ldopts.end(), { "--export=*:table" });
+         ldopts.insert(ldopts.end(), { "--export-table" });
          ldopts.insert(ldopts.end(), { "--export-memory" });
          if (fuse_main_opt) {
             ldopts.insert(ldopts.end(), { "--entry", "main" });
-            ldopts.insert(ldopts.end(), { "--export=main:function" } );
+            ldopts.insert(ldopts.end(), { "--export=main" } );
          }
          else {
             ldopts.insert(ldopts.end(), { "--entry", "initialize" } );
-            ldopts.insert(ldopts.end(), { "--export=initialize:function" } );
+            ldopts.insert(ldopts.end(), { "--export=initialize" } );
          }
          if (fquery_server_opt)
             ldopts.insert(ldopts.end(), { "--export=run_query" });
@@ -487,19 +487,19 @@ static void GetLdDefaults(std::vector<std::string>& ldopts) {
             ldopts.insert(ldopts.end(), { "--export=describe_query_response" });
          }
          if (fquery_server_opt)
-            ldopts.insert(ldopts.end(), { "--export=run_query:function" });
+            ldopts.insert(ldopts.end(), { "--export=run_query" });
          else {
-            ldopts.insert(ldopts.end(), { "--export=create_query_request:function" });
-            ldopts.insert(ldopts.end(), { "--export=decode_query_response:function" });
-            ldopts.insert(ldopts.end(), { "--export=describe_query_request:function" });
-            ldopts.insert(ldopts.end(), { "--export=describe_query_response:function" });
+            ldopts.insert(ldopts.end(), { "--export=create_query_request" });
+            ldopts.insert(ldopts.end(), { "--export=decode_query_response" });
+            ldopts.insert(ldopts.end(), { "--export=describe_query_request" });
+            ldopts.insert(ldopts.end(), { "--export=describe_query_response" });
          }
       } else {
          if (fuse_main_opt)
             ldopts.insert(ldopts.end(), { "--entry", "main" });
          else
             ldopts.insert(ldopts.end(), { "--entry", "apply" });
-         ldopts.insert(ldopts.end(), { "--export=apply:function" });
+         ldopts.insert(ldopts.end(), { "--export=apply" });
          ldopts.insert(ldopts.end(), { "--export-memory" });
       }
       ldopts.emplace_back("-lc++");
