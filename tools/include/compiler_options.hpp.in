@@ -511,18 +511,18 @@ static void GetLdDefaults(std::vector<std::string>& ldopts) {
       }
       ldopts.emplace_back("-lc++");
       ldopts.emplace_back("-lc");
-      ldopts.emplace_back("-leosio");
+      ldopts.emplace_back("-lcore_net");
       if (use_old_malloc_opt)
-         ldopts.emplace_back("-leosio_malloc");
+         ldopts.emplace_back("-lcore_net_malloc");
       else
-         ldopts.emplace_back("-leosio_dsm");
+         ldopts.emplace_back("-lcore_net_dsm");
 
       if (use_rt_opt || fquery_opt || fquery_server_opt || fquery_client_opt) {
          ldopts.emplace_back("-lrt");
          ldopts.emplace_back("-lsf");
       }
       if (fquery_opt || fquery_server_opt || fquery_client_opt)
-         ldopts.emplace_back("-leosio_cmem");
+         ldopts.emplace_back("-lcore_net_cmem");
       if (!export_opt.empty()) {
          ldopts.emplace_back("--export="+export_opt);
       }
@@ -554,7 +554,7 @@ static void GetLdDefaults(std::vector<std::string>& ldopts) {
       ldopts.insert(ldopts.end(), {"-syslibroot", sdkpath});
 #endif
       ldopts.emplace_back("-static");
-      ldopts.insert(ldopts.end(), {"-lnative_c++", "-lnative_c", "-lnative_eosio", "-lnative", "-lnative_rt"});
+      ldopts.insert(ldopts.end(), {"-lnative_c++", "-lnative_c", "-lnative_core_net", "-lnative", "-lnative_rt"});
    }
 }
 #endif
