@@ -1,6 +1,6 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
-    "version": "eosio::abi/1.2",
+    "____comment": "This file was generated with core-net-abigen. DO NOT EDIT ",
+    "version": "core_net::abi/1.2",
     "types": [
         {
             "new_type_name": "B_map_string_string_E",

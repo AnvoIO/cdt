@@ -1,12 +1,12 @@
-#include <eosio/eosio.hpp>
+#include <core_net/eosio.hpp>
 
 using namespace eosio;
 
-class [[eosio::contract]] ricardian_contract_test : public contract {
+class [[core_net::contract]] ricardian_contract_test : public contract {
   public:
       using contract::contract;
       
-      [[eosio::action]]
+      [[core_net::action]]
       void test() {
       }
 };

@@ -3,12 +3,12 @@
 #include <boost/test/unit_test.hpp>
 #pragma GCC diagnostic pop
 
-#include <eosio/testing/tester.hpp>
+#include <core_net/testing/tester.hpp>
 
 #include <contracts.hpp>
 
 using namespace eosio;
-using namespace eosio::testing;
+using namespace core_net::testing;
 
 #ifdef NON_VALIDATING_TEST
 #define TESTER tester

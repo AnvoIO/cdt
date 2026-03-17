@@ -1,4 +1,4 @@
-#include <eosio/eosio.hpp>
+#include <core_net/eosio.hpp>
 
 using namespace eosio;
 
@@ -8,14 +8,14 @@ namespace test {
 
 using My_Bool = float;
 
-class [[eosio::contract]] bool_template : public eosio::contract {
+class [[core_net::contract]] bool_template : public core_net::contract {
    public:
       using contract::contract;
 
-      [[eosio::action]] void test1(std::optional<bool> a) {}
-      [[eosio::action]] void test2(std::variant<uint64_t, bool> a) {}
-      [[eosio::action]] void test3(bool a) {}
+      [[core_net::action]] void test1(std::optional<bool> a) {}
+      [[core_net::action]] void test2(std::variant<uint64_t, bool> a) {}
+      [[core_net::action]] void test3(bool a) {}
 
-      [[eosio::action]] void test4(test::_Bool a) {}
-      [[eosio::action]] void test5(My_Bool a) {}
+      [[core_net::action]] void test4(test::_Bool a) {}
+      [[core_net::action]] void test5(My_Bool a) {}
 };

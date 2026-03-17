@@ -4,7 +4,7 @@
  * Verifies that nested typedefs build.
  */
 
-#include <eosio/eosio.hpp>
+#include <core_net/eosio.hpp>
 using namespace eosio;
 
 namespace foo {
@@ -12,10 +12,10 @@ namespace foo {
 typedef std::string str;
 }
 
-class [[eosio::contract]] using_nested_typedef : public contract {
+class [[core_net::contract]] using_nested_typedef : public contract {
 public:
    using contract::contract;
-   [[eosio::action]]
+   [[core_net::action]]
    void hi(foo::str s) {
       print(s);
    }

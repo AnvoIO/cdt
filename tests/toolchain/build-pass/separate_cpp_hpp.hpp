@@ -1,8 +1,8 @@
-#include <eosio/eosio.hpp>
+#include <core_net/eosio.hpp>
 
-class [[eosio::contract]] separate_cpp_hpp : public eosio::contract {
+class [[core_net::contract]] separate_cpp_hpp : public core_net::contract {
 public:
    using contract::contract;
 
-   [[eosio::action]] void act();
+   [[core_net::action]] void act();
 };

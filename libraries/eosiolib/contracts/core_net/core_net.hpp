@@ -1,3 +1,2 @@
 #pragma once
-#include <eosio/eosio.hpp>
-namespace core_net { using namespace eosio; }
+#include <core_net/eosio.hpp>

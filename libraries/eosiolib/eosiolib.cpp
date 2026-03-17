@@ -1,14 +1,14 @@
-#include "core/eosio/datastream.hpp"
-#include "core/eosio/powers.hpp"
-#include "contracts/eosio/system.hpp"
-#include "contracts/eosio/privileged.hpp"
+#include "core/core_net/datastream.hpp"
+#include "core/core_net/powers.hpp"
+#include "contracts/core_net/system.hpp"
+#include "contracts/core_net/privileged.hpp"
 
 #include <algorithm>
 
 extern "C" volatile uint64_t eosio_contract_name = 0;
 extern "C" volatile void eosio_set_contract_name(uint64_t n) { eosio_contract_name = n; } // LLVM creates the call to this at the beginning of apply
 
-namespace eosio {
+namespace core_net {
    extern "C" {
       __attribute__((eosio_wasm_import))
       uint64_t current_time();
@@ -25,7 +25,7 @@ namespace eosio {
    // producer_schedule.hpp
    bool block_signing_authority_v0::is_valid()const {
       uint32_t sum_weights = 0;
-      std::set<eosio::public_key> unique_keys;
+      std::set<core_net::public_key> unique_keys;
 
       for (const auto& kw: keys ) {
          if( std::numeric_limits<uint32_t>::max() - sum_weights <= kw.weight ) {
@@ -50,23 +50,23 @@ namespace eosio {
    }
 
    // privileged.hpp
-   void set_blockchain_parameters(const eosio::blockchain_parameters& params) {
-      char buf[sizeof(eosio::blockchain_parameters)];
-      eosio::datastream<char *> ds( buf, sizeof(buf) );
+   void set_blockchain_parameters(const core_net::blockchain_parameters& params) {
+      char buf[sizeof(core_net::blockchain_parameters)];
+      core_net::datastream<char *> ds( buf, sizeof(buf) );
       ds << params;
       set_blockchain_parameters_packed( buf, ds.tellp() );
    }
 
-   void get_blockchain_parameters(eosio::blockchain_parameters& params) {
-      char buf[sizeof(eosio::blockchain_parameters)];
+   void get_blockchain_parameters(core_net::blockchain_parameters& params) {
+      char buf[sizeof(core_net::blockchain_parameters)];
       size_t size = get_blockchain_parameters_packed( buf, sizeof(buf) );
-      eosio::check( size <= sizeof(buf), "buffer is too small" );
-      eosio::datastream<const char*> ds( buf, size_t(size) );
+      core_net::check( size <= sizeof(buf), "buffer is too small" );
+      core_net::datastream<const char*> ds( buf, size_t(size) );
       ds >> params;
    }
 
    std::optional<uint64_t> set_proposed_producers( const std::vector<producer_key>& prods ) {
-      auto packed_prods = eosio::pack( prods );
+      auto packed_prods = core_net::pack( prods );
       int64_t ret = set_proposed_producers((char*)packed_prods.data(), packed_prods.size());
       if (ret >= 0)
         return static_cast<uint64_t>(ret);
@@ -157,4 +157,4 @@ namespace eosio {
       return actual_end;
    }
 
-} // namespace eosio
+} // namespace core_net

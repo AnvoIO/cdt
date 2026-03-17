@@ -1,17 +1,17 @@
-#include <eosio/eosio.hpp>
+#include <core_net/eosio.hpp>
 
 using namespace eosio;
 
-class [[eosio::contract]] action_results_test : public contract {
+class [[core_net::contract]] action_results_test : public contract {
    public:
    using contract::contract;
 
-   [[eosio::action]]
+   [[core_net::action]]
    void action1() {}
 
-   [[eosio::action]]
+   [[core_net::action]]
    uint32_t action2() { return 42; }
 
-   [[eosio::action]]
+   [[core_net::action]]
    std::string action3() { return "foo"; }
 };

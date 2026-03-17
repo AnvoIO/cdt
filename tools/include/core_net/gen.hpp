@@ -7,8 +7,8 @@
 #include "clang/Tooling/Tooling.h"
 #include "clang/AST/Decl.h"
 #include "llvm/Support/raw_ostream.h"
-#include <eosio/utils.hpp>
-#include <eosio/error_emitter.hpp>
+#include <core_net/utils.hpp>
+#include <core_net/error_emitter.hpp>
 #include <functional>
 #include <vector>
 #include <string>

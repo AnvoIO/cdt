@@ -1,15 +1,15 @@
 #include <boost/test/unit_test.hpp>
-#include <eosio/testing/tester.hpp>
-#include <eosio/chain/abi_serializer.hpp>
+#include <core_net/testing/tester.hpp>
+#include <core_net/chain/abi_serializer.hpp>
 
 #include <fc/variant_object.hpp>
 
 #include <contracts.hpp>
 
 using namespace eosio;
-using namespace eosio::testing;
-using namespace eosio::chain;
-using namespace eosio::testing;
+using namespace core_net::testing;
+using namespace core_net::chain;
+using namespace core_net::testing;
 using namespace fc;
 
 using mvo = fc::mutable_variant_object;
@@ -18,13 +18,13 @@ BOOST_AUTO_TEST_SUITE(array_tests)
 
 BOOST_FIXTURE_TEST_CASE( std_array_param, tester ) try {
    /* -----------  testpa action tests --------------------------------------------------
-   [[eosio::action]]
+   [[core_net::action]]
    void testpa(std::array<int,4> input){
       std::array<int,4> arr = input;
       for(int i = 0; i < 4; ++i){
-         eosio::cout << arr[i] << " ";
+         core_net::cout << arr[i] << " ";
       }
-      eosio::cout << "\n";
+      core_net::cout << "\n";
    }
    -------------------------------------------------------------------------------------- */
    create_accounts( { "test"_n } );
@@ -50,7 +50,7 @@ BOOST_FIXTURE_TEST_CASE( std_array_param, tester ) try {
 
 BOOST_FIXTURE_TEST_CASE( std_array_return_value, tester ) try {
    /* -----------  testre action tests --------------------------------------------------
-   [[eosio::action]]
+   [[core_net::action]]
    std::array<int,4> testre(std::array<int,4> input){
       std::array<int,4> arr = input;
       for(auto & v : arr) v += 1;
@@ -73,7 +73,7 @@ BOOST_FIXTURE_TEST_CASE( std_array_return_value, tester ) try {
 
 BOOST_FIXTURE_TEST_CASE( std_vector_return_value, tester ) try {
    /* -----------  testrev action tests --------------------------------------------------
-   [[eosio::action]]
+   [[core_net::action]]
    std::vector<int> testrev(std::vector<int> input){
       std::vector<int> vec = input;
       for(auto & v : vec) v += 1;

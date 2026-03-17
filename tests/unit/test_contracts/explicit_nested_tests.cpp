@@ -1,4 +1,4 @@
-#include <eosio/eosio.hpp>
+#include <core_net/eosio.hpp>
 
     
 using namespace std;
@@ -38,69 +38,69 @@ CONTRACT explicit_nested_tests : public contract {
    };
    using test_data_idx = multi_index<"testdata"_n, testdata>;
 
-   [[eosio::action]]
+   [[core_net::action]]
     //usage: cleos -v push action eosio vvstr '[[["abc", "cde"],["def","fgh"]]]' -p eosio@active
    std::vector<std::vector<std::string>> vvstr(std::vector<std::vector<std::string>> input) {
       std::vector<std::vector<std::string>> output = input;
       for(auto & row : output) {
          for(auto & word : row) {
-            eosio::cout << " " << word;
+            core_net::cout << " " << word;
          }
-         eosio::cout << "\n";
+         core_net::cout << "\n";
       }
       return output;
    } 
-   [[eosio::action]]
+   [[core_net::action]]
    // usage : cleos -v push action eosio vvvstr '[[[["abc", "cde"],["def","fgh"]]]]' -p eosio@active
    std::vector<std::vector<std::vector<std::string>>> vvvstr(std::vector<std::vector<std::vector<std::string>>> input) {
       std::vector<std::vector<std::vector<std::string>>> output = input;
       for(auto & vecvec : output){
          for(auto & row : vecvec) {
             for(auto & word : row) {
-               eosio::cout << " " << word;
+               core_net::cout << " " << word;
             }
-            eosio::cout << "\n";
+            core_net::cout << "\n";
          }
       }
       return output;
    } 
 
-   [[eosio::action]]
+   [[core_net::action]]
    //usage : cleos -v push action eosio mapo '[[{"key":1,"value":2.0},{"key":2,"value":3.9}]]'  -p eosio@active
    std::map<uint64_t, std::optional<float> >  mapo(std::map<uint64_t, std::optional<float>>  input){
       std::map<uint64_t, std::optional<float>> output = input;
       return output;
    }
 
-   [[eosio::action]]
+   [[core_net::action]]
    // usage : cleos -v push action eosio vecop '[[{"first":1,"second":2.0},{"first":2,"second":3.9}]]'  -p eosio@active
    std::vector<std::optional<std::pair<uint64_t,float>>>  vecop(std::vector<std::optional<std::pair<uint64_t,float>>>  input){
       std::vector<std::optional<std::pair<uint64_t,float>>> output = input;
       return output;
    }
 
-   [[eosio::action]]
+   [[core_net::action]]
     // usage : cleos -v push action eosio vecpo '[[{"first":1,"second":2.0},{"first":2,"second":3.9}]]'  -p eosio@active
    std::vector<std::pair<uint64_t, opt_float >>  vecpo(std::vector<std::pair<uint64_t, opt_float >>  input){
       std::vector<std::pair<uint64_t, opt_float >> output = input;
       return output;
    }
 
-   [[eosio::action]]
+   [[core_net::action]]
    // usage : cleos -v push action eosio vecpoe '[[{"first":1,"second":2.0},{"first":2,"second":3.9}]]'  -p eosio@active
    std::vector<std::pair<uint64_t, std::optional<float> >>  vecpoe(std::vector<std::pair<uint64_t, std::optional<float> >>  input){
       std::vector<std::pair<uint64_t, std::optional<float> >> output = input;
       return output;
    }
 
-   [[eosio::action]]
+   [[core_net::action]]
    // usage : cleos -v push action eosio tup '[{"field_0":1,"field_1":2.0,"field_2":[4,5,6,7]}]'  -p eosio@active
    std::tuple<uint64_t, std::optional<float>, std::vector<int>>  tup(std::tuple<uint64_t, std::optional<float>, std::vector<int>>  input){
       std::tuple<uint64_t, std::optional<float>, std::vector<int>> output = input;
       return output;
    }
 
-   [[eosio::action]]
+   [[core_net::action]]
     // usage : cleos -v push action eosio var '[["uint64",8]]'  -p eosio@active
     // usage : cleos -v push action eosio var '[["B_optional_B_pair_int32_float32_E_E", {"first":1,"second":2.0}]]'  -p eosio@active
     // usage : cleos -v push action eosio var '[["B_vector_int32_E", [2,3,4]]]'  -p eosio@active
@@ -109,32 +109,32 @@ CONTRACT explicit_nested_tests : public contract {
       return output;
    }
 
-   [[eosio::action]]  // sdl means set deque list , as we support them should test them as well.
+   [[core_net::action]]  // sdl means set deque list , as we support them should test them as well.
    // usage : cleos -v push action eosio sdlstr '[[[["abc", "cde"],["def","fgh"]]]]' -p eosio@active
    std::set<std::deque<std::list<std::string>>> sdlstr(std::set<std::deque<std::list<std::string>>> input) {
       std::set<std::deque<std::list<std::string>>> output = input;
       for(auto & deqlist : output){
          for(auto & row : deqlist) {
             for(auto & word : row) {
-               eosio::cout << " " << word;
+               core_net::cout << " " << word;
             }
-            eosio::cout << "\n";
+            core_net::cout << "\n";
          }
       }
       return output;
    }
 
    typedef std::vector<std::vector<std::string>>  vecvecstr;
-   [[eosio::action]]   // this test is for the whole type is not explicit nested by the inside type is a alias of explicit nested.
+   [[core_net::action]]   // this test is for the whole type is not explicit nested by the inside type is a alias of explicit nested.
    // usage : cleos -v push action eosio vivvstr '[[[["abc", "cde"],["def","fgh"]]]]' -p eosio@active
    std::vector<vecvecstr> vivvstr(std::vector<vecvecstr> input) {
       std::vector<vecvecstr> output = input;
       for(auto & vecvec : output){
          for(auto & row : vecvec) {
             for(auto & word : row) {
-               eosio::cout << " " << word;
+               core_net::cout << " " << word;
             }
-            eosio::cout << "\n";
+            core_net::cout << "\n";
          }
       }
       return output;
@@ -143,7 +143,7 @@ CONTRACT explicit_nested_tests : public contract {
    typedef vector<vector<vector<int> > > myvec3;
    typedef set<myvec3> myset;
 
-   [[eosio::action]]   // this test is for the whole type is not explicit nested by the inside type is a alias of explicit nested.
+   [[core_net::action]]   // this test is for the whole type is not explicit nested by the inside type is a alias of explicit nested.
    // usage : cleos -v push action eosio sivvvi '[[[[[1, 2],[3,4]]]]]' -p eosio@active
    myset sivvvi(myset input) {
       myset output = input;
@@ -151,22 +151,22 @@ CONTRACT explicit_nested_tests : public contract {
          for(auto & vecvec : vvvi){
             for(auto & row : vecvec) {
                for(auto & num : row) {
-                  eosio::cout << " " << num;
+                  core_net::cout << " " << num;
                }
-               eosio::cout << "\n";
+               core_net::cout << "\n";
             }
          }
       }
       return output;
    }
 
-   [[eosio::action]]
+   [[core_net::action]]
    std::vector<std::vector<_mystruct>>  vvmystr(){
       std::vector<std::vector<_mystruct>> output = {{{56,5.6, {{"test"}} }, {78,7.8, {{"passed"}} }}};
       return output;
    }
 
-   [[eosio::action]]   // this test is for the put simple data to table, so as to check the the data read from table is the same
+   [[core_net::action]]   // this test is for the put simple data to table, so as to check the the data read from table is the same
    // usage : cleos -v push action eosio putd '[eosio]' -p eosio@active
    //             cleos -v get table eosio eosio testdata
    void putd(name user) {
@@ -195,42 +195,42 @@ CONTRACT explicit_nested_tests : public contract {
       auto it = _tests.begin();
       auto ite = _tests.end();
       while(it != ite){
-         eosio::cout << "id = " << it->id << "\n";
-         eosio::cout << "data : " << "\n";
+         core_net::cout << "id = " << it->id << "\n";
+         core_net::cout << "data : " << "\n";
          for(auto & p : it->data){
-            eosio::cout << p.first << ":" << p.second.value() << "\n";
+            core_net::cout << p.first << ":" << p.second.value() << "\n";
          }
-         eosio::cout << "data_vec : \n";
+         core_net::cout << "data_vec : \n";
          for(auto & opt : it->data_vec){
-            if(opt.has_value()) eosio::cout << opt.value().first << ":" << opt.value().second << "\n";
-            else eosio::cout << "no value in optional \n";
+            if(opt.has_value()) core_net::cout << opt.value().first << ":" << opt.value().second << "\n";
+            else core_net::cout << "no value in optional \n";
          }
-         eosio::cout << "data_vec2 : \n";
+         core_net::cout << "data_vec2 : \n";
          for(auto & p : it->data_vec2){
-            eosio::cout << p.first << ":" << p.second.value() << "\n";
+            core_net::cout << p.first << ":" << p.second.value() << "\n";
          }
-         eosio::cout << "data_vec3 : \n";
+         core_net::cout << "data_vec3 : \n";
          for(auto & opt : it->data_vec3){
-            if(opt.has_value()) eosio::cout << opt.value() << "\n";
-            else eosio::cout << "no value in optional \n";
+            if(opt.has_value()) core_net::cout << opt.value() << "\n";
+            else core_net::cout << "no value in optional \n";
          }
-         eosio::cout << "tup1 : \n";
+         core_net::cout << "tup1 : \n";
          auto [a, b, c] = it->tup1;
          eosio:cout << a << ",   " << b.value() << ",   " ;
-         for(auto & v : c){ eosio::cout << v  << " ";}
-         eosio::cout << "\n";
+         for(auto & v : c){ core_net::cout << v  << " ";}
+         core_net::cout << "\n";
 
-         eosio::cout << "var1 : \n";
-         for(auto & v : std::get<2>(it->var1)) { eosio::cout << v  << " "; };
-         eosio::cout << "\n";
+         core_net::cout << "var1 : \n";
+         for(auto & v : std::get<2>(it->var1)) { core_net::cout << v  << " "; };
+         core_net::cout << "\n";
 
-         eosio::cout << "vvmys: \n";
+         core_net::cout << "vvmys: \n";
          for(auto & vmys : it->vvmys){
             for(auto & mys : vmys){
-               eosio::cout << mys.field0 << "," << mys.field1 << mys.field2[0][0] <<  "\n";
+               core_net::cout << mys.field0 << "," << mys.field1 << mys.field2[0][0] <<  "\n";
             }
          }
-         eosio::cout << "\n\n";
+         core_net::cout << "\n\n";
          ++it;
       }
    }

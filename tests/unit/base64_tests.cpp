@@ -3,8 +3,8 @@
  *  @copyright defined in eosio.cdt/LICENSE.txt
  */
 
-#include <eosio/tester.hpp>
-#include <eosio/base64.hpp>
+#include <core_net/tester.hpp>
+#include <core_net/base64.hpp>
 
 using namespace eosio;
 using namespace std::literals;

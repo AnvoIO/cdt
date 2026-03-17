@@ -6,16 +6,16 @@
 #include <limits>
 #include <string>
 
-#include <eosio/tester.hpp>
-#include <eosio/symbol.hpp>
+#include <core_net/tester.hpp>
+#include <core_net/symbol.hpp>
 
 using std::numeric_limits;
 using std::string;
 
-using eosio::name;
-using eosio::symbol_code;
-using eosio::symbol;
-using eosio::extended_symbol;
+using core_net::name;
+using core_net::symbol_code;
+using core_net::symbol;
+using core_net::extended_symbol;
 
 static constexpr uint64_t u64min = numeric_limits<uint64_t>::min(); // 0ULL
 static constexpr uint64_t u64max = numeric_limits<uint64_t>::max(); // 18446744073709551615ULL

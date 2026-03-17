@@ -3,11 +3,11 @@
  *  @copyright defined in eosio.cdt/LICENSE.txt
  */
 
-#include <eosio/tester.hpp>
-#include <eosio/crypto.hpp>
+#include <core_net/tester.hpp>
+#include <core_net/crypto.hpp>
 
-using eosio::public_key;
-using eosio::signature;
+using core_net::public_key;
+using core_net::signature;
 using namespace eosio::native;
 
 // Definitions in `eosio.cdt/libraries/eosio/crypto.hpp`

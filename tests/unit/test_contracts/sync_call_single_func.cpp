@@ -1,16 +1,16 @@
-#include <eosio/call.hpp>
-#include <eosio/print.hpp>
-#include <eosio/eosio.hpp>
+#include <core_net/call.hpp>
+#include <core_net/print.hpp>
+#include <core_net/eosio.hpp>
 
-class [[eosio::contract]] sync_call_single_func : public eosio::contract{
+class [[core_net::contract]] sync_call_single_func : public core_net::contract{
 public:
    using contract::contract;
 
-   [[eosio::call]]
+   [[core_net::call]]
    uint32_t return_ten() {
       return 10;
    }
 
-   // Do NOT add any more functions tagged as `eosio::call` in this contract.
-   // It is used to test a contract having only one function tagged as `eosio::call`.
+   // Do NOT add any more functions tagged as `core_net::call` in this contract.
+   // It is used to test a contract having only one function tagged as `core_net::call`.
 };

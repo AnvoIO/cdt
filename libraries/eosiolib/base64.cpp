@@ -1,6 +1,6 @@
-#include "core/eosio/base64.hpp"
+#include "core/core_net/base64.hpp"
 
-namespace eosio::detail {
+namespace core_net::detail {
 
 unsigned int pos_of_char(const unsigned char chr, bool url) {
     // Return the position of chr within base64_encode()
@@ -43,7 +43,7 @@ unsigned int pos_of_char(const unsigned char chr, bool url) {
     }};
 
     auto c = from_base64_chars[url][chr];
-    eosio::check(c != 64, "encountered non-base64 character");
+    core_net::check(c != 64, "encountered non-base64 character");
 
     return c;
 }
@@ -149,7 +149,7 @@ std::string base64_decode(std::string_view encoded_string, bool remove_linebreak
     //
     // The last chunk produces at least one and up to three bytes.
     //
-       eosio::check(pos+1 < length_of_string, "wrong encoded string size");
+       core_net::check(pos+1 < length_of_string, "wrong encoded string size");
        size_t pos_of_char_1 = pos_of_char(encoded_string.at(pos+1), url);
 
     //
@@ -186,4 +186,4 @@ std::string base64_decode(std::string_view encoded_string, bool remove_linebreak
     return ret;
 }
 
-}//eosio::detail
+}//core_net::detail

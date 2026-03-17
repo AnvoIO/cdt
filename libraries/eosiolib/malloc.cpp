@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <alloca.h>
-#include "core/eosio/check.hpp"
-#include "core/eosio/print.hpp"
+#include "core/core_net/check.hpp"
+#include "core/core_net/print.hpp"
 
 #ifdef EOSIO_NATIVE
    extern "C" {
@@ -15,7 +15,7 @@
 #define GROW_MEMORY(X) __builtin_wasm_memory_grow(0, X)
 #endif
 
-namespace eosio {
+namespace core_net {
    extern "C" uintptr_t  __get_heap_base();
    void* sbrk(size_t num_bytes) {
          constexpr size_t NBPPL2  = 16U;
@@ -70,7 +70,7 @@ namespace eosio {
       , _active_heap(0)
       , _active_free_heap(0)
       {
-         //eosio::print("HEAP : ", __data_end, '\n');
+         //core_net::print("HEAP : ", __data_end, '\n');
       }
 
    private:
@@ -288,7 +288,7 @@ namespace eosio {
 
          char* malloc_from_freed(size_t size)
          {
-            eosio::check(_offset == _heap_size, "malloc_from_freed was designed to only be called after _heap was completely allocated");
+            core_net::check(_offset == _heap_size, "malloc_from_freed was designed to only be called after _heap was completely allocated");
 
             char* current = _heap + _size_marker;
             while (current != nullptr)
@@ -522,25 +522,25 @@ namespace eosio {
    };
 
    memory_manager memory_heap;
-} /// namespace eosio
+} /// namespace core_net
 
 extern "C" {
 void* malloc(size_t size) {
-   return eosio::memory_heap.malloc(size);
+   return core_net::memory_heap.malloc(size);
 }
 
 void* calloc(size_t count, size_t size) {
-   void* ptr = eosio::memory_heap.malloc(count*size);
+   void* ptr = core_net::memory_heap.malloc(count*size);
    memset(ptr, 0, count*size);
    return ptr;
 }
 
 void* realloc(void* ptr, size_t size) {
-   return eosio::memory_heap.realloc(ptr, size);
+   return core_net::memory_heap.realloc(ptr, size);
 }
 
 void free(void* ptr) {
-   return eosio::memory_heap.free(ptr);
+   return core_net::memory_heap.free(ptr);
 }
 }
 

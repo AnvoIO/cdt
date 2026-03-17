@@ -1,4 +1,4 @@
-#include <eosio/eosio.hpp>
+#include <core_net/eosio.hpp>
 
 using namespace eosio;
 
@@ -7,11 +7,11 @@ struct TaggedNumber {
     uint64_t value;
 };
 
-class [[eosio::contract]] tagged_number_test : public contract {
+class [[core_net::contract]] tagged_number_test : public contract {
   public:
       using contract::contract;
       
-      [[eosio::action]]
+      [[core_net::action]]
       void test(TaggedNumber<"a.tag"_n.value>) {
       }
 };

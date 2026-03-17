@@ -1,21 +1,21 @@
 // Verifies that a table with name-typed primary key works
 
-#include <eosio/multi_index.hpp>
-#include <eosio/contract.hpp>
+#include <core_net/multi_index.hpp>
+#include <core_net/contract.hpp>
 
-struct [[eosio::table]] name_table {
-    eosio::name pk;
+struct [[core_net::table]] name_table {
+    core_net::name pk;
     int num;
 
     auto primary_key() const { return pk; }
 };
-using name_table_idx = eosio::multi_index<"name.pk"_n, name_table>;
+using name_table_idx = core_net::multi_index<"name.pk"_n, name_table>;
 
-class [[eosio::contract]] name_pk_tests : public eosio::contract {
+class [[core_net::contract]] name_pk_tests : public core_net::contract {
  public:
-   using eosio::contract::contract;
+   using core_net::contract::contract;
 
-   [[eosio::action]] void write() {
+   [[core_net::action]] void write() {
        name_table_idx table(get_self(), 0);
        table.emplace(get_self(), [](auto& row) {
            row.pk = "alice"_n;
@@ -27,9 +27,9 @@ class [[eosio::contract]] name_pk_tests : public eosio::contract {
        });
    }
 
-   [[eosio::action]] void read() {
+   [[core_net::action]] void read() {
        name_table_idx table(get_self(), 0);
-       eosio::check(table.get("alice"_n).num == 2, "num mismatch");
-       eosio::check(table.get("bob"_n).num == 1, "num mismatch");
+       core_net::check(table.get("alice"_n).num == 2, "num mismatch");
+       core_net::check(table.get("bob"_n).num == 1, "num mismatch");
    }
 };

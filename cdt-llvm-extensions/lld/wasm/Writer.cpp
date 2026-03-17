@@ -31,8 +31,8 @@
 #include "llvm/Support/LEB128.h"
 #include "llvm/Support/Parallel.h"
 
-#include <eosio/abimerge.hpp>
-#include <eosio/utils.hpp>
+#include <core_net/abimerge.hpp>
+#include <core_net/utils.hpp>
 
 #include <cstdarg>
 #include <map>
@@ -1608,7 +1608,7 @@ void Writer::createDispatchFunction() {
          writeU8(os, OPCODE_ELSE, "ELSE");
       }
       need_else = true;
-      uint64_t nm = eosio::cdt::string_to_name(str.substr(0, str.find(":")).c_str());
+      uint64_t nm = core_net::cdt::string_to_name(str.substr(0, str.find(":")).c_str());
       writeU8(os, OPCODE_I64_CONST, "I64 CONST");
       encodeSLEB128((int64_t)nm, os);
       writeU8(os, OPCODE_GET_LOCAL, "GET_LOCAL");
@@ -1670,7 +1670,7 @@ void Writer::createDispatchFunction() {
       writeU8(OS, OPCODE_GET_LOCAL, "GET_LOCAL");
       writeUleb128(OS, 0, "self");
       writeU8(OS, OPCODE_I64_CONST, "I64.CONST");
-      encodeSLEB128((int64_t)eosio::cdt::string_to_name("eosio"), OS);
+      encodeSLEB128((int64_t)core_net::cdt::string_to_name("eosio"), OS);
       writeU8(OS, OPCODE_I64_NE, "I64.NE");
       writeU8(OS, OPCODE_IF, "if receiver != eosio");
       writeU8(OS, 0x40, "none");
@@ -1743,7 +1743,7 @@ void Writer::createDispatchFunction() {
       if (!has_onerror_handler) {
          // assert on onerror
          writeU8(OS, OPCODE_I64_CONST, "I64.CONST");
-         uint64_t acnt = eosio::cdt::string_to_name("eosio");
+         uint64_t acnt = core_net::cdt::string_to_name("eosio");
          encodeSLEB128((int64_t)acnt, OS);
          writeU8(OS, OPCODE_GET_LOCAL, "GET_LOCAL");
          writeUleb128(OS, 1, "code");
@@ -1751,7 +1751,7 @@ void Writer::createDispatchFunction() {
          writeU8(OS, OPCODE_IF, "IF code==eosio");
          writeU8(OS, 0x40, "none");
          writeU8(OS, OPCODE_I64_CONST, "I64.CONST");
-         uint64_t nm = eosio::cdt::string_to_name("onerror");
+         uint64_t nm = core_net::cdt::string_to_name("onerror");
          encodeSLEB128((int64_t)nm, OS);
          writeU8(OS, OPCODE_GET_LOCAL, "GET_LOCAL");
          writeUleb128(OS, 2, "action");
@@ -1773,7 +1773,7 @@ void Writer::createDispatchFunction() {
       if (not_cnt > 0) {
          bool has_written = false;
          for (auto const& notif0 : notify_handlers) {
-            uint64_t nm = eosio::cdt::string_to_name(notif0.first.c_str());
+            uint64_t nm = core_net::cdt::string_to_name(notif0.first.c_str());
             if (notif0.first == "*")
                continue;
             has_written = true;
@@ -1982,7 +1982,7 @@ void Writer::createCallDispatchFunction() {
       writeUleb128(os, 0, "offset=0");
 
       // Generate code to compare called function name with `call_name`
-      uint64_t id = eosio::cdt::to_hash_id(call_name.substr(0, call_name.find(":")).c_str());
+      uint64_t id = core_net::cdt::to_hash_id(call_name.substr(0, call_name.find(":")).c_str());
       writeU8(os, OPCODE_I64_CONST, "I64 CONST");
       encodeSLEB128((int64_t)id, os);
       writeU8(os, OPCODE_I64_EQ, "I64_EQ");

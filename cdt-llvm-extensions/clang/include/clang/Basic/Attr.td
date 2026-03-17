@@ -1266,95 +1266,109 @@ def C11NoReturn : InheritableAttr {
 }
 
 def EosioIgnore : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "ignore">, GNU<"eosio_ignore">];
+   let Spellings = [CXX11<"core_net", "ignore">, GNU<"core_net_ignore">,
+                    CXX11<"eosio", "ignore">, GNU<"eosio_ignore">];
    let Args = [StringArgument<"name", 1>];
    let Subjects = SubjectList<[CXXRecord, Record]>;
    let Documentation = [EosioIgnoreDocs];
 }
 
 def EosioNotify : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "on_notify">, GNU<"eosio_on_notify">];
+   let Spellings = [CXX11<"core_net", "on_notify">, GNU<"core_net_on_notify">,
+                    CXX11<"eosio", "on_notify">, GNU<"eosio_on_notify">];
    let Args = [StringArgument<"name">];
    let Subjects = SubjectList<[CXXMethod]>;
    let Documentation = [EosioIgnoreDocs];
 }
 
 def EosioRicardian : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "ricardian">, GNU<"eosio_ricardian">];
+   let Spellings = [CXX11<"core_net", "ricardian">, GNU<"core_net_ricardian">,
+                    CXX11<"eosio", "ricardian">, GNU<"eosio_ricardian">];
    let Args = [StringArgument<"name">];
    let Subjects = SubjectList<[CXXRecord, CXXMethod]>;
    let Documentation = [EosioRicardianDocs];
 }
 
 def EosioContract : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "contract">, GNU<"eosio_contract">];
+   let Spellings = [CXX11<"core_net", "contract">, GNU<"core_net_contract">,
+                    CXX11<"eosio", "contract">, GNU<"eosio_contract">];
    let Args = [StringArgument<"name", 1>];
    let Subjects = SubjectList<[CXXRecord, CXXMethod]>;
    let Documentation = [EosioContractDocs];
 }
 
 def EosioWasmAction : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "wasm_action">, GNU<"eosio_wasm_action">];
+   let Spellings = [CXX11<"core_net", "wasm_action">, GNU<"core_net_wasm_action">,
+                    CXX11<"eosio", "wasm_action">, GNU<"eosio_wasm_action">];
    let Args = [StringArgument<"name", 1>];
    let Subjects = SubjectList<[Function]>;
    let Documentation = [EosioWasmImportDocs];
 }
 
 def EosioWasmNotify : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "wasm_notify">, GNU<"eosio_wasm_notify">];
+   let Spellings = [CXX11<"core_net", "wasm_notify">, GNU<"core_net_wasm_notify">,
+                    CXX11<"eosio", "wasm_notify">, GNU<"eosio_wasm_notify">];
    let Args = [StringArgument<"name", 1>];
    let Subjects = SubjectList<[Function]>;
    let Documentation = [EosioWasmImportDocs];
 }
 
 def EosioWasmCall : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "wasm_call">, GNU<"eosio_wasm_call">];
+   let Spellings = [CXX11<"core_net", "wasm_call">, GNU<"core_net_wasm_call">,
+                    CXX11<"eosio", "wasm_call">, GNU<"eosio_wasm_call">];
    let Args = [StringArgument<"name", 1>];
    let Subjects = SubjectList<[Function]>;
    let Documentation = [EosioWasmImportDocs];
 }
 
 def EosioWasmABI : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "wasm_abi">, GNU<"eosio_wasm_abi">];
+   let Spellings = [CXX11<"core_net", "wasm_abi">, GNU<"core_net_wasm_abi">,
+                    CXX11<"eosio", "wasm_abi">, GNU<"eosio_wasm_abi">];
    let Args = [StringArgument<"abi", 1>];
    let Subjects = SubjectList<[Function]>;
    let Documentation = [EosioWasmImportDocs];
 }
 
 def EosioWasmEntry : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "wasm_entry">, GNU<"eosio_wasm_entry">];
+   let Spellings = [CXX11<"core_net", "wasm_entry">, GNU<"core_net_wasm_entry">,
+                    CXX11<"eosio", "wasm_entry">, GNU<"eosio_wasm_entry">];
    let Subjects = SubjectList<[Function]>;
    let Documentation = [EosioWasmImportDocs];
 }
 
 def EosioWasmImport : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "wasm_import">, GNU<"eosio_wasm_import">];
+   let Spellings = [CXX11<"core_net", "wasm_import">, GNU<"core_net_wasm_import">,
+                    CXX11<"eosio", "wasm_import">, GNU<"eosio_wasm_import">];
    let Subjects = SubjectList<[Function]>;
    let Documentation = [EosioWasmImportDocs];
 }
 
 def EosioAction : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "action">, GNU<"eosio_action">];
+   let Spellings = [CXX11<"core_net", "action">, GNU<"core_net_action">,
+                    CXX11<"eosio", "action">, GNU<"eosio_action">];
    let Args = [StringArgument<"name", 1>];
    let Subjects = SubjectList<[CXXRecord, CXXMethod]>;
    let Documentation = [EosioActionDocs];
 }
 
 def EosioCall : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "call">, GNU<"eosio_call">];
+   let Spellings = [CXX11<"core_net", "call">, GNU<"core_net_call">,
+                    CXX11<"eosio", "call">, GNU<"eosio_call">];
    let Args = [StringArgument<"name", 1>];
    let Subjects = SubjectList<[CXXRecord, CXXMethod]>;
    let Documentation = [EosioCallDocs];
 }
 
 def EosioReadOnly : InheritableAttr {
-  let Spellings = [CXX11<"eosio", "read_only">, GNU<"eosio_read_only">];
+  let Spellings = [CXX11<"core_net", "read_only">, GNU<"core_net_read_only">,
+                   CXX11<"eosio", "read_only">, GNU<"eosio_read_only">];
   let Subjects = SubjectList<[CXXRecord, CXXMethod]>;
   let Documentation = [EosioReadOnlyDocs];
 }
 
 def EosioTable : InheritableAttr {
-   let Spellings = [CXX11<"eosio", "table">, GNU<"eosio_table">];
+   let Spellings = [CXX11<"core_net", "table">, GNU<"core_net_table">,
+                    CXX11<"eosio", "table">, GNU<"eosio_table">];
    let Args = [StringArgument<"name", 1>];
    let Subjects = SubjectList<[CXXRecord]>;
    let MeaningfulToClassTemplateDefinition = 1;

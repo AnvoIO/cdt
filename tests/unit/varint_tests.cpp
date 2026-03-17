@@ -5,15 +5,15 @@
 
 #include <limits>
 
-#include <eosio/tester.hpp>
-#include <eosio/datastream.hpp>
-#include <eosio/varint.hpp>
+#include <core_net/tester.hpp>
+#include <core_net/datastream.hpp>
+#include <core_net/varint.hpp>
 
 using std::numeric_limits;
 
-using eosio::datastream;
-using eosio::unsigned_int;
-using eosio::signed_int;
+using core_net::datastream;
+using core_net::unsigned_int;
+using core_net::signed_int;
 
 static constexpr uint32_t u32min = numeric_limits<uint32_t>::min(); // 0
 static constexpr uint32_t u32max = numeric_limits<uint32_t>::max(); // 4294967295

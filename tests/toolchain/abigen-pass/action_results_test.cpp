@@ -1,4 +1,4 @@
-#include <eosio/eosio.hpp>
+#include <core_net/eosio.hpp>
 #include <vector>
 
 using namespace eosio;
@@ -9,22 +9,22 @@ struct test_res {
    name  c;
 };
 
-class [[eosio::contract]] action_results_test : public contract {
+class [[core_net::contract]] action_results_test : public contract {
    public:
    using contract::contract;
 
-   [[eosio::action]]
+   [[core_net::action]]
    void action1() {}
 
-   [[eosio::action]]
+   [[core_net::action]]
    uint32_t action2() { return 42; }
 
-   [[eosio::action]]
+   [[core_net::action]]
    std::string action3() { return "foo"; }
 
-   [[eosio::action]]
+   [[core_net::action]]
    std::vector<name> action4() { return {"dan"_n}; }
 
-   [[eosio::action]]
+   [[core_net::action]]
    test_res action5() { return {4, 42.4f, "bucky"_n}; }
 };

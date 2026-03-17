@@ -1,17 +1,17 @@
-#include <eosio/eosio.hpp>
-#include <eosio/action.hpp>
-#include <eosio/name.hpp>
+#include <core_net/eosio.hpp>
+#include <core_net/action.hpp>
+#include <core_net/name.hpp>
 
 #include "get_code_hash_table.hpp"
 
-class [[eosio::contract]] get_code_hash_tests : public contract {
+class [[core_net::contract]] get_code_hash_tests : public contract {
 public:
    using contract::contract;
 
    using hash_table = multi_index<name("code.hash"), code_hash>;
 
    // Read the old code's hash from database and verify new code's hash differs
-   [[eosio::action]]
+   [[core_net::action]]
    void theaction() {
       require_auth(get_self());
       hash_table hashes(get_self(), get_self().value);
@@ -21,7 +21,7 @@ public:
 
       auto record = hashes.get(0, "Unable to find recorded hash");
       check(hash != record.hash, "Code hash has not changed");
-      eosio::print("Old hash: ", record.hash, "; new hash: ", hash);
+      core_net::print("Old hash: ", record.hash, "; new hash: ", hash);
    }
 };
 

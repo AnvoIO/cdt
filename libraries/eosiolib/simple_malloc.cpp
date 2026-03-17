@@ -1,5 +1,5 @@
 #include <memory>
-#include "core/eosio/check.hpp"
+#include "core/core_net/check.hpp"
 
 #ifdef EOSIO_NATIVE
    extern "C" {
@@ -13,7 +13,7 @@
 #define GROW_MEMORY(X) __builtin_wasm_memory_grow(0, X)
 #endif
 
-namespace eosio {
+namespace core_net {
    struct dsmalloc {
       inline char* align(char* ptr, uint8_t align_amt) {
          return (char*)((((size_t)ptr) + align_amt-1) & ~(align_amt-1));
@@ -46,7 +46,7 @@ namespace eosio {
             next_page++;
             pages_to_alloc++;
          }
-         eosio::check(GROW_MEMORY(pages_to_alloc) != -1, "failed to allocate pages");
+         core_net::check(GROW_MEMORY(pages_to_alloc) != -1, "failed to allocate pages");
          return ret;
       }
 
@@ -61,13 +61,13 @@ namespace eosio {
 extern "C" {
 
 void* malloc(size_t size) {
-   void* ret = eosio::_dsmalloc(size);
+   void* ret = core_net::_dsmalloc(size);
    return ret;
 }
 
 void* memset(void*,int,size_t);
 void* calloc(size_t count, size_t size) {
-   if (void* ptr = eosio::_dsmalloc(count*size)) {
+   if (void* ptr = core_net::_dsmalloc(count*size)) {
       memset(ptr, 0, count*size);
       return ptr;
    }
@@ -75,7 +75,7 @@ void* calloc(size_t count, size_t size) {
 }
 
 void* realloc(void* ptr, size_t size) {
-   if (void* result = eosio::_dsmalloc(size)) {
+   if (void* result = core_net::_dsmalloc(size)) {
       // May read out of bounds, but that's okay, as the
       // contents of the memory are undefined anyway.
       memmove(result, ptr, size);

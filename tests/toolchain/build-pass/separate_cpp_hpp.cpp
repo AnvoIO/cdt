@@ -7,5 +7,5 @@
 #include "separate_cpp_hpp.hpp"
 
 void separate_cpp_hpp::act() {
-   eosio::print("ok\n");
+   core_net::print("ok\n");
 }
