@@ -52,7 +52,7 @@ namespace {
          IRBuilder<> builder(&F.getEntryBlock());
          builder.SetInsertPoint(&(F.getEntryBlock().front()));
 
-         auto set_contract = F.getParent()->getOrInsertFunction("eosio_set_contract_name", AttributeList{}, Type::getVoidTy(F.getContext()), Type::getInt64Ty(F.getContext()));
+         auto set_contract = F.getParent()->getOrInsertFunction("core_net_set_contract_name", AttributeList{}, Type::getVoidTy(F.getContext()), Type::getInt64Ty(F.getContext()));
 
          CallInst* set_contract_call = builder.CreateCall(set_contract, {F.arg_begin()}, "");
          if (const Function* F_ = dyn_cast<const Function>(set_contract.getCallee()->stripPointerCasts()))

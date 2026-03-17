@@ -12,7 +12,7 @@
 
 using core_net::cdt::output_stream;
 
-EOSIO_TEST_BEGIN(output_stream_push)
+CORE_NET_TEST_BEGIN(output_stream_push)
    std_err.clear();
    const char* msg = "abc";
    _prints(msg, core_net::cdt::output_stream_kind::std_err);
@@ -26,9 +26,9 @@ EOSIO_TEST_BEGIN(output_stream_push)
    CHECK_EQUAL(std_err.index(), 0);
 
    std_err.clear();
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
-EOSIO_TEST_BEGIN(output_stream_push_overflow)
+CORE_NET_TEST_BEGIN(output_stream_push_overflow)
    std_err.clear();
    const auto initial_capacity = std_err.to_string().capacity();
    CHECK_EQUAL(std_err.index(), 0);
@@ -40,9 +40,9 @@ EOSIO_TEST_BEGIN(output_stream_push_overflow)
    CHECK_EQUAL(std_err.index(), large_msg.size());
 
    std_err.clear();
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
-EOSIO_TEST_BEGIN(output_stream_get_and_push)
+CORE_NET_TEST_BEGIN(output_stream_get_and_push)
    std_err.clear();
    std::string example_msg("abcdef");
 
@@ -53,7 +53,7 @@ EOSIO_TEST_BEGIN(output_stream_get_and_push)
    CHECK_EQUAL(strcmp(std_err.get(), "abcdefg") , 0);
 
    std_err.clear();
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 int main(int argc, char* argv[]) {
    bool verbose = false;
@@ -62,8 +62,8 @@ int main(int argc, char* argv[]) {
    }
    silence_output(!verbose);
 
-   EOSIO_TEST(output_stream_push)
-   EOSIO_TEST(output_stream_push_overflow)
-   EOSIO_TEST(output_stream_get_and_push)
+   CORE_NET_TEST(output_stream_push)
+   CORE_NET_TEST(output_stream_push_overflow)
+   CORE_NET_TEST(output_stream_get_and_push)
    return has_failed();
 }

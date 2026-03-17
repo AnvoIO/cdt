@@ -64,10 +64,10 @@ static constexpr int OPCODE_I64_NE     = 0x52;
 static constexpr int OPCODE_I64_LOAD   = 0x29;
 
 // CDT error codes embedded in WASM dispatch
-static constexpr uint64_t EOSIO_COMPILER_ERROR_BASE = 8000000000000000000ull;
-static constexpr uint64_t EOSIO_ERROR_NO_ACTION     = EOSIO_COMPILER_ERROR_BASE;
-static constexpr uint64_t EOSIO_ERROR_ONERROR       = EOSIO_COMPILER_ERROR_BASE+1;
-static constexpr uint64_t EOSIO_CANARY_FAILURE       = EOSIO_COMPILER_ERROR_BASE+2;
+static constexpr uint64_t CORE_NET_COMPILER_ERROR_BASE = 8000000000000000000ull;
+static constexpr uint64_t CORE_NET_ERROR_NO_ACTION     = CORE_NET_COMPILER_ERROR_BASE;
+static constexpr uint64_t CORE_NET_ERROR_ONERROR       = CORE_NET_COMPILER_ERROR_BASE+1;
+static constexpr uint64_t CORE_NET_CANARY_FAILURE      = CORE_NET_COMPILER_ERROR_BASE+2;
 
 // Sync call status codes
 static constexpr int64_t SYNC_CALL_EXECUTED = 0;
@@ -1640,7 +1640,7 @@ void Writer::createDispatchFunction() {
       writeUleb128(os, index, "index");
    };
 
-   auto assert_sym = dyn_cast_or_null<FunctionSymbol>(symtab->find("eosio_assert_code"));
+   auto assert_sym = dyn_cast_or_null<FunctionSymbol>(symtab->find("core_net_assert_code"));
    uint32_t assert_idx = UINT32_MAX;
    if (assert_sym && assert_sym->hasFunctionIndex())
      assert_idx = assert_sym->getFunctionIndex();
@@ -1680,7 +1680,7 @@ void Writer::createDispatchFunction() {
         writeU8(OS, OPCODE_I32_CONST, "I32.CONST");
         writeUleb128(OS, 0, "false");
         writeU8(OS, OPCODE_I64_CONST, "I64.CONST");
-        encodeSLEB128((int64_t)EOSIO_ERROR_NO_ACTION, OS);
+        encodeSLEB128((int64_t)CORE_NET_ERROR_NO_ACTION, OS);
         writeU8(OS, OPCODE_CALL, "CALL");
         writeUleb128(OS, assert_idx, "code");
       } else {
@@ -1761,7 +1761,7 @@ void Writer::createDispatchFunction() {
          writeU8(OS, OPCODE_I32_CONST, "I32.CONST");
          writeUleb128(OS, 0, "false");
          writeU8(OS, OPCODE_I64_CONST, "I64.CONST");
-         encodeSLEB128((int64_t)EOSIO_ERROR_ONERROR, OS);
+         encodeSLEB128((int64_t)CORE_NET_ERROR_ONERROR, OS);
          writeU8(OS, OPCODE_CALL, "CALL");
          writeUleb128(OS, assert_idx, "code");
          writeU8(OS, OPCODE_END, "END");
@@ -1828,16 +1828,16 @@ void Writer::createDispatchFunction() {
       writeUleb128(OS, 0, "num locals");
 
       auto *contract_sym = dyn_cast_or_null<FunctionSymbol>(
-          symtab->find("eosio_set_contract_name"));
+          symtab->find("core_net_set_contract_name"));
       if (!contract_sym || !contract_sym->hasFunctionIndex()) {
-         error("CDT dispatch: eosio_set_contract_name not found or has no index");
+         error("CDT dispatch: core_net_set_contract_name not found or has no index");
          return;
       }
       uint32_t contract_idx = contract_sym->getFunctionIndex();
       writeU8(OS, OPCODE_GET_LOCAL, "GET_LOCAL");
       writeUleb128(OS, 0, "receiver");
       writeU8(OS, OPCODE_CALL, "CALL");
-      writeUleb128(OS, contract_idx, "eosio_set_contract_name");
+      writeUleb128(OS, contract_idx, "core_net_set_contract_name");
 
       // create ctors call
       if (WasmSym::callCtors && WasmSym::callCtors->isLive()) {
@@ -2052,12 +2052,12 @@ void Writer::createCallDispatchFunction() {
       writeUleb128(OS, 2, "num of locals in group 1");
       writeU8(OS, OPCODE_I32_TYPE, "type of group 1 is i32");
 
-      auto contract_sym = cast<FunctionSymbol>(symtab->find("eosio_set_contract_name"));
+      auto contract_sym = cast<FunctionSymbol>(symtab->find("core_net_set_contract_name"));
       uint32_t contract_idx = contract_sym->getFunctionIndex();
       writeU8(OS, OPCODE_GET_LOCAL, "GET_LOCAL");
       writeUleb128(OS, 1, "receiver");
       writeU8(OS, OPCODE_CALL, "CALL");
-      writeUleb128(OS, contract_idx, "eosio_set_contract_name");
+      writeUleb128(OS, contract_idx, "core_net_set_contract_name");
 
       // create ctors call
       if (WasmSym::callCtors && WasmSym::callCtors->isLive()) {

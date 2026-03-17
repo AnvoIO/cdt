@@ -41,46 +41,46 @@ namespace {
   struct CoreNetSoftfloatPass : public PassInfoMixin<CoreNetSoftfloatPass> {
 
     PreservedAnalyses run(Function &F, FunctionAnalysisManager &FAM) {
-       auto  f32add = F.getParent()->getOrInsertFunction("_eosio_f32_add", AttributeList{},
+       auto  f32add = F.getParent()->getOrInsertFunction("_core_net_f32_add", AttributeList{},
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()));
-       auto  f32sub = F.getParent()->getOrInsertFunction("_eosio_f32_sub", AttributeList{},
+       auto  f32sub = F.getParent()->getOrInsertFunction("_core_net_f32_sub", AttributeList{},
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()));
-       auto  f32mul = F.getParent()->getOrInsertFunction("_eosio_f32_mul", AttributeList{},
+       auto  f32mul = F.getParent()->getOrInsertFunction("_core_net_f32_mul", AttributeList{},
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()));
-       auto  f32div = F.getParent()->getOrInsertFunction("_eosio_f32_div", AttributeList{},
+       auto  f32div = F.getParent()->getOrInsertFunction("_core_net_f32_div", AttributeList{},
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()));
        // TODO: set but not read
-       auto  f32rem = F.getParent()->getOrInsertFunction("_eosio_f32_rem", AttributeList{},
+       auto  f32rem = F.getParent()->getOrInsertFunction("_core_net_f32_rem", AttributeList{},
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()));
 
-       auto  f64add = F.getParent()->getOrInsertFunction("_eosio_f64_add", AttributeList{},
+       auto  f64add = F.getParent()->getOrInsertFunction("_core_net_f64_add", AttributeList{},
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()));
-       auto  f64sub = F.getParent()->getOrInsertFunction("_eosio_f64_sub", AttributeList{},
+       auto  f64sub = F.getParent()->getOrInsertFunction("_core_net_f64_sub", AttributeList{},
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()));
-       auto  f64mul = F.getParent()->getOrInsertFunction("_eosio_f64_mul", AttributeList{},
+       auto  f64mul = F.getParent()->getOrInsertFunction("_core_net_f64_mul", AttributeList{},
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()));
-       auto  f64div = F.getParent()->getOrInsertFunction("_eosio_f64_div", AttributeList{},
+       auto  f64div = F.getParent()->getOrInsertFunction("_core_net_f64_div", AttributeList{},
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()),
                                                                    Type::getFloatTy(F.getContext()));
        // TODO: set but not read
-       auto  f64rem = F.getParent()->getOrInsertFunction("_eosio_f64_rem", AttributeList{},
+       auto  f64rem = F.getParent()->getOrInsertFunction("_core_net_f64_rem", AttributeList{},
                                                                        Type::getFloatTy(F.getContext()),
                                                                        Type::getFloatTy(F.getContext()),
                                                                        Type::getFloatTy(F.getContext()));

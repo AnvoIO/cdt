@@ -3,7 +3,7 @@
         {
             "expected": {
                 "exit-code": 255,
-                "stderr": "iostreams currently clash with eosio::datastream"
+                "stderr": "iostreams currently clash with core_net::datastream"
             }
         }
     ]

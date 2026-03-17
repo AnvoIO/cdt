@@ -3,7 +3,7 @@
 
 using namespace core_net::native;
 
-EOSIO_TEST_BEGIN(print_test)
+CORE_NET_TEST_BEGIN(print_test)
    CHECK_PRINT("27", [](){ core_net::print((uint8_t)27); });
    CHECK_PRINT("34", [](){ core_net::print((int)34); });
    CHECK_PRINT([](std::string s){return s[0] == 'a';},  [](){ core_net::print((char)'a'); });
@@ -20,7 +20,7 @@ EOSIO_TEST_BEGIN(print_test)
    CHECK_PRINT("-404000000", [](){ core_net::print((int64_t)-404000000); });
    CHECK_PRINT("0x0066000000000000", [](){ core_net::print((uint128_t)102); });
    CHECK_PRINT("0xffffff9affffffffffffffffffffffff", [](){ core_net::print((int128_t)-102); });
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 int main(int argc, char** argv) {
    bool verbose = false;
@@ -29,6 +29,6 @@ int main(int argc, char** argv) {
    }
    silence_output(!verbose);
 
-   EOSIO_TEST(print_test);
+   CORE_NET_TEST(print_test);
    return has_failed();
 }

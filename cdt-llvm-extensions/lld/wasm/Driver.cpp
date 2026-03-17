@@ -1263,7 +1263,7 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
 
   // CDT: Mark runtime symbols needed by the dispatch function as live.
   // These are called from the synthetic apply body generated in Writer.cpp.
-  for (const char *name : {"eosio_assert_code", "eosio_set_contract_name",
+  for (const char *name : {"core_net_assert_code", "core_net_set_contract_name",
                            "__cxa_finalize",
                            "__eos_get_sync_call_data_",
                            "__eos_get_sync_call_data_header_"}) {

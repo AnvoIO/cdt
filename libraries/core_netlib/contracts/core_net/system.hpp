@@ -12,7 +12,7 @@ namespace core_net {
   namespace internal_use_do_not_use {
     extern "C" {
       __attribute__((core_net_wasm_import, noreturn))
-      void eosio_exit( int32_t code );
+      void core_net_exit( int32_t code );
 
       struct  __attribute__((aligned (16))) capi_checksum256 {
          uint8_t hash[32];
@@ -33,7 +33,7 @@ namespace core_net {
   /**
    *  @addtogroup system System
    *  @ingroup contracts
-   *  @brief Defines time related functions and eosio_exit
+   *  @brief Defines time related functions and core_net_exit
    */
 
    /**
@@ -53,14 +53,14 @@ namespace core_net {
     *    Example:
     *
     *      @code
-    *      eosio_exit(0);
-    *      eosio_exit(1);
-    *      eosio_exit(2);
-    *      eosio_exit(3);
+    *      core_net_exit(0);
+    *      core_net_exit(1);
+    *      core_net_exit(2);
+    *      core_net_exit(3);
     *      @endcode
    */
-   inline void eosio_exit( int32_t code ) {
-     internal_use_do_not_use::eosio_exit(code);
+   inline void core_net_exit( int32_t code ) {
+     internal_use_do_not_use::core_net_exit(code);
    }
 
    /**

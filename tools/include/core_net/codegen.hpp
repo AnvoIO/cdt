@@ -664,12 +664,12 @@ namespace core_net { namespace cdt {
                   ss << "\n";
                   ss << "extern \"C\" {\n";
                   ss << "__attribute__((core_net_wasm_import))\n";
-                  ss << "void eosio_assert_code(uint32_t, uint64_t);";
+                  ss << "void core_net_assert_code(uint32_t, uint64_t);";
                   ss << "\t__attribute__((weak, core_net_wasm_entry, core_net_wasm_abi(";
                   ss << "\"" << quoted(cg.abi) << "\"";
                   ss << ")))\n";
                   ss << "\tvoid __insert_core_net_abi(unsigned long long r, unsigned long long c, unsigned long long a){";
-                  ss << "eosio_assert_code(false, 1);";
+                  ss << "core_net_assert_code(false, 1);";
                   ss << "}\n";
                   ss << "}";
 

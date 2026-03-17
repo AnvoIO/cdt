@@ -3,7 +3,7 @@
 
 // Test the validation of the number of arguments passed in call_wrapper.
 // Expected error:
-// .../build/bin/../include/core_netlib/contracts/eosio/detail.hpp:72:7: error: static_assert failed due to requirement 'sizeof...(Ts) == std::tuple_size<std::__1::tuple<unsigned int, unsigned int, unsigned int>>::value'
+// .../build/bin/../include/core_netlib/contracts/core_net/detail.hpp:72:7: error: static_assert failed due to requirement 'sizeof...(Ts) == std::tuple_size<std::__1::tuple<unsigned int, unsigned int, unsigned int>>::value'
 //    static_assert(sizeof...(Ts) == std::tuple_size<deduced<Function>>::value);
 
 class [[core_net::contract]] sync_call_invalid_arg_nums : public core_net::contract{

@@ -86,8 +86,8 @@ static cl::opt<bool> fno_stack_first_opt(
       cl::cat(LD_CAT));
 static cl::opt<int> stack_size_opt(
       "stack-size",
-      cl::desc("Specifies the maximum stack size for the contract. Defaults to ${EOSIO_STACK_SIZE} bytes."),
-      cl::init(${EOSIO_STACK_SIZE}),
+      cl::desc("Specifies the maximum stack size for the contract. Defaults to ${CORE_NET_STACK_SIZE} bytes."),
+      cl::init(${CORE_NET_STACK_SIZE}),
       cl::cat(LD_CAT));
 static cl::opt<bool> fno_post_pass_opt(
       "fno-post-pass",

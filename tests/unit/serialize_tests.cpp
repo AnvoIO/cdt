@@ -51,7 +51,7 @@ struct D2 : public D1 {
 };
 
 // Definitions in `cdt/libraries/core_net/serialize.hpp`
-EOSIO_TEST_BEGIN(serialize_test)
+CORE_NET_TEST_BEGIN(serialize_test)
    static constexpr uint16_t buffer_size{256};
    char ds_buffer[buffer_size]{}; // Buffer for the datastream to point to
    char ds_expected_buffer[buffer_size]{}; // Buffer to compare `ds_buffer` with
@@ -99,7 +99,7 @@ EOSIO_TEST_BEGIN(serialize_test)
    ds.seekp(0);
    ds >> dd2;
    REQUIRE_EQUAL( d2, dd2 )
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 int main(int argc, char* argv[]) {
    bool verbose = false;
@@ -108,6 +108,6 @@ int main(int argc, char* argv[]) {
    }
    silence_output(!verbose);
 
-   EOSIO_TEST(serialize_test)
+   CORE_NET_TEST(serialize_test)
    return has_failed();
 }

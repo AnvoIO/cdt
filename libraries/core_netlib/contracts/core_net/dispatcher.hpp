@@ -125,7 +125,7 @@ extern "C" { \
          switch( action ) { \
             CORE_NET_DISPATCH_HELPER( TYPE, MEMBERS ) \
          } \
-         /* does not allow destructor of thiscontract to run: eosio_exit(0); */ \
+         /* does not allow destructor of thiscontract to run: core_net_exit(0); */ \
       } \
    } \
 } \

@@ -56,12 +56,16 @@ create_symlink cdt-objdump cdt-objdump
 create_symlink cdt-ranlib cdt-ranlib
 create_symlink cdt-readelf cdt-readelf
 create_symlink cdt-strip cdt-strip
-# Legacy tool names (built by cdt-llvm, kept for backward compat)
-create_symlink eosio-pp eosio-pp
-create_symlink eosio-wasm2wast eosio-wasm2wast
-create_symlink eosio-wast2wasm eosio-wast2wasm
-create_symlink eosio-wasm2wast cdt-wasm2wast
-create_symlink eosio-wast2wasm cdt-wast2wasm
+# WABT tools (primary names)
+create_symlink core-net-pp core-net-pp
+create_symlink core-net-wasm2wast core-net-wasm2wast
+create_symlink core-net-wast2wasm core-net-wast2wasm
+# Legacy compat symlinks
+create_symlink core-net-wasm2wast cdt-wasm2wast
+create_symlink core-net-wast2wasm cdt-wast2wasm
+create_symlink core-net-pp eosio-pp
+create_symlink core-net-wasm2wast eosio-wasm2wast
+create_symlink core-net-wast2wasm eosio-wast2wasm
 
 echo "Generating Tarball $NAME.tar.gz..."
 tar -cvzf $NAME.tar.gz ./${PREFIX}/* || exit 1

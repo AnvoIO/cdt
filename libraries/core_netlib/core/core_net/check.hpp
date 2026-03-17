@@ -12,13 +12,13 @@ namespace core_net {
    namespace internal_use_do_not_use {
       extern "C" {
          __attribute__((core_net_wasm_import))
-         void eosio_assert( uint32_t test, const char* msg );
+         void core_net_assert( uint32_t test, const char* msg );
 
          __attribute__((core_net_wasm_import))
-         void eosio_assert_message( uint32_t test, const char* msg, uint32_t msg_len );
+         void core_net_assert_message( uint32_t test, const char* msg, uint32_t msg_len );
 
          __attribute__((core_net_wasm_import))
-         void eosio_assert_code( uint32_t test, uint64_t code );
+         void core_net_assert_code( uint32_t test, uint64_t code );
       }
    }
 
@@ -50,7 +50,7 @@ namespace core_net {
     */
    inline void check(bool pred, std::string_view msg) {
       if (!pred)
-         internal_use_do_not_use::eosio_assert_message(false, msg.data(), msg.size());
+         internal_use_do_not_use::core_net_assert_message(false, msg.data(), msg.size());
    }
 
    /**
@@ -65,7 +65,7 @@ namespace core_net {
     */
    inline void check(bool pred, const char* msg) {
       if (!pred) {
-         internal_use_do_not_use::eosio_assert(false, msg);
+         internal_use_do_not_use::core_net_assert(false, msg);
       }
    }
 
@@ -81,7 +81,7 @@ namespace core_net {
     */
    inline void check(bool pred, const std::string& msg) {
       if (!pred) {
-         internal_use_do_not_use::eosio_assert_message(false, msg.data(), msg.size());
+         internal_use_do_not_use::core_net_assert_message(false, msg.data(), msg.size());
       }
    }
 
@@ -97,7 +97,7 @@ namespace core_net {
     */
    inline void check(bool pred, std::string&& msg) {
       if (!pred) {
-         internal_use_do_not_use::eosio_assert_message(false, msg.data(), msg.size());
+         internal_use_do_not_use::core_net_assert_message(false, msg.data(), msg.size());
       }
    }
 
@@ -115,7 +115,7 @@ namespace core_net {
     */
    inline void check(bool pred, const char* msg, size_t n) {
       if (!pred) {
-         internal_use_do_not_use::eosio_assert_message(false, msg, n);
+         internal_use_do_not_use::core_net_assert_message(false, msg, n);
       }
    }
 
@@ -132,7 +132,7 @@ namespace core_net {
     */
    inline void check(bool pred, const std::string& msg, size_t n) {
       if (!pred) {
-         internal_use_do_not_use::eosio_assert_message(false, msg.data(), n);
+         internal_use_do_not_use::core_net_assert_message(false, msg.data(), n);
       }
    }
 
@@ -148,7 +148,7 @@ namespace core_net {
     */
    inline void check(bool pred, uint64_t code) {
       if (!pred) {
-         internal_use_do_not_use::eosio_assert_code(false, code);
+         internal_use_do_not_use::core_net_assert_code(false, code);
       }
    }
 } // namespace core_net

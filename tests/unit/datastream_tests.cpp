@@ -57,7 +57,7 @@ struct be_test {
 };
 
 // Definitions in `cdt/libraries/core_net/datastream.hpp`
-EOSIO_TEST_BEGIN(datastream_test)
+CORE_NET_TEST_BEGIN(datastream_test)
    static constexpr uint16_t buffer_size{256};
    char datastream_buffer[buffer_size]{}; // Buffer for the datastream to point to
    char buffer[buffer_size]; // Buffer to compare `datastream_buffer` with
@@ -141,10 +141,10 @@ EOSIO_TEST_BEGIN(datastream_test)
    CHECK_EQUAL( ds.remaining(), 0 )
    ds.seekp(257);
    CHECK_EQUAL( ds.remaining(), -1)
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 // Definitions in `cdt/libraries/core_net/datastream.hpp`
-EOSIO_TEST_BEGIN(datastream_specialization_test)
+CORE_NET_TEST_BEGIN(datastream_specialization_test)
    static constexpr uint16_t buffer_size{256};
    char datastream_buffer[buffer_size]{}; // Buffer for the datastream to point to
    char buffer[buffer_size]; // Buffer to compare `datastream_buffer` with
@@ -213,10 +213,10 @@ EOSIO_TEST_BEGIN(datastream_specialization_test)
 
    ds.seekp(257);
    CHECK_EQUAL( ds.remaining(), 0 )
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 // Definitions in `cdt/libraries/core_net/datastream.hpp`
-EOSIO_TEST_BEGIN(datastream_stream_test)
+CORE_NET_TEST_BEGIN(datastream_stream_test)
    static constexpr uint16_t buffer_size{256};
    char datastream_buffer[buffer_size]; // Buffer for the datastream to point to
 
@@ -595,10 +595,10 @@ EOSIO_TEST_BEGIN(datastream_stream_test)
    ds.seekp(0);
    ds >> sc;
    CHECK_EQUAL( csc, sc )
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 // Definitions in `cdt/libraries/core_net/datastream.hpp`
-EOSIO_TEST_BEGIN(misc_datastream_test)
+CORE_NET_TEST_BEGIN(misc_datastream_test)
    // ---------------------------
    // vector<char> pack(const T&)
    static const string pack_str{"abcdefghi"};
@@ -631,7 +631,7 @@ EOSIO_TEST_BEGIN(misc_datastream_test)
       unpack_ch = unpack<char>(unpack_source_buffer+i, 9);
       CHECK_EQUAL( unpack_source_buffer[i], unpack_ch )
    }
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 int main(int argc, char* argv[]) {
    bool verbose = false;
@@ -640,9 +640,9 @@ int main(int argc, char* argv[]) {
    }
    silence_output(!verbose);
 
-   EOSIO_TEST(datastream_test);
-   EOSIO_TEST(datastream_specialization_test);
-   EOSIO_TEST(datastream_stream_test);
-   EOSIO_TEST(misc_datastream_test);
+   CORE_NET_TEST(datastream_test);
+   CORE_NET_TEST(datastream_specialization_test);
+   CORE_NET_TEST(datastream_stream_test);
+   CORE_NET_TEST(misc_datastream_test);
    return has_failed();
 }

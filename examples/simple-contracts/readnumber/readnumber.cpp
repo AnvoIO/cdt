@@ -9,4 +9,4 @@ CONTRACT enf: public contract {
          return 42;
       }
 };
-EOSIO_DISPATCH(enf, (readnumber))
+CORE_NET_DISPATCH(enf, (readnumber))

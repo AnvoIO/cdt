@@ -39,7 +39,7 @@ namespace core_net { namespace native {
    auto create_function(std::index_sequence<Is...>) {
       return std::function<R(typename std::tuple_element<Is, Args>::type ...)>{
          [](typename std::tuple_element<Is, Args>::type ...) {
-            eosio_assert(false, "unsupported intrinsic"); return (R)0;
+            core_net_assert(false, "unsupported intrinsic"); return (R)0;
          }
       };
    }

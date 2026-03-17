@@ -4,7 +4,7 @@
 static constexpr uint32_t SHIFT_WIDTH = (sizeof(uint64_t)*8)-1;
 
 extern "C" {
-void eosio_assert(int32_t, const char*);
+void core_net_assert(int32_t, const char*);
 void __ashlti3(__int128& ret, uint64_t low, uint64_t high, uint32_t shift) {
    uint128_t i = high;
    i <<= 64;
@@ -47,7 +47,7 @@ void __divti3(__int128& ret, uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb)
    rhs <<= 64;
    rhs |=  lb;
    //if ( rhs == 0 )
-   //   eosio_assert(false, "divide by zero");
+   //   core_net_assert(false, "divide by zero");
 
    lhs /= rhs;
 
@@ -64,7 +64,7 @@ void __udivti3(unsigned __int128& ret, uint64_t la, uint64_t ha, uint64_t lb, ui
    rhs <<= 64;
    rhs |=  lb;
    //if ( rhs == 0 )
-   //   eosio_assert(false, "divide by zero");
+   //   core_net_assert(false, "divide by zero");
 
    lhs /= rhs;
    ret = lhs;
@@ -94,7 +94,7 @@ void __modti3(__int128& ret, uint64_t la, uint64_t ha, uint64_t lb, uint64_t hb)
    rhs <<= 64;
    rhs |=  lb;
    //if ( rhs == 0 )
-   //   eosio_assert(false, "divide by zero");
+   //   core_net_assert(false, "divide by zero");
 
    lhs %= rhs;
    ret = lhs;
@@ -110,7 +110,7 @@ void __umodti3(unsigned __int128& ret, uint64_t la, uint64_t ha, uint64_t lb, ui
    rhs <<= 64;
    rhs |=  lb;
    //if ( rhs == 0 )
-   //   eosio_assert(false, "divide by zero");
+   //   core_net_assert(false, "divide by zero");
 
    lhs %= rhs;
    ret = lhs;

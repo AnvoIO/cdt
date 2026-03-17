@@ -14,7 +14,7 @@ using std::string;
 using core_net::check;
 
 // Definitions in `cdt/libraries/core_netlib/system.hpp`
-EOSIO_TEST_BEGIN(system_test)
+CORE_NET_TEST_BEGIN(system_test)
    // ------------------------------------
    // inline void check(bool, const char*)
    CHECK_ASSERT( "asserted", []() { const char* str{"asserted"}; check(false, str);} );
@@ -41,7 +41,7 @@ EOSIO_TEST_BEGIN(system_test)
    CHECK_ASSERT("100", []() { check(false, 100);} );
    CHECK_ASSERT("18446744073709551615", []() { check(false, 18446744073709551615ULL);} );
    CHECK_ASSERT("18446744073709551615", []() { check(false, -1ULL);} );
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 int main(int argc, char* argv[]) {
    bool verbose = false;
@@ -50,6 +50,6 @@ int main(int argc, char* argv[]) {
    }
    silence_output(!verbose);
 
-   EOSIO_TEST(system_test);
+   CORE_NET_TEST(system_test);
    return has_failed();
 }

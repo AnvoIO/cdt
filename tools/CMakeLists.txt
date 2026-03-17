@@ -25,7 +25,7 @@ link_directories(${LLVM_LIBRARY_DIRS})
 add_definitions(${LLVM_DEFINITIONS})
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-set(EOSIO_STACK_SIZE 8192)
+set(CORE_NET_STACK_SIZE 8192)
 
 # Detect host architecture for native compilation mode
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")

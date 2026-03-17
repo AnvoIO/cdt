@@ -37,7 +37,7 @@ extern "C" {
 
    size_t _grow_memory(size_t size) {
       if ((___heap_ptr + (size*64*1024)) > (___heap_ptr + 100*1024*1024))
-         eosio_assert(false, "__builtin_wasm_grow_memory");
+         core_net_assert(false, "__builtin_wasm_grow_memory");
       ___heap_ptr += (size*64*1024);
       return ++___pages;
    }
@@ -144,7 +144,7 @@ extern "C" {
             const char* hex_characters = "0123456789abcdef";
 
             uint32_t buffer_size = 2*len;
-            if(buffer_size < len) eosio_assert( false, "length passed into printhex is too large" );
+            if(buffer_size < len) core_net_assert( false, "length passed into printhex is too large" );
 
             void* buffer = (max_stack_buffer_size < buffer_size) ? malloc(buffer_size) : alloca(buffer_size);
 

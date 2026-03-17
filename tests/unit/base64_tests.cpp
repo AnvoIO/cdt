@@ -9,75 +9,75 @@
 using namespace core_net;
 using namespace std::literals;
 
-EOSIO_TEST_BEGIN(base64enc)
+CORE_NET_TEST_BEGIN(base64enc)
    auto input = "abc123$&()'?\xb4\xf5\x01\xfa~a"s;
    auto expected_output = "YWJjMTIzJCYoKSc/tPUB+n5h"s;
 
    CHECK_EQUAL(expected_output, base64_encode(input));
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 // No trailing sequence of = added
-EOSIO_TEST_BEGIN(base64urlenc)
+CORE_NET_TEST_BEGIN(base64urlenc)
    auto input = "abc123$&()'?\xb4\xf5\x01\xfa~a"s;
    auto expected_output = "YWJjMTIzJCYoKSc_tPUB-n5h"s;
 
    CHECK_EQUAL(expected_output, base64url_encode(input));
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
-EOSIO_TEST_BEGIN(base64dec)
+CORE_NET_TEST_BEGIN(base64dec)
    auto input = "YWJjMTIzJCYoKSc/tPUB+n5h"s;
    auto expected_output = "abc123$&()'?\xb4\xf5\x01\xfa~a"s;
 
    CHECK_EQUAL(expected_output, base64_decode(input));
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
-EOSIO_TEST_BEGIN(base64urldec)
+CORE_NET_TEST_BEGIN(base64urldec)
    auto input = "YWJjMTIzJCYoKSc_tPUB-n5h"s;
    auto expected_output = "abc123$&()'?\xb4\xf5\x01\xfa~a"s;
 
    CHECK_EQUAL(expected_output, base64url_decode(input));
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
-EOSIO_TEST_BEGIN(base64dec_extraequals)
+CORE_NET_TEST_BEGIN(base64dec_extraequals)
    CHECK_ASSERT( "encountered non-base64 character",
       ([](){
          base64_decode("YWJjMTIzJCYoKSc/tPUB+n5h========="s);
       }));
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
-EOSIO_TEST_BEGIN(base64dec_bad_stuff)
+CORE_NET_TEST_BEGIN(base64dec_bad_stuff)
    CHECK_ASSERT( "encountered non-base64 character",
       ([](){
          base64_decode("YWJjMTIzJCYoKSc/tPU$B+n5h="s);
       }));
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 // `+` not valid in base64 url
-EOSIO_TEST_BEGIN(base64urldec_plus_not_allowed)
+CORE_NET_TEST_BEGIN(base64urldec_plus_not_allowed)
    CHECK_ASSERT( "encountered non-base64 character",
       ([](){
          base64_decode("YWJjMTIzJCYoKSc+tPUB-n5h"s);
       }));
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 // `/` not valid in base64 url
-EOSIO_TEST_BEGIN(base64urldec_slash_not_allowed)
+CORE_NET_TEST_BEGIN(base64urldec_slash_not_allowed)
    CHECK_ASSERT( "encountered non-base64 character",
       ([](){
          base64_decode("YWJjMTIzJCYoKSc/tPUB-n5h"s);
       }));
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 // trailing not allowed in base64 url
-EOSIO_TEST_BEGIN(base64urldec_trailing_not_allowed)
+CORE_NET_TEST_BEGIN(base64urldec_trailing_not_allowed)
    CHECK_ASSERT( "encountered non-base64 character",
       ([](){
          base64_decode("YWJjMTIzJCYoKSc_tPUB-n5h=="s);
       }));
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 // tests from https://github.com/ReneNyffenegger/cpp-base64/blob/master/test.cpp
-EOSIO_TEST_BEGIN(base64_cpp_base64_tests)
+CORE_NET_TEST_BEGIN(base64_cpp_base64_tests)
    //
    // Note: this file must be encoded in UTF-8
    // for the following test, otherwise, the test item
@@ -195,7 +195,7 @@ EOSIO_TEST_BEGIN(base64_cpp_base64_tests)
 
    CHECK_EQUAL(sv_decoded, sv_orig);
 
-EOSIO_TEST_END
+CORE_NET_TEST_END
 
 int main(int argc, char* argv[]) {
    bool verbose = false;
@@ -204,12 +204,12 @@ int main(int argc, char* argv[]) {
    }
    silence_output(!verbose);
 
-   EOSIO_TEST(base64enc);
-   EOSIO_TEST(base64urlenc);
-   EOSIO_TEST(base64dec);
-   EOSIO_TEST(base64urldec);
-   EOSIO_TEST(base64dec_extraequals);
-   EOSIO_TEST(base64dec_bad_stuff);
-   EOSIO_TEST(base64_cpp_base64_tests);
+   CORE_NET_TEST(base64enc);
+   CORE_NET_TEST(base64urlenc);
+   CORE_NET_TEST(base64dec);
+   CORE_NET_TEST(base64urldec);
+   CORE_NET_TEST(base64dec_extraequals);
+   CORE_NET_TEST(base64dec_bad_stuff);
+   CORE_NET_TEST(base64_cpp_base64_tests);
    return has_failed();
 }
