@@ -90,18 +90,26 @@ extern "C" {
             _prints(cs, core_net::cdt::output_stream_kind::std_out);
          });
       intrinsics::set_intrinsic<intrinsics::printi>([](int64_t v) {
-            printf("%lli", v);
+            char buf[32];
+            int len = snprintf(buf, sizeof(buf), "%lli", v);
+            _prints_l(buf, len, core_net::cdt::output_stream_kind::std_out);
          });
       intrinsics::set_intrinsic<intrinsics::printui>([](uint64_t v) {
-            printf("%llu", v);
+            char buf[32];
+            int len = snprintf(buf, sizeof(buf), "%llu", v);
+            _prints_l(buf, len, core_net::cdt::output_stream_kind::std_out);
          });
       intrinsics::set_intrinsic<intrinsics::printi128>([](const int128_t* v) {
+            char buf[64];
             int* tmp = (int*)v;
-            printf("0x%04x%04x%04x%04x", tmp[0], tmp[1], tmp[2], tmp[3]);
+            int len = snprintf(buf, sizeof(buf), "0x%04x%04x%04x%04x", tmp[0], tmp[1], tmp[2], tmp[3]);
+            _prints_l(buf, len, core_net::cdt::output_stream_kind::std_out);
          });
       intrinsics::set_intrinsic<intrinsics::printui128>([](const uint128_t* v) {
+            char buf[64];
             int* tmp = (int*)v;
-            printf("0x%04x%04x%04x%04x", tmp[0], tmp[1], tmp[2], tmp[3]);
+            int len = snprintf(buf, sizeof(buf), "0x%04x%04x%04x%04x", tmp[0], tmp[1], tmp[2], tmp[3]);
+            _prints_l(buf, len, core_net::cdt::output_stream_kind::std_out);
          });
       intrinsics::set_intrinsic<intrinsics::printsf>([](float v) {
             char buff[512] = {0};
