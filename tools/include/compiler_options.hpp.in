@@ -445,21 +445,21 @@ static void GetCompDefaults(std::vector<std::string>& copts) {
       copts.emplace_back("-DBOOST_EXCEPTION_DISABLE");
       copts.emplace_back("-U__APPLE__");
       if (!fnative_opt) {
-         if (llvm::sys::fs::exists(core_net::cdt::whereami::where()+"/LLVMEosioApply"+plugin_suff))
-            copts.emplace_back("-fpass-plugin="+core_net::cdt::whereami::where()+"/LLVMEosioApply"+plugin_suff);
-         else if (llvm::sys::fs::exists(core_net::cdt::whereami::where()+"/../lib/LLVMEosioApply"+plugin_suff))
-            copts.emplace_back("-fpass-plugin="+core_net::cdt::whereami::where()+"/../lib/LLVMEosioApply"+plugin_suff);
+         if (llvm::sys::fs::exists(core_net::cdt::whereami::where()+"/LLVMCoreNetApply"+plugin_suff))
+            copts.emplace_back("-fpass-plugin="+core_net::cdt::whereami::where()+"/LLVMCoreNetApply"+plugin_suff);
+         else if (llvm::sys::fs::exists(core_net::cdt::whereami::where()+"/../lib/LLVMCoreNetApply"+plugin_suff))
+            copts.emplace_back("-fpass-plugin="+core_net::cdt::whereami::where()+"/../lib/LLVMCoreNetApply"+plugin_suff);
       }
       if (false && fnative_opt) {
-         if (llvm::sys::fs::exists(core_net::cdt::whereami::where()+"/LLVMEosioSoftfloat"+plugin_suff))
-            copts.emplace_back("-fpass-plugin="+core_net::cdt::whereami::where()+"/LLVMEosioSoftfloat"+plugin_suff);
-         else if (llvm::sys::fs::exists(core_net::cdt::whereami::where()+"/../lib/LLVMEosioSoftfloat"+plugin_suff))
-            copts.emplace_back("-fpass-plugin="+core_net::cdt::whereami::where()+"/../lib/LLVMEosioSoftfloat"+plugin_suff);
+         if (llvm::sys::fs::exists(core_net::cdt::whereami::where()+"/LLVMCoreNetSoftfloat"+plugin_suff))
+            copts.emplace_back("-fpass-plugin="+core_net::cdt::whereami::where()+"/LLVMCoreNetSoftfloat"+plugin_suff);
+         else if (llvm::sys::fs::exists(core_net::cdt::whereami::where()+"/../lib/LLVMCoreNetSoftfloat"+plugin_suff))
+            copts.emplace_back("-fpass-plugin="+core_net::cdt::whereami::where()+"/../lib/LLVMCoreNetSoftfloat"+plugin_suff);
       }
-      if (llvm::sys::fs::exists(core_net::cdt::whereami::where()+"/eosio_plugin"+plugin_suff))
-         copts.emplace_back("-fpass-plugin="+core_net::cdt::whereami::where()+"/eosio_plugin"+plugin_suff);
-      else if (llvm::sys::fs::exists(core_net::cdt::whereami::where()+"/../lib/eosio_plugin"+plugin_suff))
-         copts.emplace_back("-fpass-plugin="+core_net::cdt::whereami::where()+"/../lib/eosio_plugin"+plugin_suff);
+      if (llvm::sys::fs::exists(core_net::cdt::whereami::where()+"/core_net_plugin"+plugin_suff))
+         copts.emplace_back("-fpass-plugin="+core_net::cdt::whereami::where()+"/core_net_plugin"+plugin_suff);
+      else if (llvm::sys::fs::exists(core_net::cdt::whereami::where()+"/../lib/core_net_plugin"+plugin_suff))
+         copts.emplace_back("-fpass-plugin="+core_net::cdt::whereami::where()+"/../lib/core_net_plugin"+plugin_suff);
    }
 }
 
