@@ -42,12 +42,12 @@ int main(int argc, const char **argv) {
 
   // finally any post processing
   if (!fno_post_pass_opt && !opts.native) {
-     if ( !llvm::sys::fs::exists( opts.pp_dir+"/eosio-pp" ) ) {
+     if ( !llvm::sys::fs::exists( opts.pp_dir+"/core-net-pp" ) ) {
         std::cerr << "Error: cdt-pp not found! (Try reinstalling CDT)" << std::endl;
         return -1;
      }
 
-     if (!core_net::cdt::environment::exec_subprogram("eosio-pp", {opts.output_fn})) {
+     if (!core_net::cdt::environment::exec_subprogram("core-net-pp", {opts.output_fn})) {
         std::cerr << "cdt-pp failed" << std::endl;
         return -1;
      }
