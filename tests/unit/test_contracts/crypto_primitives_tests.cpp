@@ -1,8 +1,8 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/crypto.hpp>
 #include <core_net/crypto_ext.hpp>
 
-using namespace eosio;
+using namespace core_net;
 
 class [[core_net::contract]] crypto_primitives_tests : public contract{
    public:

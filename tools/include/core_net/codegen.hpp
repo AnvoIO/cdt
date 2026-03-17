@@ -84,7 +84,7 @@ namespace core_net { namespace cdt {
          }
    };
 
-   class eosio_codegen_visitor : public RecursiveASTVisitor<eosio_codegen_visitor>, public generation_utils {
+   class core_net_codegen_visitor : public RecursiveASTVisitor<core_net_codegen_visitor>, public generation_utils {
       private:
          codegen& cg = codegen::get();
          FileID    main_fid;
@@ -104,7 +104,7 @@ namespace core_net { namespace cdt {
          call_map_t                  func_calls;
          indirect_func_map_t         indi_func_map;
 
-         explicit eosio_codegen_visitor(CompilerInstance *CI)
+         explicit core_net_codegen_visitor(CompilerInstance *CI)
                : generation_utils(), ci(CI) {
             cg.ast_context = &(CI->getASTContext());
             cg.codegen_ci = CI;
@@ -146,7 +146,7 @@ namespace core_net { namespace cdt {
             return "";
          }
 
-         // Return `true` if the method `decl`'s base class if `eosio::contract`
+         // Return `true` if the method `decl`'s base class is `core_net::contract`
          bool base_is_eosio_contract_class(const clang::CXXMethodDecl* decl) {
             auto cxx_decl = decl->getParent();
             // on this point it could be just an attribute so let's check base classes
@@ -357,7 +357,7 @@ namespace core_net { namespace cdt {
             if (decl->isEosioAction()) {
                name = generation_utils::get_action_name(decl);
                validate_name(name, [&](auto s) {
-                  CDT_ERROR("codegen_error", decl->getLocation(), std::string("action name (")+s+") is not a valid eosio name");
+                  CDT_ERROR("codegen_error", decl->getLocation(), std::string("action name (")+s+") is not a valid name");
                });
 
                if (!_action_set.count(name))
@@ -606,15 +606,15 @@ namespace core_net { namespace cdt {
 
       };
 
-      class eosio_codegen_consumer : public ASTConsumer, public generation_utils {
+      class core_net_codegen_consumer : public ASTConsumer, public generation_utils {
       private:
-         eosio_codegen_visitor *visitor;
+         core_net_codegen_visitor *visitor;
          std::string main_file;
          CompilerInstance* ci;
 
       public:
-         explicit eosio_codegen_consumer(CompilerInstance *CI, std::string file)
-            : visitor(new eosio_codegen_visitor(CI)), main_file(file), ci(CI) { }
+         explicit core_net_codegen_consumer(CompilerInstance *CI, std::string file)
+            : visitor(new core_net_codegen_visitor(CI)), main_file(file), ci(CI) { }
 
 
          virtual void HandleTranslationUnit(ASTContext &Context) {
@@ -684,11 +684,11 @@ namespace core_net { namespace cdt {
 
       };
 
-      class eosio_codegen_frontend_action : public ASTFrontendAction {
+      class core_net_codegen_frontend_action : public ASTFrontendAction {
       public:
          virtual std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI, StringRef file) {
-            CI.getPreprocessor().addPPCallbacks(std::make_unique<eosio_ppcallbacks>(CI.getSourceManager(), file.str()));
-            return std::make_unique<eosio_codegen_consumer>(&CI, file.str());
+            CI.getPreprocessor().addPPCallbacks(std::make_unique<core_net_ppcallbacks>(CI.getSourceManager(), file.str()));
+            return std::make_unique<core_net_codegen_consumer>(&CI, file.str());
          }
    };
 

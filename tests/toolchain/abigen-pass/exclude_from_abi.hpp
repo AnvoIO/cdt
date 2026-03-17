@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/name.hpp>
 #include <core_net/singleton.hpp>
 #include <core_net/multi_index.hpp>

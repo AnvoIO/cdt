@@ -1,8 +1,8 @@
-/* Verify the support of nested containers in eosio multi-index table
+/* Verify the support of nested containers in multi-index table
  * For each action, an example regarding how to use the action with the cleos command line is given.
  *
  * std:pair<T1,T2> is a struct with 2 fields first and second,
- * std::map<K,V> is handled as an array/vector of pairs/structs by EOSIO with implicit fields key, value,
+ * std::map<K,V> is handled as an array/vector of pairs/structs with implicit fields key, value,
  * the cases of combined use of key/value and first/second involving map,pair in the cleos are documented here.
  * so handling of std::pair is NOT the same as the handling of a general struct such as struct mystruct!
  *
@@ -15,7 +15,7 @@
  *      For each setx action, the printed result on the cleos console is given in its corresponding prntx action.
  */
 
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
 #include <vector>
 #include <set>
@@ -23,7 +23,7 @@
 #include <map>
 #include <tuple>
 
-using namespace eosio;
+using namespace core_net;
 using namespace std;
 
 #define  SETCONTAINERVAL(x) do { \
@@ -144,7 +144,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
 
 
         //[[core_net::action]] void settuple(name user, const tuple<uint16_t>& tp) {}
-        //  eosio-cpp compile error for std::tuple: Tried to get a nested template type of a template not containing one
+        //  cdt-cpp compile error for std::tuple: Tried to get a nested template type of a template not containing one
 
          /*Examples:
           * cleos --verbose push action nestcontn2a setv '["alice", [100,200,300,600]]' -p alice@active

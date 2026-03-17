@@ -1,4 +1,4 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/action.hpp>
 #include <core_net/name.hpp>
 

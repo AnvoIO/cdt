@@ -20,9 +20,9 @@ namespace core_net { namespace cdt {
       SourceRange    range;
    };
    std::map<std::string, std::vector<include_double>>  global_includes;
-   class eosio_ppcallbacks : public PPCallbacks {
+   class core_net_ppcallbacks : public PPCallbacks {
       public:
-         eosio_ppcallbacks(SourceManager& sm, std::string file) : sources(sm), fn(file) {}
+         core_net_ppcallbacks(SourceManager& sm, std::string file) : sources(sm), fn(file) {}
       protected:
          virtual void InclusionDirective(
             SourceLocation hash_loc,

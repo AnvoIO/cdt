@@ -92,15 +92,15 @@ namespace core_net {
 
   /// @cond INTERNAL
 
- // Helper macro for EOSIO_DISPATCH_INTERNAL
- #define EOSIO_DISPATCH_INTERNAL( OP, elem ) \
+ // Helper macro for CORE_NET_DISPATCH_INTERNAL
+ #define CORE_NET_DISPATCH_INTERNAL( OP, elem ) \
     case core_net::name( BLUEGRASS_META_STRINGIZE(elem) ).value: \
        core_net::execute_action( core_net::name(receiver), core_net::name(code), &OP::elem ); \
        break;
 
- // Helper macro for EOSIO_DISPATCH
- #define EOSIO_DISPATCH_HELPER( TYPE,  MEMBERS ) \
-    BLUEGRASS_META_FOREACH_SEQ( EOSIO_DISPATCH_INTERNAL, TYPE, MEMBERS )
+ // Helper macro for CORE_NET_DISPATCH
+ #define CORE_NET_DISPATCH_HELPER( TYPE,  MEMBERS ) \
+    BLUEGRASS_META_FOREACH_SEQ( CORE_NET_DISPATCH_INTERNAL, TYPE, MEMBERS )
 
 /// @endcond
 
@@ -114,7 +114,7 @@ namespace core_net {
  *
  * Example:
  * @code
- * EOSIO_DISPATCH( core_net::bios, (setpriv)(setalimits)(setglimits)(setprods)(reqauth) )
+ * CORE_NET_DISPATCH( core_net::bios, (setpriv)(setalimits)(setglimits)(setprods)(reqauth) )
  * @endcode
  */
 #define CORE_NET_DISPATCH( TYPE, MEMBERS ) \
@@ -123,14 +123,16 @@ extern "C" { \
    void apply( uint64_t receiver, uint64_t code, uint64_t action ) { \
       if( code == receiver ) { \
          switch( action ) { \
-            EOSIO_DISPATCH_HELPER( TYPE, MEMBERS ) \
+            CORE_NET_DISPATCH_HELPER( TYPE, MEMBERS ) \
          } \
          /* does not allow destructor of thiscontract to run: eosio_exit(0); */ \
       } \
    } \
 } \
 
-// Legacy alias
-#define EOSIO_DISPATCH CORE_NET_DISPATCH
+// Legacy aliases for backward compatibility
+#define EOSIO_DISPATCH_INTERNAL  CORE_NET_DISPATCH_INTERNAL
+#define EOSIO_DISPATCH_HELPER    CORE_NET_DISPATCH_HELPER
+#define EOSIO_DISPATCH           CORE_NET_DISPATCH
 
 }

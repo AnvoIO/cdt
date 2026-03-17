@@ -1,7 +1,7 @@
 #include <memory>
 #include "core/core_net/check.hpp"
 
-#ifdef EOSIO_NATIVE
+#ifdef CORE_NET_NATIVE
    extern "C" {
       size_t _current_memory();
       size_t _grow_memory(size_t);
@@ -56,7 +56,7 @@ namespace core_net {
       size_t next_page;
    };
    dsmalloc _dsmalloc;
-} // ns eosio
+} // ns core_net
 
 extern "C" {
 

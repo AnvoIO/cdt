@@ -1,7 +1,7 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/privileged.hpp>
 
-using namespace eosio;
+using namespace core_net;
 extern "C" __attribute__((weak)) __attribute__((eosio_wasm_import)) void set_resource_limit(int64_t, int64_t, int64_t);
 
 class [[core_net::contract]] warn_action_read_only : public contract {

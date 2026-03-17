@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in LICENSE
  */
 #pragma once
 #include <cstdlib>
@@ -17,40 +17,40 @@ namespace core_net {
 
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          uint32_t read_action_data( void* msg, uint32_t len );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          uint32_t action_data_size();
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void require_recipient( uint64_t name );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void require_auth( uint64_t name );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          bool has_auth( uint64_t name );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void require_auth2( uint64_t name, uint64_t permission );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          bool is_account( uint64_t name );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void send_inline(char *serialized_action, size_t size);
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void send_context_free_inline(char *serialized_action, size_t size);
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          uint64_t  publication_time();
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          uint64_t current_receiver();
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          uint32_t get_code_hash( uint64_t account, uint32_t struct_version, char* result_buffer, size_t buffer_size );
       }
    };
@@ -63,7 +63,7 @@ namespace core_net {
        uint8_t vm_version;
 
        CDT_REFLECT(struct_version, code_sequence, code_hash, vm_type, vm_version);
-       EOSLIB_SERIALIZE(code_hash_result, (struct_version)(code_sequence)(code_hash)(vm_type)(vm_version));
+       CORE_NET_SERIALIZE(code_hash_result, (struct_version)(code_sequence)(code_hash)(vm_type)(vm_version));
    };
 
    /**
@@ -85,7 +85,7 @@ namespace core_net {
     *    unsigned long long b; //8
     *    int  c; //4
     *
-    *    EOSLIB_SERIALIZE( dummy_action, (a)(b)(c) )
+    *    CORE_NET_SERIALIZE( dummy_action, (a)(b)(c) )
     *  };
     *  dummy_action msg = unpack_action_data<dummy_action>();
     *  @endcode
@@ -280,7 +280,7 @@ namespace core_net {
          return std::tie( a.actor, a.permission ) < std::tie( b.actor, b.permission );
       }
 
-      EOSLIB_SERIALIZE( permission_level, (actor)(permission) )
+      CORE_NET_SERIALIZE( permission_level, (actor)(permission) )
    };
 
    /**
@@ -373,7 +373,7 @@ namespace core_net {
 
       /// @cond INTERNAL
 
-      EOSLIB_SERIALIZE( action, (account)(name)(authorization)(data) )
+      CORE_NET_SERIALIZE( action, (account)(name)(authorization)(data) )
 
       /// @endcond
 
@@ -418,9 +418,9 @@ namespace core_net {
     * // defined by contract writer of the actions
     * using transfer_act = action_wrapper<"transfer"_n, &token::transfer>;
     * // usage by different contract writer
-    * transfer_act{"eosio.token"_n, {st.issuer, "active"_n}}.send(st.issuer, to, quantity, memo);
+    * transfer_act{"core.token"_n, {st.issuer, "active"_n}}.send(st.issuer, to, quantity, memo);
     * // or
-    * transfer_act trans_action{ "eosio.token"_n, {st.issuer, "active"_n}};
+    * transfer_act trans_action{ "core.token"_n, {st.issuer, "active"_n}};
     * trans_action.send(st.issuer, to, quantity, memo);
     * @endcode
     */
@@ -554,7 +554,7 @@ INLINE_ACTION_SENDER3( CONTRACT_CLASS, NAME, ::core_net::name(#NAME) )
  *
  * @brief A macro to simplify calling inline actions
  * @details The send inline action macro is intended to simplify the process of calling inline actions. When calling new actions from existing actions
- * EOSIO supports two communication models, inline and deferred. Inline actions are executed as part of the current transaction. This macro
+ * The platform supports two communication models, inline and deferred. Inline actions are executed as part of the current transaction. This macro
  * creates an @ref action using the supplied parameters and automatically calls action.send() on this newly created action.
  *
  * Example:
@@ -562,10 +562,10 @@ INLINE_ACTION_SENDER3( CONTRACT_CLASS, NAME, ::core_net::name(#NAME) )
  * SEND_INLINE_ACTION( *this, transfer, {st.issuer,N(active)}, {st.issuer, to, quantity, memo} );
  * @endcode
  *
- * The example above is taken from eosio.token.
+ * The example above is taken from core.token.
  * This example:
- *       uses the passed in, dereferenced `this` pointer, to call this.get_self() i.e. the eosio.token contract;
- *       calls the eosio.token::transfer() action;
+ *       uses the passed in, dereferenced `this` pointer, to call this.get_self() i.e. the core.token contract;
+ *       calls the core.token::transfer() action;
  *       uses the active permission of the "issuer" account;
  *       uses parameters st.issuer, to, quantity and memo.
  * This macro creates an action struct used to 'send()' (call) transfer(account_name from, account_name to, asset quantity, string memo)

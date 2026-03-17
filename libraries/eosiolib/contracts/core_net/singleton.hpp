@@ -7,7 +7,7 @@ namespace  core_net {
    /**
     *  @defgroup singleton Singleton Table
     *  @ingroup contracts
-    *  @brief Defines EOSIO Singleton Table used with %multiindex
+    *  @brief Defines Singleton Table used with %multiindex
     */
 
    /**
@@ -41,7 +41,7 @@ namespace  core_net {
           */
          uint64_t primary_key() const { return pk_value; }
 
-         EOSLIB_SERIALIZE( row, (value) )
+         CORE_NET_SERIALIZE( row, (value) )
       };
 
       typedef core_net::multi_index<SingletonName, row> table;

@@ -1,12 +1,12 @@
 /*
- * Regression test for https://github.com/EOSIO/eosio.cdt/issues/601.
+ * Regression test for upstream issue 601.
  *
  * Verifies that a struct can inherit from a typedef'd class/struct.
  */
 
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
-using namespace eosio;
+using namespace core_net;
 
 struct foo {
    int value;

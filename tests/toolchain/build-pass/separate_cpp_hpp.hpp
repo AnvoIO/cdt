@@ -1,4 +1,4 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
 class [[core_net::contract]] separate_cpp_hpp : public core_net::contract {
 public:

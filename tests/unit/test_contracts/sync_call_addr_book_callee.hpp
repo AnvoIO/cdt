@@ -1,5 +1,5 @@
 #include <core_net/call.hpp>
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
 struct person_info {
    std::string first_name;

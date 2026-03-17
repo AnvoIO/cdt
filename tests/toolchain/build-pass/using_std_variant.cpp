@@ -1,15 +1,15 @@
 /*
- * Regression test for https://github.com/EOSIO/eosio.cdt/issues/558
+ * Regression test for upstream issue 558
  *
  * Verifies that a class/function can be used from the std namespace
  */
 
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/print.hpp>
 #include <variant>
 
 using std::variant;
-using namespace eosio;
+using namespace core_net;
 
 class[[core_net::contract("hello")]] hello : public contract
 {

@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in LICENSE
  */
 #pragma once
 #include "action.hpp"
@@ -13,25 +13,25 @@
 namespace core_net {
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          size_t read_transaction(char*, size_t);
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          size_t transaction_size();
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          int tapos_block_num();
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          int tapos_block_prefix();
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          uint32_t expiration();
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          int get_action( uint32_t, uint32_t, char*, size_t);
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          int get_context_free_data( uint32_t, char*, size_t);
       }
    }
@@ -82,7 +82,7 @@ namespace core_net {
       uint8_t         max_cpu_usage_ms = 0UL; /// number of CPU usage units to bill transaction for
       unsigned_int    delay_sec = 0UL; /// number of seconds to delay transaction, default: 0
 
-      EOSLIB_SERIALIZE( transaction_header, (expiration)(ref_block_num)(ref_block_prefix)(max_net_usage_words)(max_cpu_usage_ms)(delay_sec) )
+      CORE_NET_SERIALIZE( transaction_header, (expiration)(ref_block_num)(ref_block_prefix)(max_net_usage_words)(max_cpu_usage_ms)(delay_sec) )
    };
 
    /**
@@ -102,7 +102,7 @@ namespace core_net {
       std::vector<action>  actions;
       extensions_type      transaction_extensions;
 
-      EOSLIB_SERIALIZE_DERIVED( transaction, transaction_header, (context_free_actions)(actions)(transaction_extensions) )
+      CORE_NET_SERIALIZE_DERIVED( transaction, transaction_header, (context_free_actions)(actions)(transaction_extensions) )
    };
 
    /**

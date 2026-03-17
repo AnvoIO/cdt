@@ -1,5 +1,5 @@
 #include <core_net/call.hpp>
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
 // Test the validation of the types of arguments passed in call_wrapper.
 // Expected error:

@@ -1,5 +1,5 @@
 #include <core_net/call.hpp>
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
 class [[core_net::contract]] sync_call_test : public core_net::contract {
 public:

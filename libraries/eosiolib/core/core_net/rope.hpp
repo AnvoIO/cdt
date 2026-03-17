@@ -228,4 +228,4 @@ namespace core_net {
             return {c_str(), size};
          }
    };
-} // ns eosio
+} // ns core_net

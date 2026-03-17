@@ -7,7 +7,7 @@
 #include <contracts.hpp>
 #include "test_utils.hpp"
 
-using namespace eosio;
+using namespace core_net;
 using namespace core_net::testing;
 using namespace core_net::chain;
 using namespace core_net::testing;

@@ -1,6 +1,6 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
-using namespace eosio;
+using namespace core_net;
 
 class [[core_net::contract]] ricardian_contract_test : public contract {
   public:

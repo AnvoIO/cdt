@@ -1,11 +1,11 @@
 /*
- * Regression test for https://github.com/EOSIO/eosio.cdt/issues/600
+ * Regression test for upstream issue 600
  *
  * Verifies that nested typedefs build.
  */
 
-#include <core_net/eosio.hpp>
-using namespace eosio;
+#include <core_net/core_net.hpp>
+using namespace core_net;
 
 namespace foo {
 //using str = std::string;

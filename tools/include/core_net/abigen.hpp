@@ -124,7 +124,7 @@ namespace core_net::cdt {
             _abi.action_results.insert({get_action_name(decl), translate_type(decl->getReturnType())});
             /*
             else {
-               std::cout << "Error, currently in eosio.cdt v2.0 `auto` is not allowed for actions\n";
+               std::cout << "Error, currently in cdt v2.0 `auto` is not allowed for actions\n";
                throw abigen_ex;
             }
             */
@@ -793,14 +793,14 @@ namespace core_net::cdt {
          std::set<const clang::Type*>          evaluated;
    };
 
-   class eosio_abigen_visitor : public RecursiveASTVisitor<eosio_abigen_visitor>, public generation_utils {
+   class core_net_abigen_visitor : public RecursiveASTVisitor<core_net_abigen_visitor>, public generation_utils {
       private:
          bool has_added_clauses = false;
          abigen& ag = abigen::get();
          const clang::CXXRecordDecl* contract_class = NULL;
 
       public:
-         explicit eosio_abigen_visitor(CompilerInstance *CI) {
+         explicit core_net_abigen_visitor(CompilerInstance *CI) {
             get_error_emitter().set_compiler_instance(CI);
          }
 
@@ -943,15 +943,15 @@ namespace core_net::cdt {
          return contract_class;
       }
    };
-   class eosio_abigen_consumer : public ASTConsumer {
+   class core_net_abigen_consumer : public ASTConsumer {
       private:
-         eosio_abigen_visitor *visitor;
+         core_net_abigen_visitor *visitor;
          std::string main_file;
          CompilerInstance* ci;
 
       public:
-         explicit eosio_abigen_consumer(CompilerInstance *CI, std::string file)
-            : visitor(new eosio_abigen_visitor(CI)), main_file(file), ci(CI) { }
+         explicit core_net_abigen_consumer(CompilerInstance *CI, std::string file)
+            : visitor(new core_net_abigen_visitor(CI)), main_file(file), ci(CI) { }
 
          virtual void HandleTranslationUnit(ASTContext &Context) {
             auto& src_mgr = Context.getSourceManager();
@@ -967,11 +967,11 @@ namespace core_net::cdt {
          }
    };
 
-   class eosio_abigen_frontend_action : public ASTFrontendAction {
+   class core_net_abigen_frontend_action : public ASTFrontendAction {
       public:
          virtual std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI, StringRef file) {
-            CI.getPreprocessor().addPPCallbacks(std::make_unique<eosio_ppcallbacks>(CI.getSourceManager(), file.str()));
-            return std::make_unique<eosio_abigen_consumer>(&CI, file.str());
+            CI.getPreprocessor().addPPCallbacks(std::make_unique<core_net_ppcallbacks>(CI.getSourceManager(), file.str()));
+            return std::make_unique<core_net_abigen_consumer>(&CI, file.str());
          }
    };
 } // ns core_net::cdt

@@ -19,7 +19,7 @@ extern "C" {
  * @pre `data` is a valid pointer to a range of memory at least `len` bytes long that contains packed abi_finalizer_policy data
  * abi_finalizer_policy structure is defined in instant_finality.hpp
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 void set_finalizers( uint64_t packed_finalizer_format, const char* data, uint32_t len );
 
 #ifdef __cplusplus

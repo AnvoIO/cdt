@@ -59,7 +59,7 @@ namespace core_net {
       uint64_t id = 0;
 
       CDT_REFLECT(id);
-      EOSLIB_SERIALIZE( hash_id, (id) )
+      CORE_NET_SERIALIZE( hash_id, (id) )
    }; /// namespace hash_id
 } /// namespace core_net
 

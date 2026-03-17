@@ -1,11 +1,11 @@
 /*
- * Regression test for https://github.com/EOSIO/eosio.cdt/issues/527.
+ * Regression test for upstream issue 527.
  *
  * Verifies that a table can reference its own type.
  */
 
-#include <core_net/eosio.hpp>
-using namespace eosio;
+#include <core_net/core_net.hpp>
+using namespace core_net;
 
 CONTRACT self_referential_table : public contract {
    public:

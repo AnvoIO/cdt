@@ -1,4 +1,4 @@
-/* Verify the support of nested containers involving std::tuple<Ts...> in eosio multi-index table
+/* Verify the support of nested containers involving std::tuple<Ts...> in multi-index table
  * This tupletest.cpp can be  regarded as a continuation of ../nestcontn2a.cpp
  * For each action, an example regarding how to use the action with the cleos command line is given.
  *
@@ -12,7 +12,7 @@
  *      For each setx action, the printed result on the cleos console is given in its corresponding prntx action.
  */
 
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
 #include <vector>
 #include <set>
@@ -20,7 +20,7 @@
 #include <map>
 #include <tuple>
 
-using namespace eosio;
+using namespace core_net;
 using namespace std;
 
 #define  SETCONTAINERVAL(x) do { \
@@ -325,7 +325,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
 
             core_net::print("stored tuple<uint16_t, vec_uint16, vec_uint16>  vals:\n");
 
-            auto printVec = [](vec_uint16 v) {//eosio-cpp compiler allows c++11 usage such as lambda
+            auto printVec = [](vec_uint16 v) {//cdt-cpp compiler allows c++11 usage such as lambda
                 for (int i=0; i < v.size();i++)
                     core_net::print(v[i]," ");
                 core_net::print("\n");

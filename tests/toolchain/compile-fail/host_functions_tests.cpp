@@ -11,7 +11,7 @@ send_deferred : yes
 set_finalizers : yes
 */
 
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/contract.hpp>
 #include <core_net/action.hpp>
 #include <core_net/crypto.hpp>

@@ -1,5 +1,5 @@
-#include <core_net/eosio.hpp>
-using namespace eosio;
+#include <core_net/core_net.hpp>
+using namespace core_net;
 
 CONTRACT hello : public contract {
    public:

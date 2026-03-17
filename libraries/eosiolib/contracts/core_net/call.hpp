@@ -15,16 +15,16 @@ namespace core_net {
 
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          int64_t call(uint64_t receiver, uint64_t flags, const char* data, size_t data_size);
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          uint32_t get_call_return_value( void* mem, uint32_t len );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          uint32_t get_call_data( void* mem, uint32_t len );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void set_call_return_value( void* mem, uint32_t len );
       }
    };
@@ -70,7 +70,7 @@ namespace core_net {
       uint32_t version   = 0;
       uint64_t func_name = 0; // At WASM level, function name is a short ID of uint64_t.
 
-      EOSLIB_SERIALIZE(call_data_header, (version)(func_name))
+      CORE_NET_SERIALIZE(call_data_header, (version)(func_name))
    };
 
    /**

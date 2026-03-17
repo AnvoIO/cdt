@@ -6,7 +6,7 @@
 
 #include <contracts.hpp>
 
-using namespace eosio;
+using namespace core_net;
 using namespace core_net::testing;
 using namespace fc;
 

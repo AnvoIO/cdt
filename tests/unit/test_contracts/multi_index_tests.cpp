@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
 #include <cmath>
 #include <limits>
@@ -18,7 +18,7 @@ namespace _test_multi_index
         auto primary_key() const { return id; }
         uint64_t get_secondary() const { return sec; }
 
-        EOSLIB_SERIALIZE(record_idx64, (id)(sec))
+        CORE_NET_SERIALIZE(record_idx64, (id)(sec))
     };
 
     struct record_idx128
@@ -29,7 +29,7 @@ namespace _test_multi_index
         auto primary_key() const { return id; }
         uint128_t get_secondary() const { return sec; }
 
-        EOSLIB_SERIALIZE(record_idx128, (id)(sec))
+        CORE_NET_SERIALIZE(record_idx128, (id)(sec))
     };
 
     struct record_idx256
@@ -40,7 +40,7 @@ namespace _test_multi_index
         auto primary_key() const { return id; }
         const checksum256 &get_secondary() const { return sec; }
 
-        EOSLIB_SERIALIZE(record_idx256, (id)(sec))
+        CORE_NET_SERIALIZE(record_idx256, (id)(sec))
     };
 
     struct record_idx_double
@@ -51,7 +51,7 @@ namespace _test_multi_index
         auto primary_key() const { return id; }
         double get_secondary() const { return sec; }
 
-        EOSLIB_SERIALIZE(record_idx_double, (id)(sec))
+        CORE_NET_SERIALIZE(record_idx_double, (id)(sec))
     };
 
     struct record_idx_long_double
@@ -62,7 +62,7 @@ namespace _test_multi_index
         auto primary_key() const { return id; }
         long double get_secondary() const { return sec; }
 
-        EOSLIB_SERIALIZE(record_idx_long_double, (id)(sec))
+        CORE_NET_SERIALIZE(record_idx_long_double, (id)(sec))
     };
 
     template <uint64_t TableName>

@@ -73,7 +73,7 @@ void generate(const std::vector<std::string>& base_options, std::string input, s
    codegen::get().set_warn_action_read_only(warn_action_read_only);
 
    int tool_run = -1;
-   tool_run = ctool.run(newFrontendActionFactory<eosio_abigen_frontend_action>().get());
+   tool_run = ctool.run(newFrontendActionFactory<core_net_abigen_frontend_action>().get());
    if (tool_run != 0) {
       throw std::runtime_error("abigen error");
    }
@@ -86,7 +86,7 @@ void generate(const std::vector<std::string>& base_options, std::string input, s
       handle_empty_abigen(contract_name, has_o_opt, has_contract_opt);
    }
 
-   tool_run = ctool.run(newFrontendActionFactory<eosio_codegen_frontend_action>().get());
+   tool_run = ctool.run(newFrontendActionFactory<core_net_codegen_frontend_action>().get());
    if (tool_run != 0) {
       throw std::runtime_error("codegen error");
    }

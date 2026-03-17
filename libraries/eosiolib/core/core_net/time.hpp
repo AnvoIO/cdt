@@ -39,7 +39,7 @@ namespace core_net {
 
         int64_t _count;
         /// @endcond
-        EOSLIB_SERIALIZE( microseconds, (_count) )
+        CORE_NET_SERIALIZE( microseconds, (_count) )
     private:
         friend class time_point;
   };
@@ -95,7 +95,7 @@ namespace core_net {
         microseconds elapsed;
         /// @endcond
 
-        EOSLIB_SERIALIZE( time_point, (elapsed) )
+        CORE_NET_SERIALIZE( time_point, (elapsed) )
   };
 
   /**
@@ -159,7 +159,7 @@ namespace core_net {
 
         /// @endcond
 
-        EOSLIB_SERIALIZE( time_point_sec, (utc_seconds) )
+        CORE_NET_SERIALIZE( time_point_sec, (utc_seconds) )
   };
 
    /**
@@ -226,7 +226,7 @@ namespace core_net {
          static constexpr int64_t block_timestamp_epoch = 946684800000ll;  // epoch is year 2000
          /// @endcond
 
-         EOSLIB_SERIALIZE( block_timestamp, (slot) )
+         CORE_NET_SERIALIZE( block_timestamp, (slot) )
       private:
 
 

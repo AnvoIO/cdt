@@ -1,9 +1,9 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/print.hpp>
 #include <array>
 
 using std::array;
-using namespace eosio;
+using namespace core_net;
 
 class[[core_net::contract("using_std_array")]] using_std_array : public contract
 {

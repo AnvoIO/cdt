@@ -1,4 +1,4 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/tester.hpp>
 
 using namespace eosio::native;

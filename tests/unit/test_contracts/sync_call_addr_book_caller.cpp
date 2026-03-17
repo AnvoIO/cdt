@@ -1,6 +1,6 @@
 #include "sync_call_addr_book_callee.hpp"
 
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/call.hpp>
 
 class [[core_net::contract]] sync_call_addr_book_caller : public core_net::contract{

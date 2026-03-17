@@ -1,4 +1,4 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/call.hpp>
 
 // Because this contract does not tag any functions by `call` attribute,

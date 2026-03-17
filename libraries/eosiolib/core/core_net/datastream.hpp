@@ -1,6 +1,6 @@
 /**
  *  @file datastream.hpp
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in LICENSE
  */
 #pragma once
 #include "check.hpp"

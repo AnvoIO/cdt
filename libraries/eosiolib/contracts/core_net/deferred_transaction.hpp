@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in LICENSE
  */
 #pragma once
 #include "system.hpp"
@@ -12,10 +12,10 @@
 namespace core_net {
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void send_deferred(const uint128_t&, uint64_t, const char*, size_t, uint32_t);
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          int cancel_deferred(const uint128_t&);
       }
    }
@@ -96,7 +96,7 @@ namespace core_net {
          return unpack<transaction>(sent_trx);
       }
 
-      EOSLIB_SERIALIZE( onerror, (sender_id)(sent_trx) )
+      CORE_NET_SERIALIZE( onerror, (sender_id)(sent_trx) )
    };
 
    /**

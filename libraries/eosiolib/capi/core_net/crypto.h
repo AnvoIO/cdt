@@ -34,10 +34,10 @@ extern "C" {
  *  uint32_t length;
  *  assert_sha256( data, length, hash )
  *  //If the sha256 hash generated from data does not equal provided hash, anything below will never fire.
- *  eosio::print("sha256 hash generated from data equals provided hash");
+ *  core_net::print("sha256 hash generated from data equals provided hash");
  *  @endcode
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 void assert_sha256( const char* data, uint32_t length, const struct capi_checksum256* hash );
 
 /**
@@ -59,10 +59,10 @@ void assert_sha256( const char* data, uint32_t length, const struct capi_checksu
  *  uint32_t length;
  *  assert_sha1( data, length, hash )
  *  //If the sha1 hash generated from data does not equal provided hash, anything below will never fire.
- *  eosio::print("sha1 hash generated from data equals provided hash");
+ *  core_net::print("sha1 hash generated from data equals provided hash");
  *  @endcode
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 void assert_sha1( const char* data, uint32_t length, const struct capi_checksum160* hash );
 
 /**
@@ -84,10 +84,10 @@ void assert_sha1( const char* data, uint32_t length, const struct capi_checksum1
  *  uint32_t length;
  *  assert_sha512( data, length, hash )
  *  //If the sha512 hash generated from data does not equal provided hash, anything below will never fire.
- *  eosio::print("sha512 hash generated from data equals provided hash");
+ *  core_net::print("sha512 hash generated from data equals provided hash");
  *  @endcode
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 void assert_sha512( const char* data, uint32_t length, const struct capi_checksum512* hash );
 
 /**
@@ -108,10 +108,10 @@ void assert_sha512( const char* data, uint32_t length, const struct capi_checksu
  *  uint32_t length;
  *  assert_ripemod160( data, length, hash )
  *  //If the ripemod160 hash generated from data does not equal provided hash, anything below will never fire.
- *  eosio::print("ripemod160 hash generated from data equals provided hash");
+ *  core_net::print("ripemod160 hash generated from data equals provided hash");
  *  @endcode
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 void assert_ripemd160( const char* data, uint32_t length, const struct capi_checksum160* hash );
 
 /**
@@ -129,7 +129,7 @@ void assert_ripemd160( const char* data, uint32_t length, const struct capi_chec
  *  eos_assert( calc_hash == hash, "invalid hash" );
  *  @endcode
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 void sha256( const char* data, uint32_t length, struct capi_checksum256* hash );
 
 /**
@@ -147,7 +147,7 @@ void sha256( const char* data, uint32_t length, struct capi_checksum256* hash );
  *  eos_assert( calc_hash == hash, "invalid hash" );
  *  @endcode
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 void sha1( const char* data, uint32_t length, struct capi_checksum160* hash );
 
 /**
@@ -165,7 +165,7 @@ void sha1( const char* data, uint32_t length, struct capi_checksum160* hash );
  *  eos_assert( calc_hash == hash, "invalid hash" );
  *  @endcode
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 void sha512( const char* data, uint32_t length, struct capi_checksum512* hash );
 
 /**
@@ -183,7 +183,7 @@ void sha512( const char* data, uint32_t length, struct capi_checksum512* hash );
  *  eos_assert( calc_hash == hash, "invalid hash" );
  *  @endcode
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 void ripemd160( const char* data, uint32_t length, struct capi_checksum160* hash );
 
 /**
@@ -201,7 +201,7 @@ void ripemd160( const char* data, uint32_t length, struct capi_checksum160* hash
  *  @code
  *  @endcode
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 int recover_key( const struct capi_checksum256* digest, const char* sig, size_t siglen, char* pub, size_t publen );
 
 /**
@@ -226,10 +226,10 @@ int recover_key( const struct capi_checksum256* digest, const char* sig, size_t 
  *  size_t publen;
  *  assert_recover_key( digest, sig, siglen, pub, publen )
  *  // If the given public key does not match with the generated key from digest and the signature, anything below will never fire.
- *  eosio::print("pub key matches the pub key generated from digest");
+ *  core_net::print("pub key matches the pub key generated from digest");
  *  @endcode
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 void assert_recover_key( const struct capi_checksum256* digest, const char* sig, size_t siglen, const char* pub, size_t publen );
 
 #ifdef __cplusplus

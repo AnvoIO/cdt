@@ -1,10 +1,10 @@
 #include "sync_call_callee.hpp"
 #include "sync_call_not_supported.hpp"
 
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/call.hpp>
 
-using namespace eosio;
+using namespace core_net;
 
 class [[core_net::contract]] sync_call_caller : public core_net::contract{
 public:

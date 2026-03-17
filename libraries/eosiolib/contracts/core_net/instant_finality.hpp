@@ -16,7 +16,7 @@
 namespace core_net {
     namespace internal_use_do_not_use {
         extern "C" {
-            __attribute__((eosio_wasm_import))
+            __attribute__((core_net_wasm_import))
             void set_finalizers( uint64_t packed_finalizer_format, const char* data, uint32_t len );
         } // extern "C"
     } //internal_use_do_not_use
@@ -26,13 +26,13 @@ namespace core_net {
         uint64_t              weight = 0;    // weight that this finalizer's vote has for meeting threshold
         std::vector<char>     public_key;    // Affine little endian non-montgomery g1
 
-        EOSLIB_SERIALIZE(finalizer_authority, (description)(weight)(public_key));
+        CORE_NET_SERIALIZE(finalizer_authority, (description)(weight)(public_key));
     };
     struct finalizer_policy {
         uint64_t                          threshold = 0;
         std::vector<finalizer_authority>  finalizers;
 
-        EOSLIB_SERIALIZE(finalizer_policy, (threshold)(finalizers));
+        CORE_NET_SERIALIZE(finalizer_policy, (threshold)(finalizers));
     };
 
 /**
@@ -48,4 +48,4 @@ namespace core_net {
         internal_use_do_not_use::set_finalizers(0, packed.data(), packed.size());
     }
 
-} //eosio
+} //core_net

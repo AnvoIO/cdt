@@ -8,7 +8,7 @@
  * @defgroup contract Contract
  * @ingroup contracts
  * @ingroup types
- * @brief Defines contract type which is %base class for every EOSIO contract
+ * @brief Defines contract type which is %base class for every contract
  */
 
 /**
@@ -22,10 +22,10 @@
 namespace core_net {
 
 /**
- * %Base class for EOSIO contract.
+ * %Base class for smart contracts.
  *
  * @ingroup contract
- * @details %A new contract should derive from this class, so it can make use of EOSIO_ABI macro.
+ * @details %A new contract should derive from this class, so it can make use of CORE_NET_DISPATCH macro.
  */
 class contract {
    public:

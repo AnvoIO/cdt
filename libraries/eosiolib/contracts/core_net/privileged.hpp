@@ -9,31 +9,31 @@ namespace core_net {
 
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          bool is_privileged( uint64_t account );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void get_resource_limits( uint64_t account, int64_t* ram_bytes, int64_t* net_weight, int64_t* cpu_weight );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void set_resource_limits( uint64_t account, int64_t ram_bytes, int64_t net_weight, int64_t cpu_weight );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void set_privileged( uint64_t account, bool is_priv );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void set_blockchain_parameters_packed( char* data, uint32_t datalen );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          uint32_t get_blockchain_parameters_packed( char* data, uint32_t datalen );
 
-         __attribute((eosio_wasm_import))
+         __attribute((core_net_wasm_import))
          int64_t set_proposed_producers( char*, uint32_t );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void preactivate_feature( const capi_checksum256* feature_digest );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          int64_t set_proposed_producers_ex( uint64_t producer_data_format, char *producer_data, uint32_t producer_data_size );
       }
    }
@@ -153,7 +153,7 @@ namespace core_net {
       uint16_t max_authority_depth;
 
 
-      EOSLIB_SERIALIZE( blockchain_parameters,
+      CORE_NET_SERIALIZE( blockchain_parameters,
                         (max_block_net_usage)(target_block_net_usage_pct)
                         (max_transaction_net_usage)(base_per_transaction_net_usage)(net_usage_leeway)
                         (context_free_discount_net_usage_num)(context_free_discount_net_usage_den)

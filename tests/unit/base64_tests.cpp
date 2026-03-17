@@ -6,7 +6,7 @@
 #include <core_net/tester.hpp>
 #include <core_net/base64.hpp>
 
-using namespace eosio;
+using namespace core_net;
 using namespace std::literals;
 
 EOSIO_TEST_BEGIN(base64enc)

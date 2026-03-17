@@ -4,7 +4,7 @@
  * can reach it.
  */
 
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/call.hpp>
 
 namespace core_net {

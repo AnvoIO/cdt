@@ -381,7 +381,7 @@ namespace core_net {
             printl( buffer, (end-buffer) );
       }
 
-      EOSLIB_SERIALIZE( asset, (amount)(symbol) )
+      CORE_NET_SERIALIZE( asset, (amount)(symbol) )
    };
 
   /**
@@ -532,6 +532,6 @@ namespace core_net {
 
       /// @endcond
 
-      EOSLIB_SERIALIZE( extended_asset, (quantity)(contract) )
+      CORE_NET_SERIALIZE( extended_asset, (quantity)(contract) )
    };
 }

@@ -23,7 +23,7 @@ extern "C" {
  *  @return the number of bytes of the return value of the call. If the function is `void`, return `0`
  *
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 int64_t call(capi_name receiver, uint64_t flags, const char* data, size_t data_size);
 
 /**
@@ -35,7 +35,7 @@ int64_t call(capi_name receiver, uint64_t flags, const char* data, size_t data_s
  *  @param len - length of the return value to be copied
  *  @return the number of bytes of the return value that can be retrieved (the number of total bytes of return value)
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 uint32_t get_call_return_value( void* mem, uint32_t len );
 
 /**
@@ -46,7 +46,7 @@ uint32_t get_call_return_value( void* mem, uint32_t len );
  *  @param len - length of the current call data to be copied
  *  @return the number of bytes of the data that can be retrieved (the number of total bytes of the data)
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 uint32_t get_call_data( void* mem, uint32_t len );
 
 /**
@@ -56,7 +56,7 @@ uint32_t get_call_data( void* mem, uint32_t len );
  *  @brief Copy the return value from the specified location
  *  @param mem - a pointer where `len` bytes of the return value will be copied from
  */
-__attribute__((eosio_wasm_import))
+__attribute__((core_net_wasm_import))
 void set_call_return_value( void* mem, uint32_t len );
 
 #ifdef __cplusplus

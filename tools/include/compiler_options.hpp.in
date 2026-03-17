@@ -423,7 +423,9 @@ static void GetCompDefaults(std::vector<std::string>& copts) {
 #if !defined(__aarch64__) && !defined(_M_ARM64)
          copts.emplace_back("-mstackrealign");
 #endif
+         copts.emplace_back("-D__core_net_cdt_native__");
          copts.emplace_back("-D__eosio_cdt_native__");
+         copts.emplace_back("-DCORE_NET_NATIVE");
          copts.emplace_back("-DEOSIO_NATIVE");
          copts.emplace_back("-DLLP64");
       }

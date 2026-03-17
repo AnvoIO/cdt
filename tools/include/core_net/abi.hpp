@@ -92,7 +92,7 @@ struct version_t {
    std::string str() const { return std::to_string(major) + "." + std::to_string(minor); }
 };
 
-/// From eosio libraries/chain/include/eosio/chain/abi_def.hpp
+/// From chain abi_def.hpp
 struct abi {
    version_t                              version{1,2}; // base version is 1.2, add features (bitset, sync calls) push to 1.3
    std::set<abi_struct>                   structs;

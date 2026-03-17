@@ -1,6 +1,6 @@
 /**
  * @file
- * @copyright defined in eos/LICENSE
+ * @copyright defined in LICENSE
  */
 #pragma once
 
@@ -29,184 +29,184 @@
 namespace core_net {
   namespace internal_use_do_not_use {
     extern "C" {
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_store_i64(uint64_t, uint64_t, uint64_t, uint64_t,  const void*, uint32_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       void db_update_i64(int32_t, uint64_t, const void*, uint32_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       void db_remove_i64(int32_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_get_i64(int32_t, const void*, uint32_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_next_i64(int32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_previous_i64(int32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_find_i64(uint64_t, uint64_t, uint64_t, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_lowerbound_i64(uint64_t, uint64_t, uint64_t, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_upperbound_i64(uint64_t, uint64_t, uint64_t, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_end_i64(uint64_t, uint64_t, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx64_store(uint64_t, uint64_t, uint64_t, uint64_t, const uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       void db_idx64_update(int32_t, uint64_t, const uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       void db_idx64_remove(int32_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx64_next(int32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx64_previous(int32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx64_find_primary(uint64_t, uint64_t, uint64_t, uint64_t*, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx64_find_secondary(uint64_t, uint64_t, uint64_t, const uint64_t*, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx64_lowerbound(uint64_t, uint64_t, uint64_t, uint64_t*, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx64_upperbound(uint64_t, uint64_t, uint64_t, uint64_t*, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx64_end(uint64_t, uint64_t, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx128_store(uint64_t, uint64_t, uint64_t, uint64_t, const uint128_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       void db_idx128_update(int32_t, uint64_t, const uint128_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       void db_idx128_remove(int32_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx128_next(int32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx128_previous(int32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx128_find_primary(uint64_t, uint64_t, uint64_t, uint128_t*, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx128_find_secondary(uint64_t, uint64_t, uint64_t, const uint128_t*, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx128_lowerbound(uint64_t, uint64_t, uint64_t, uint128_t*, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx128_upperbound(uint64_t, uint64_t, uint64_t, uint128_t*, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx128_end(uint64_t, uint64_t, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx256_store(uint64_t, uint64_t, uint64_t, uint64_t, const uint128_t*, uint32_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       void db_idx256_update(int32_t, uint64_t, const uint128_t*, uint32_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       void db_idx256_remove(int32_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx256_next(int32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx256_previous(int32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx256_find_primary(uint64_t, uint64_t, uint64_t, uint128_t*, uint32_t, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx256_find_secondary(uint64_t, uint64_t, uint64_t, const uint128_t*, uint32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx256_lowerbound(uint64_t, uint64_t, uint64_t, uint128_t*, uint32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx256_upperbound(uint64_t, uint64_t, uint64_t, uint128_t*, uint32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx256_end(uint64_t, uint64_t, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_double_store(uint64_t, uint64_t, uint64_t, uint64_t, const double*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       void db_idx_double_update(int32_t, uint64_t, const double*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       void db_idx_double_remove(int32_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_double_next(int32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_double_previous(int32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_double_find_primary(uint64_t, uint64_t, uint64_t, double*, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_double_find_secondary(uint64_t, uint64_t, uint64_t, const double*, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_double_lowerbound(uint64_t, uint64_t, uint64_t, double*, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_double_upperbound(uint64_t, uint64_t, uint64_t, double*, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_double_end(uint64_t, uint64_t, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_long_double_store(uint64_t, uint64_t, uint64_t, uint64_t, const long double*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       void db_idx_long_double_update(int32_t, uint64_t, const long double*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       void db_idx_long_double_remove(int32_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_long_double_next(int32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_long_double_previous(int32_t, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_long_double_find_primary(uint64_t, uint64_t, uint64_t, long double*, uint64_t);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_long_double_find_secondary(uint64_t, uint64_t, uint64_t, const long double*, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_long_double_lowerbound(uint64_t, uint64_t, uint64_t, long double*, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_long_double_upperbound(uint64_t, uint64_t, uint64_t, long double*, uint64_t*);
 
-      __attribute__((eosio_wasm_import))
+      __attribute__((core_net_wasm_import))
       int32_t db_idx_long_double_end(uint64_t, uint64_t, uint64_t);
     }
   };
@@ -341,17 +341,17 @@ namespace _multi_index_detail {
 }
 
 /**
- * The indexed_by struct is used to instantiate the indices for the Multi-Index table. In EOSIO, up to 16 secondary indices can be specified.
+ * The indexed_by struct is used to instantiate the indices for the Multi-Index table. Up to 16 secondary indices can be specified.
  *
  * @ingroup multiindex
- * @tparam IndexName - is the name of the index. The name must be provided as an EOSIO base32 encoded 64-bit integer and must conform to the EOSIO naming requirements of a maximum of 13 characters, the first twelve from the lowercase characters a-z, digits 1-5, and ".", and if there is a 13th character, it is restricted to lowercase characters a-p and ".".
+ * @tparam IndexName - is the name of the index. The name must be provided as an base32 encoded 64-bit integer and must conform to the naming requirements of a maximum of 13 characters, the first twelve from the lowercase characters a-z, digits 1-5, and ".", and if there is a 13th character, it is restricted to lowercase characters a-p and ".".
  * @tparam Extractor - is a function call operator that takes a const reference to the table object type and returns either a secondary key type or a reference to a secondary key type. It is recommended to use the `core_net::const_mem_fun` template.
  *
  * Example:
  *
  *
  * @code
- * #include <eosiolib/eosio.hpp>
+ * #include <core_net/core_net.hpp>
  * using namespace core_net;
  * class mycontract: core_net::contract {
  *   struct record {
@@ -369,7 +369,7 @@ namespace _multi_index_detail {
  *                  indexed_by< "bysecondary"_n, const_mem_fun<record, uint128_t, &record::get_secondary> > > table( code, scope);
  *     }
  * }
- * EOSIO_DISPATCH( mycontract, (myaction) )
+ * CORE_NET_DISPATCH( mycontract, (myaction) )
  * @endcode
  */
 template<name::raw IndexName, typename Extractor>
@@ -381,11 +381,11 @@ struct indexed_by {
 /**
  * @ingroup multiindex
  *
- * @brief Defines EOSIO Multi Index Table
- * @details EOSIO Multi-Index API provides a C++ interface to the EOSIO database. It is patterned after Boost Multi Index Container.
- * EOSIO Multi-Index table requires exactly a uint64_t primary key. For the table to be able to retrieve the primary key,
+ * @brief Defines Multi Index Table
+ * @details Multi-Index API provides a C++ interface to the the database. It is patterned after Boost Multi Index Container.
+ * Multi-Index table requires exactly a uint64_t primary key. For the table to be able to retrieve the primary key,
  * the object stored inside the table is required to have a const member function called primary_key() that returns uint64_t.
- * EOSIO Multi-Index table also supports up to 16 secondary indices. The type of the secondary indices could be any of:
+ * Multi-Index table also supports up to 16 secondary indices. The type of the secondary indices could be any of:
  * - uint64_t
  * - uint128_t
  * - double
@@ -399,7 +399,7 @@ struct indexed_by {
  * Example:
  *
  * @code
- * #include <eosiolib/eosio.hpp>
+ * #include <core_net/core_net.hpp>
  * using namespace core_net;
  * class mycontract: contract {
  *   struct record {
@@ -430,7 +430,7 @@ struct indexed_by {
  *       > table( code, scope);
  *     }
  * }
- * EOSIO_DISPATCH( mycontract, (myaction) )
+ * CORE_NET_DISPATCH( mycontract, (myaction) )
  * @endcode
  */
 
@@ -866,7 +866,7 @@ class multi_index
        * Example:
        *
        * @code
-       * #include <eosiolib/eosio.hpp>
+       * #include <core_net/core_net.hpp>
        * using namespace core_net;
        * using namespace std;
        * class addressbook: contract {
@@ -886,7 +886,7 @@ class multi_index
        *       address_index addresses(_self, _self.value); // code, scope
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       multi_index( name code, uint64_t scope )
@@ -909,7 +909,7 @@ class multi_index
        *       core_net::check(addresses.get_code() == "dan"_n, "Codes don't match.");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       name get_code()const      { return _code; }
@@ -930,7 +930,7 @@ class multi_index
        *       core_net::check(addresses.get_scope() == "dan"_n.value, "Scopes don't match");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       uint64_t get_scope()const { return _scope; }
@@ -1017,7 +1017,7 @@ class multi_index
        *       core_net::check(itr == addresses.cbegin(), "Only address is not at front.");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       const_iterator cbegin()const {
@@ -1043,7 +1043,7 @@ class multi_index
        *       core_net::check(itr == addresses.begin(), "Only address is not at front.");
        *     }
        * }
-       * EOSIO_ABI( addressbook, (myaction) )
+       * CORE_NET_ABI( addressbook, (myaction) )
        * @endcode
        */
       const_iterator begin()const  { return cbegin(); }
@@ -1067,7 +1067,7 @@ class multi_index
        *       core_net::check(itr != addresses.cend(), "Address for account doesn't exist");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       const_iterator cend()const   { return const_iterator( this ); }
@@ -1091,7 +1091,7 @@ class multi_index
        *       core_net::check(itr != addresses.end(), "Address for account doesn't exist");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       const_iterator end()const    { return cend(); }
@@ -1126,7 +1126,7 @@ class multi_index
        *       core_net::check(itr->account_name == name("brendan"), "Lock arf, Incorrect Second Last Record");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       const_reverse_iterator crbegin()const { return std::make_reverse_iterator(cend()); }
@@ -1161,7 +1161,7 @@ class multi_index
        *       core_net::check(itr->account_name == name("brendan"), "Lock arf, Incorrect Second Last Record");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       const_reverse_iterator rbegin()const  { return crbegin(); }
@@ -1197,7 +1197,7 @@ class multi_index
        *       core_net::check(itr->account_name == name("dan"), "Lock arf, Incorrect Second Record");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       const_reverse_iterator crend()const   { return std::make_reverse_iterator(cbegin()); }
@@ -1233,7 +1233,7 @@ class multi_index
        *       core_net::check(itr->account_name == name("dan"), "Lock arf, Incorrect Second Record");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       const_reverse_iterator rend()const    { return crend(); }
@@ -1274,7 +1274,7 @@ class multi_index
        *       core_net::check(itr == zip_index.end(), "Lock arf, Incorrect End of Iterator");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       template<typename PK>
@@ -1320,7 +1320,7 @@ class multi_index
        *       core_net::check(itr == zip_index.end(), "Lock arf, Incorrect End of Iterator");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       template<typename PK>
@@ -1360,7 +1360,7 @@ class multi_index
        *       });
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       uint64_t available_primary_key()const {
@@ -1393,7 +1393,7 @@ class multi_index
        * Example:
        *
        * @code
-       * #include <eosiolib/eosio.hpp>
+       * #include <core_net/core_net.hpp>
        * using namespace core_net;
        * using namespace std;
        * class addressbook: contract {
@@ -1420,7 +1420,7 @@ class multi_index
        *       core_net::check(itr->account_name == name("dan"), "Lock arf, Incorrect Record ");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       template<name::raw IndexName>
@@ -1471,7 +1471,7 @@ class multi_index
        *       core_net::check(itr == zip_index.end(), "Lock arf, Incorrect End of Iterator");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       template<name::raw IndexName>
@@ -1519,7 +1519,7 @@ class multi_index
        *       core_net::check(iterator_to(user) == itr, "Invalid iterator");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        * 
        * Warning: the interator_to can have undefined behavior if the caller 
@@ -1565,7 +1565,7 @@ class multi_index
        *       });
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       template<typename Lambda>
@@ -1650,7 +1650,7 @@ class multi_index
        *       });
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       template<typename Lambda>
@@ -1698,7 +1698,7 @@ class multi_index
        *       core_net::check(itr->city == "San Luis Obispo", "Lock arf, Address not modified");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       template<typename Lambda>
@@ -1774,7 +1774,7 @@ class multi_index
        *       core_net::check(user.first_name == "Daniel", "Couldn't get him.");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        * 
        * Warning: 
@@ -1811,7 +1811,7 @@ class multi_index
        *       core_net::check(itr != addresses.end(), "Couldn't get him.");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       template<typename PK>
@@ -1888,7 +1888,7 @@ class multi_index
        *       core_net::check(itr != addresses.end(), "Everting lock arf, Address not erased properly");
        *     }
        * }
-       * EOSIO_ABI( addressbook, (myaction) )
+       * CORE_NET_ABI( addressbook, (myaction) )
        * @endcode
        */
       const_iterator erase( const_iterator itr ) {
@@ -1931,7 +1931,7 @@ class multi_index
        *       core_net::check(itr == addresses.end(), "Record is not deleted");
        *     }
        * }
-       * EOSIO_DISPATCH( addressbook, (myaction) )
+       * CORE_NET_DISPATCH( addressbook, (myaction) )
        * @endcode
        */
       void erase( const T& obj ) {
@@ -1966,4 +1966,4 @@ class multi_index
       }
 
 };
-}  /// eosio
+}  /// core_net

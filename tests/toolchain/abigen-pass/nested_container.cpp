@@ -1,8 +1,8 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <tuple>
 #include <vector>
 
-using namespace eosio;
+using namespace core_net;
 using std::map;
 using std::string;
 using std::tuple;

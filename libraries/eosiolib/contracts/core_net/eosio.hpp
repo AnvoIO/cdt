@@ -1,29 +1,3 @@
-/**
- *  @file
- *  @copyright defined in eos/LICENSE
- */
+// Legacy convenience header — use <core_net/core_net.hpp> instead
 #pragma once
-#include "action.hpp"
-#include "../../core/core_net/print.hpp"
-#include "multi_index.hpp"
-#include "dispatcher.hpp"
-#include "contract.hpp"
-
-#ifndef EOSIO_NATIVE
-static_assert( sizeof(long) == sizeof(int), "unexpected size difference" );
-#endif
-
-/**
- * @defgroup core Core API
- * @brief C++ Core API for chain-agnostic smart-contract functionality
- */
-
- /**
-  * @defgroup contracts Contracts API
-  * @brief C++ Contracts API for chain-dependent smart-contract functionality
-  */
-
-/**
- * @defgroup types Types
- * @brief C++ Types API for data layout of data-structures available for the EOSIO platform
- */
+#include "core_net.hpp"

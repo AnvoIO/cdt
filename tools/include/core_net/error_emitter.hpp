@@ -8,7 +8,7 @@
 
 namespace core_net { namespace cdt {
    struct internal_error : public std::exception {
-      virtual const char* what() const throw() { return "eosio tool internal error"; }
+      virtual const char* what() const throw() { return "cdt tool internal error"; }
    } internal_error_ex;
 
    struct error_emitter {

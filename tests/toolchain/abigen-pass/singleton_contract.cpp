@@ -1,11 +1,11 @@
 #include <core_net/asset.hpp>
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/name.hpp>
 #include <core_net/singleton.hpp>
 
 #include "exclude_from_abi.hpp"
  
-using namespace eosio;
+using namespace core_net;
 
 struct [[core_net::table]] out_of_class2 {
     uint64_t id;

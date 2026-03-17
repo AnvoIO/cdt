@@ -1,6 +1,6 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
-using namespace eosio;
+using namespace core_net;
 
 // TODO: chained assigmnets in volatile not supported
 class [[core_net::contract]] malloc_tests : public contract{

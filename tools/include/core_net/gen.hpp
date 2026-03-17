@@ -686,8 +686,8 @@ struct generation_utils {
             return t+"[]";
          }
       }
-      //The following else if (is_tuple(type)) block is removed, because it causes eosio-cpp compilation
-      //failure on any action that has std::tuple<Ts...> parameter, also the type eosio::non_unique this block
+      //The following else if (is_tuple(type)) block is removed, because it causes cdt-cpp compilation
+      //failure on any action that has std::tuple<Ts...> parameter, also the type core_net::non_unique this block
       //was supposed to handle is obsolete now.
       //
       //else if (is_tuple(type)) {

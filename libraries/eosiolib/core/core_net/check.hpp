@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in LICENSE
  */
 #pragma once
 
@@ -11,13 +11,13 @@ namespace core_net {
 
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void eosio_assert( uint32_t test, const char* msg );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void eosio_assert_message( uint32_t test, const char* msg, uint32_t msg_len );
 
-         __attribute__((eosio_wasm_import))
+         __attribute__((core_net_wasm_import))
          void eosio_assert_code( uint32_t test, uint64_t code );
       }
    }
@@ -34,7 +34,7 @@ namespace core_net {
    /**
     *  @defgroup system System
     *  @ingroup core
-    *  @brief Defines wrappers over eosio_assert
+    *  @brief Defines wrappers over assertion intrinsics
     */
 
 

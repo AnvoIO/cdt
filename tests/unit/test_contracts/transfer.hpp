@@ -1,7 +1,7 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/asset.hpp>
 
-using namespace eosio;
+using namespace core_net;
 
 CONTRACT transfer_contract : public contract {
    public:

@@ -96,4 +96,4 @@ namespace core_net { namespace detail {
        using return_type = Ret;
    };
    /// @endcond
-}} // eosio detail
+}} // core_net detail

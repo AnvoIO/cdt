@@ -1,8 +1,8 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
     
 using namespace std;
-using namespace eosio;
+using namespace core_net;
     
 CONTRACT explicit_nested_tests : public contract {
    public:
@@ -34,7 +34,7 @@ CONTRACT explicit_nested_tests : public contract {
       std::vector<std::vector<_mystruct>> vvmys;
       auto primary_key() const -> decltype(id) { return id; }
 
-      EOSLIB_SERIALIZE(testdata, (id)(data)(data_vec)(data_vec2)(data_vec3)(tup1)(var1)(vvmys));
+      CORE_NET_SERIALIZE(testdata, (id)(data)(data_vec)(data_vec2)(data_vec3)(tup1)(var1)(vvmys));
    };
    using test_data_idx = multi_index<"testdata"_n, testdata>;
 

@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eos/LICENSE
+ *  @copyright defined in LICENSE
  */
 #pragma once
 
@@ -450,6 +450,6 @@ namespace core_net {
       symbol sym; ///< the symbol
       name   contract; ///< the token contract hosting the symbol
 
-      EOSLIB_SERIALIZE( extended_symbol, (sym)(contract) )
+      CORE_NET_SERIALIZE( extended_symbol, (sym)(contract) )
    };
 }

@@ -1,12 +1,12 @@
 /*
- * Regression test for https://github.com/EOSIO/eosio.cdt/issues/602.
+ * Regression test for upstream issue 602.
  *
  * Verifies that an aliased type can be used as a variant template arg.
  */
 
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
-using namespace eosio;
+using namespace core_net;
 
 using str = std::string;
 

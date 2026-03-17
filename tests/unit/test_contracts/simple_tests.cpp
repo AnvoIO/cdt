@@ -1,10 +1,10 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/deferred_transaction.hpp>
 #include <core_net/bitset.hpp>
 
 #include "transfer.hpp" 
 
-using namespace eosio;
+using namespace core_net;
 
 class [[core_net::contract]] simple_tests : public contract {
    public:

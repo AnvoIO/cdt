@@ -1,4 +1,4 @@
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 #include <core_net/instant_finality.hpp>
 
 class [[core_net::contract]] instant_finality_tests : public core_net::contract{

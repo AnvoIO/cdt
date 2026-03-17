@@ -7,7 +7,7 @@
 
 #include <contracts.hpp>
 
-using namespace eosio;
+using namespace core_net;
 using namespace core_net::testing;
 
 #ifdef NON_VALIDATING_TEST

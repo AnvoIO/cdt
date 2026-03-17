@@ -1,7 +1,7 @@
 #include "sync_call_addr_book_callee.hpp"
-#include <core_net/eosio.hpp>
+#include <core_net/core_net.hpp>
 
-using namespace eosio;
+using namespace core_net;
 
 void sync_call_addr_book_callee::upsert(name user, std::string first_name, std::string street) {
    // Intentionally leave out require_auth(user) to test upsert cannot be called as a read_only
