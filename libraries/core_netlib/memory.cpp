@@ -1,4 +1,5 @@
 #include <cstring>
+#include <cstdint>
 
 extern "C" {
    void* memset( void* ptr, int c, size_t n ) {

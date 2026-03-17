@@ -50,6 +50,8 @@ add_library(c
             ${HEADERS})
 
 target_include_directories(c
+                           PRIVATE
+                           ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/src/include
                            PUBLIC
                            ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/include
                            ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/src/internal
@@ -81,6 +83,8 @@ if (ENABLE_NATIVE_COMPILER)
                ${HEADERS})
 
    target_include_directories(native_c
+                              PRIVATE
+                              ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/src/include
                               PUBLIC
                               ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/include
                               ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/src/internal
