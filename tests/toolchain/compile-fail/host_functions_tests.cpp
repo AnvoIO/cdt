@@ -11,19 +11,19 @@ send_deferred : yes
 set_finalizers : yes
 */
 
-#include <eosio/eosio.hpp>
-#include <eosio/contract.hpp>
-#include <eosio/action.hpp>
-#include <eosio/crypto.hpp>
-#include <eosio/fixed_bytes.hpp>
-#include <eosio/privileged.hpp>
-#include <eosio/producer_schedule.hpp>
+#include <core_net/eosio.hpp>
+#include <core_net/contract.hpp>
+#include <core_net/action.hpp>
+#include <core_net/crypto.hpp>
+#include <core_net/fixed_bytes.hpp>
+#include <core_net/privileged.hpp>
+#include <core_net/producer_schedule.hpp>
 
-#include <eosio/asset.hpp>
-#include <eosio/binary_extension.hpp>
-#include <eosio/singleton.hpp>
-#include <eosio/system.hpp>
-#include <eosio/time.hpp>
+#include <core_net/asset.hpp>
+#include <core_net/binary_extension.hpp>
+#include <core_net/singleton.hpp>
+#include <core_net/system.hpp>
+#include <core_net/time.hpp>
 
 
 extern "C" __attribute__((eosio_wasm_import)) void set_resource_limit(int64_t, int64_t, int64_t);
@@ -59,9 +59,9 @@ extern "C" __attribute__((eosio_wasm_import)) void set_parameters_packed( const 
 extern "C" __attribute__((eosio_wasm_import)) void send_inline(char *serialized_action, size_t size);
 extern "C" __attribute__((eosio_wasm_import)) void send_context_free_inline(char *serialized_action, size_t size);
 
-#define ACTION_TYPE  [[eosio::action, eosio::read_only]]
+#define ACTION_TYPE  [[core_net::action, core_net::read_only]]
 
-class [[eosio::contract]] host_functions_tests : public eosio::contract {
+class [[core_net::contract]] host_functions_tests : public core_net::contract {
 public:
    using contract::contract;
     
@@ -71,10 +71,10 @@ public:
       int64_t net_weight;
       int64_t cpu_weight;
       get_resource_limits( "eosio"_n, ram_bytes, net_weight,  cpu_weight ) ;
-      eosio::cout << "Get resource: ram_bytes=" << ram_bytes << " net_weight=" << net_weight << " cpu_weight=" << cpu_weight << " \n";
+      core_net::cout << "Get resource: ram_bytes=" << ram_bytes << " net_weight=" << net_weight << " cpu_weight=" << cpu_weight << " \n";
       set_resource_limits( "eosio"_n, ram_bytes  , net_weight  ,  cpu_weight );
       get_resource_limits( "eosio"_n, ram_bytes, net_weight,  cpu_weight ) ;
-      eosio::cout << "Get resource: ram_bytes=" << ram_bytes << " net_weight=" << net_weight << " cpu_weight=" << cpu_weight << " \n";
+      core_net::cout << "Get resource: ram_bytes=" << ram_bytes << " net_weight=" << net_weight << " cpu_weight=" << cpu_weight << " \n";
       return true;
    }
    ACTION_TYPE
@@ -83,24 +83,24 @@ public:
       int64_t net_weight;
       int64_t cpu_weight;
       get_resource_limits( "eosio"_n, ram_bytes, net_weight,  cpu_weight ) ;
-      eosio::cout << "Get resource: ram_bytes=" << ram_bytes << " net_weight=" << net_weight << " cpu_weight=" << cpu_weight << " \n";
+      core_net::cout << "Get resource: ram_bytes=" << ram_bytes << " net_weight=" << net_weight << " cpu_weight=" << cpu_weight << " \n";
       set_resource_limit( "eosio"_n.value, "ram"_n.value  , ram_bytes );
       get_resource_limits( "eosio"_n, ram_bytes, net_weight,  cpu_weight ) ;
-      eosio::cout << "Get resource: ram_bytes=" << ram_bytes << " net_weight=" << net_weight << " cpu_weight=" << cpu_weight << " \n";
+      core_net::cout << "Get resource: ram_bytes=" << ram_bytes << " net_weight=" << net_weight << " cpu_weight=" << cpu_weight << " \n";
       return true;
    }
    ACTION_TYPE
    bool bcpara () {
-      char buf[sizeof(eosio::blockchain_parameters)];
+      char buf[sizeof(core_net::blockchain_parameters)];
       size_t size = get_blockchain_parameters_packed( buf, sizeof(buf) );
-      eosio::cout << "Block chain parameter size : " << size << "\n";
+      core_net::cout << "Block chain parameter size : " << size << "\n";
       set_blockchain_parameters_packed(buf, size); 
       return true;
    }
    ACTION_TYPE
    bool setpriv() {
       bool ispr = is_privileged("eosio"_n);
-      eosio::cout << "eosio is privileged : " << ispr << "\n";
+      core_net::cout << "eosio is privileged : " << ispr << "\n";
       set_privileged("eosio"_n, ispr);      
       return true;
    }

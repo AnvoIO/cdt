@@ -3,20 +3,20 @@
  *  @copyright defined in eosio.cdt/LICENSE.txt
  */
 
-#include <eosio/tester.hpp>
-#include <eosio/time.hpp>
+#include <core_net/tester.hpp>
+#include <core_net/time.hpp>
 
 using std::numeric_limits;
 
-using eosio::days;
-using eosio::hours;
-using eosio::microseconds;
-using eosio::milliseconds;
-using eosio::minutes;
-using eosio::seconds;
-using eosio::time_point;
-using eosio::time_point_sec;
-using eosio::block_timestamp;
+using core_net::days;
+using core_net::hours;
+using core_net::microseconds;
+using core_net::milliseconds;
+using core_net::minutes;
+using core_net::seconds;
+using core_net::time_point;
+using core_net::time_point_sec;
+using core_net::block_timestamp;
 
 static constexpr int64_t i64min = numeric_limits<int64_t>::min(); // -9223372036854775808
 static constexpr int64_t i64max = numeric_limits<int64_t>::max(); //  9223372036854775807

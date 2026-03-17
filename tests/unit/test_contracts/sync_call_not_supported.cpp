@@ -1,10 +1,10 @@
 #include "sync_call_not_supported.hpp"
 
-[[eosio::action]]
+[[core_net::action]]
 void sync_call_not_supported::voidfunc() {
 }
 
-[[eosio::action]]
+[[core_net::action]]
 int sync_call_not_supported::intfunc() {
    return 1;
 }

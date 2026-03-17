@@ -1,10 +1,10 @@
-#include <eosio/eosio.hpp>
-#include <eosio/transaction.hpp>
-#include <eosio/name.hpp>
+#include <core_net/eosio.hpp>
+#include <core_net/transaction.hpp>
+#include <core_net/name.hpp>
 
 using namespace eosio;
 
-class [[eosio::contract]] array_tests : public contract {
+class [[core_net::contract]] array_tests : public contract {
    public:
       using contract::contract;
 
@@ -32,7 +32,7 @@ class [[eosio::contract]] array_tests : public contract {
    };
 
    // test inside using std::array
-   [[eosio::action]]
+   [[core_net::action]]
    void testin(std::string message) {
       tests_table _tests(get_self(), get_self().value);
 
@@ -46,37 +46,37 @@ class [[eosio::contract]] array_tests : public contract {
       }
 
       std::array<uint8_t, 32> str2 = str;
-      eosio::cout << "size of std::array str is : " << str.size() << "\n";
+      core_net::cout << "size of std::array str is : " << str.size() << "\n";
       for(int i = 0; i < 32; ++i){
-         eosio::cout << str[i] << " ";
+         core_net::cout << str[i] << " ";
       }
-      eosio::cout << "\n";
+      core_net::cout << "\n";
       for(int i = 0; i < 32; ++i){
-         eosio::cout << str2[i] << " ";
+         core_net::cout << str2[i] << " ";
       }
-      eosio::cout << "\n";
+      core_net::cout << "\n";
       std::array<info, 2> info_arr;
       info_arr[0].age = 20;
       info_arr[0].name = "abc";
       info_arr[1].age = 21;
       info_arr[1].name = "cde";
       for(int i = 0; i < 2; ++i){
-         eosio::cout << info_arr[i].age << " " << info_arr[i].name << "\n";
+         core_net::cout << info_arr[i].age << " " << info_arr[i].name << "\n";
       }
    }
 
    // test parameter using std::array
-   [[eosio::action]]
+   [[core_net::action]]
    void testpa(std::array<int,4> input){
       std::array<int,4> arr = input;
       for(int i = 0; i < 4; ++i){
-         eosio::cout << arr[i] << " ";
+         core_net::cout << arr[i] << " ";
       }
-      eosio::cout << "\n";
+      core_net::cout << "\n";
    }
 
    // test parameter and return value using std::array
-   [[eosio::action]]
+   [[core_net::action]]
    // cleos -v push action eosio testre '[[1,2,3,4]]' -p eosio@active
    std::array<int,4> testre(std::array<int,4> input){
       std::array<int,4> arr = input;
@@ -85,7 +85,7 @@ class [[eosio::contract]] array_tests : public contract {
    }
 
    // test return value using std::array
-   [[eosio::action]]
+   [[core_net::action]]
    // cleos -v push action eosio testre2 '[[1,2,3,4]]' -p eosio@active
    std::array<int,4> testre2(std::vector<int> input){
       std::array<int,4> arr;
@@ -94,7 +94,7 @@ class [[eosio::contract]] array_tests : public contract {
    }
 
    // test return using std::vector
-   [[eosio::action]]
+   [[core_net::action]]
    // cleos -v push action eosio testrev '[[1,2,3,4]]' -p eosio@active
    std::vector<int> testrev(std::vector<int> input){
       std::vector<int> vec = input;
@@ -103,7 +103,7 @@ class [[eosio::contract]] array_tests : public contract {
    }
 
    // test nested array
-   [[eosio::action]]
+   [[core_net::action]]
    void testne() {
       std::array<tests,2> nest;
       std::array<uint8_t, 32> str = {'a','a','a','a','a','a','a','a',
@@ -116,24 +116,24 @@ class [[eosio::contract]] array_tests : public contract {
       nest[1].id = 2;
       nest[1].str = str;
       for(int i = 0; i < nest.size(); ++i){
-         eosio::cout << nest[i].id << "   " ;
+         core_net::cout << nest[i].id << "   " ;
          for(int j = 0; j < nest[i].str.size(); ++j) {
-            eosio::cout << nest[i].str[j] + i << " ";
+            core_net::cout << nest[i].str[j] + i << " ";
          }
-         eosio::cout << "\n";
+         core_net::cout << "\n";
       }
       std::array<std::array<std::string, 5>, 3> nest2;
       for(int i = 0; i < nest2.size(); ++i){
          for(int j = 0; j < nest2[i].size(); ++j) {
             nest2[i][j] = "test nested ";
-            eosio::cout << nest2[i][j] << " ";
+            core_net::cout << nest2[i][j] << " ";
          }
-         eosio::cout << "\n";
+         core_net::cout << "\n";
       }
    }
 
    // test complex data
-   [[eosio::action]]
+   [[core_net::action]]
    void testcom(name user) {
       require_auth(user);
       tests_table _tests(get_self(), get_self().value);
@@ -149,11 +149,11 @@ class [[eosio::contract]] array_tests : public contract {
       auto it = _tests.begin();
       auto ite = _tests.end();
       while(it != ite){
-         eosio::cout << "id = " << it->id << "\n";
+         core_net::cout << "id = " << it->id << "\n";
          for(int i = 0; i < it->str.size(); ++i) {
-            eosio::cout << it->str[i] << " ";
+            core_net::cout << it->str[i] << " ";
          }
-         eosio::cout << "\n";
+         core_net::cout << "\n";
          ++it;
       }
    }

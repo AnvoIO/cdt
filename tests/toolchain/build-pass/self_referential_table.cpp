@@ -4,7 +4,7 @@
  * Verifies that a table can reference its own type.
  */
 
-#include <eosio/eosio.hpp>
+#include <core_net/eosio.hpp>
 using namespace eosio;
 
 CONTRACT self_referential_table : public contract {
@@ -30,7 +30,7 @@ CONTRACT self_referential_table : public contract {
 
       };
 
-      typedef eosio::multi_index< "testtabs"_n, testtab > testtabs;
+      typedef core_net::multi_index< "testtabs"_n, testtab > testtabs;
 
 };
 ACTION self_referential_table::hi( name nm ) {

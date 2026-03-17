@@ -5,13 +5,13 @@
 
 #include <string>
 
-#include <eosio/eosio.hpp>
-#include <eosio/tester.hpp>
+#include <core_net/eosio.hpp>
+#include <core_net/tester.hpp>
 
 using std::move;
 using std::string;
 
-using eosio::check;
+using core_net::check;
 
 // Definitions in `eosio.cdt/libraries/eosiolib/system.hpp`
 EOSIO_TEST_BEGIN(system_test)

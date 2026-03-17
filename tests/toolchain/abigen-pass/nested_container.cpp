@@ -1,4 +1,4 @@
-#include <eosio/eosio.hpp>
+#include <core_net/eosio.hpp>
 #include <tuple>
 #include <vector>
 
@@ -8,13 +8,13 @@ using std::string;
 using std::tuple;
 using std::vector;
 
-class [[eosio::contract]] nested_container : public contract {
+class [[core_net::contract]] nested_container : public contract {
 public:
    using contract::contract;
 
-    [[eosio::action]] 
+    [[core_net::action]] 
     void map2map(map<string, string> m, map<string, map<string, string>> m2m) {}
 
-    [[eosio::action]]
+    [[core_net::action]]
     void settuple2(name user, const tuple  <int, double, string, vector<int> >& tp2) {}
 };

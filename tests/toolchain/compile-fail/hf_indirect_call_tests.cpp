@@ -1,16 +1,16 @@
-#include <eosio/eosio.hpp>
-#include <eosio/contract.hpp>
-#include <eosio/action.hpp>
-#include <eosio/crypto.hpp>
-#include <eosio/fixed_bytes.hpp>
-#include <eosio/privileged.hpp>
-#include <eosio/producer_schedule.hpp>
+#include <core_net/eosio.hpp>
+#include <core_net/contract.hpp>
+#include <core_net/action.hpp>
+#include <core_net/crypto.hpp>
+#include <core_net/fixed_bytes.hpp>
+#include <core_net/privileged.hpp>
+#include <core_net/producer_schedule.hpp>
 
-#include <eosio/asset.hpp>
-#include <eosio/binary_extension.hpp>
-#include <eosio/singleton.hpp>
-#include <eosio/system.hpp>
-#include <eosio/time.hpp>
+#include <core_net/asset.hpp>
+#include <core_net/binary_extension.hpp>
+#include <core_net/singleton.hpp>
+#include <core_net/system.hpp>
+#include <core_net/time.hpp>
 /* 
  tests which create aliases and indirect calls for host functions.
  at least one host function called within a C++ lambda.  It can be a trivial lambda which simply calls the host function and nothing else.
@@ -24,7 +24,7 @@
 extern "C" __attribute__((eosio_wasm_import)) void set_resource_limit(int64_t, int64_t, int64_t);
 extern "C" __attribute__((eosio_wasm_import)) void foo_bar(int64_t, int64_t, int64_t);
 
-#define ACTION_TYPE  [[eosio::action, eosio::read_only]]
+#define ACTION_TYPE  [[core_net::action, core_net::read_only]]
 
 using func = void (*)(int64_t, int64_t, int64_t);
 
@@ -33,7 +33,7 @@ func srl_g2 = set_resource_limit;
 func srl_g3;
 func fb_g = foo_bar;
 
-class [[eosio::contract]] hf_indirect_call_tests : public eosio::contract {
+class [[core_net::contract]] hf_indirect_call_tests : public core_net::contract {
 public:
    using contract::contract;
    func srl_m1 = set_resource_limit;

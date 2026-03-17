@@ -7,8 +7,8 @@
 #include <cstdio>
 #include <string>
 
-#include <eosio/tester.hpp>
-#include <eosio/crt.hpp>
+#include <core_net/tester.hpp>
+#include <core_net/crt.hpp>
 
 using eosio::cdt::output_stream;
 

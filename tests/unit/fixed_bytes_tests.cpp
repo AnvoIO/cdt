@@ -5,12 +5,12 @@
 
 #include <array>
 
-#include <eosio/tester.hpp>
-#include <eosio/fixed_bytes.hpp>
+#include <core_net/tester.hpp>
+#include <core_net/fixed_bytes.hpp>
 
 using std::array;
 
-using eosio::fixed_bytes;
+using core_net::fixed_bytes;
 
 // Definitions in `eosio.cdt/libraries/eosio/fixed_bytes.hpp`
 EOSIO_TEST_BEGIN(fixed_bytes_test)

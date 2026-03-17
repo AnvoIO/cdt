@@ -4,7 +4,7 @@
  * Verifies that a struct can inherit from a typedef'd class/struct.
  */
 
-#include <eosio/eosio.hpp>
+#include <core_net/eosio.hpp>
 
 using namespace eosio;
 
@@ -17,11 +17,11 @@ using bar = foo;
 struct baz : bar {
 };
 
-class [[eosio::contract]] struct_base_typedefd : public contract {
+class [[core_net::contract]] struct_base_typedefd : public contract {
 public:
    using contract::contract;
 
-   [[eosio::action]]
+   [[core_net::action]]
    void hi(baz b) {
       print(b.value);
    }

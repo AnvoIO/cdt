@@ -5,16 +5,16 @@
 
 #include <string>
 
-#include <eosio/tester.hpp>
-#include <eosio/asset.hpp>
+#include <core_net/tester.hpp>
+#include <core_net/asset.hpp>
 
 using std::string;
 
-using eosio::name;
-using eosio::symbol;
-using eosio::extended_symbol;
-using eosio::asset;
-using eosio::extended_asset;
+using core_net::name;
+using core_net::symbol;
+using core_net::extended_symbol;
+using core_net::asset;
+using core_net::extended_asset;
 
 static constexpr int64_t asset_mask{(1LL << 62) - 1};
 static constexpr int64_t asset_min{-asset_mask}; // -4611686018427387903

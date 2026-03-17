@@ -9,9 +9,9 @@
 #include <tuple>
 #include <vector>
 
-#include <eosio/tester.hpp>
-#include <eosio/datastream.hpp>
-#include <eosio/serialize.hpp>
+#include <core_net/tester.hpp>
+#include <core_net/datastream.hpp>
+#include <core_net/serialize.hpp>
 
 using std::begin;
 using std::end;
@@ -21,7 +21,7 @@ using std::string;
 using std::tie;
 using std::vector;
 
-using eosio::datastream;
+using core_net::datastream;
 
 struct B {
    const char c{};

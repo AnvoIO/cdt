@@ -1,6 +1,6 @@
 #pragma once
-#include <eosio/gen.hpp>
-#include <eosio/ppcallbacks.hpp>
+#include <core_net/gen.hpp>
+#include <core_net/ppcallbacks.hpp>
 
 #include "clang/Driver/Options.h"
 #include "clang/AST/AST.h"
@@ -16,9 +16,9 @@
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "clang/Rewrite/Frontend/Rewriters.h"
 
-#include <eosio/utils.hpp>
-#include <eosio/whereami/whereami.hpp>
-#include <eosio/abi.hpp>
+#include <core_net/utils.hpp>
+#include <core_net/whereami/whereami.hpp>
+#include <core_net/abi.hpp>
 
 #include <exception>
 #include <iostream>
@@ -531,7 +531,7 @@ namespace core_net::cdt {
 
       std::string generate_json_comment() {
          std::stringstream ss;
-         ss << "This file was generated with eosio-abigen.";
+         ss << "This file was generated with core-net-abigen.";
          ss << " DO NOT EDIT ";
          return ss.str();
       }
@@ -915,7 +915,8 @@ namespace core_net::cdt {
             for (const auto& base : cxx_decl->bases()) {
                if (const clang::Type *base_type = base.getType().getTypePtrOrNull()) {
                   if (const auto* cur_cxx_decl = base_type->getAsCXXRecordDecl()) {
-                     if (cur_cxx_decl->getQualifiedNameAsString() == "eosio::contract") {
+                     auto qname = cur_cxx_decl->getQualifiedNameAsString();
+                     if (qname == "core_net::contract" || qname == "eosio::contract") {
                         is_eosio_contract = true;
                         break;
                      }

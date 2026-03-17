@@ -1,5 +1,5 @@
 #include "sync_call_addr_book_callee.hpp"
-#include <eosio/eosio.hpp>
+#include <core_net/eosio.hpp>
 
 using namespace eosio;
 

@@ -10,12 +10,12 @@
 #include <string>
 #include <vector>
 
-#include <eosio/tester.hpp>
-#include <eosio/binary_extension.hpp>
-#include <eosio/crypto.hpp>
-#include <eosio/datastream.hpp>
-#include <eosio/ignore.hpp>
-#include <eosio/symbol.hpp>
+#include <core_net/tester.hpp>
+#include <core_net/binary_extension.hpp>
+#include <core_net/crypto.hpp>
+#include <core_net/datastream.hpp>
+#include <core_net/ignore.hpp>
+#include <core_net/symbol.hpp>
 
 using std::array;
 using std::begin;
@@ -32,20 +32,20 @@ using std::tuple;
 using std::variant;
 using std::vector;
 
-using eosio::binary_extension;
-using eosio::datastream;
-using eosio::fixed_bytes;
-using eosio::ignore;
-using eosio::ignore_wrapper;
-using eosio::pack;
-using eosio::pack_size;
-using eosio::ecc_public_key;
-using eosio::public_key;
-using eosio::ecc_signature;
-using eosio::signature;
-using eosio::symbol;
-using eosio::symbol_code;
-using eosio::unpack;
+using core_net::binary_extension;
+using core_net::datastream;
+using core_net::fixed_bytes;
+using core_net::ignore;
+using core_net::ignore_wrapper;
+using core_net::pack;
+using core_net::pack_size;
+using core_net::ecc_public_key;
+using core_net::public_key;
+using core_net::ecc_signature;
+using core_net::signature;
+using core_net::symbol;
+using core_net::symbol_code;
+using core_net::unpack;
 
 // This data structure (which cannot be defined within a test macro block) needs both a default and a
 // user-defined constructor for a specific `binary extension` test
@@ -476,7 +476,7 @@ EOSIO_TEST_BEGIN(datastream_stream_test)
    CHECK_EQUAL( cchar_vec, char_vec )
 
    // -----------------------
-   // eosio::binary_extension
+   // core_net::binary_extension
    ds.seekp(0);
    fill(begin(datastream_buffer), end(datastream_buffer), 0);
    static const binary_extension<char> cbe_char{'c'};
@@ -512,7 +512,7 @@ EOSIO_TEST_BEGIN(datastream_stream_test)
    CHECK_EQUAL( 42, be_default_test.value_or().val )
 
    // ------------------
-   // eosio::fixed_bytes
+   // core_net::fixed_bytes
    ds.seekp(0);
    fill(begin(datastream_buffer), end(datastream_buffer), 0);
    static const fixed_bytes<32> cfb{fixed_bytes<32>::make_from_word_sequence<uint64_t>(1ULL,2ULL,3ULL,4ULL)};
@@ -523,7 +523,7 @@ EOSIO_TEST_BEGIN(datastream_stream_test)
    CHECK_EQUAL( cfb, fb )
 
    // -------------
-   // eosio::ignore
+   // core_net::ignore
    ds.seekp(0);
    fill(begin(datastream_buffer), end(datastream_buffer), 0);
    static const ignore<char> cig{};
@@ -534,7 +534,7 @@ EOSIO_TEST_BEGIN(datastream_stream_test)
    CHECK_EQUAL( ds.tellp(), 0 )
 
    // ---------------------
-   // eosio::ignore_wrapper
+   // core_net::ignore_wrapper
    ds.seekp(0);
    fill(begin(datastream_buffer), end(datastream_buffer), 0);
    static const ignore_wrapper<char> cigw{'c'};
@@ -545,7 +545,7 @@ EOSIO_TEST_BEGIN(datastream_stream_test)
    CHECK_EQUAL( cigw.value, igw )
 
    // -----------------
-   // eosio::public_key
+   // core_net::public_key
    ds.seekp(0);
    fill(begin(datastream_buffer), end(datastream_buffer), 0);
    static const public_key cpubkey(std::in_place_index<0>,ecc_public_key{'a','b','c','d','e','f','g','h','i'});
@@ -556,7 +556,7 @@ EOSIO_TEST_BEGIN(datastream_stream_test)
    CHECK_EQUAL( cpubkey, pubkey )
 
    // ----------------
-   // eosio::signature
+   // core_net::signature
    ds.seekp(0);
    fill(begin(datastream_buffer), end(datastream_buffer), 0);
    static const signature csig(std::in_place_index<0>,ecc_signature{'a','b','c','d','e','f','g','h','i'});
@@ -567,7 +567,7 @@ EOSIO_TEST_BEGIN(datastream_stream_test)
    CHECK_EQUAL( csig, sig )
 
    // -------------
-   // eosio::symbol
+   // core_net::symbol
    ds.seekp(0);
    fill(begin(datastream_buffer), end(datastream_buffer), 0);
    static const symbol csym_no_prec{"SYMBOLL", 0};
@@ -586,7 +586,7 @@ EOSIO_TEST_BEGIN(datastream_stream_test)
    CHECK_EQUAL( csym_prec, sym )
 
    // ------------------
-   // eosio::symbol_code
+   // core_net::symbol_code
    ds.seekp(0);
    fill(begin(datastream_buffer), end(datastream_buffer), 0);
    static const symbol_code csc{"SYMBOLL"};

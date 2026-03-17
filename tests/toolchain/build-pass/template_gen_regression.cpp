@@ -1,5 +1,5 @@
-#include <eosio/eosio.hpp>
-#include <eosio/crypto.hpp>
+#include <core_net/eosio.hpp>
+#include <core_net/crypto.hpp>
 
 using namespace eosio;
 
@@ -46,7 +46,7 @@ struct foo {
 };
 
 
-CONTRACT template_gen_regression : public eosio::contract {
+CONTRACT template_gen_regression : public core_net::contract {
    public:
       using contract::contract;
 

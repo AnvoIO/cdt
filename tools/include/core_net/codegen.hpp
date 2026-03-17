@@ -16,12 +16,12 @@
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "clang/Rewrite/Frontend/Rewriters.h"
 
-#include <eosio/gen.hpp>
+#include <core_net/gen.hpp>
 
-#include <eosio/utils.hpp>
-#include <eosio/whereami/whereami.hpp>
-#include <eosio/abi.hpp>
-#include <eosio/ppcallbacks.hpp>
+#include <core_net/utils.hpp>
+#include <core_net/whereami/whereami.hpp>
+#include <core_net/abi.hpp>
+#include <core_net/ppcallbacks.hpp>
 
 #include <exception>
 #include <iostream>
@@ -123,7 +123,7 @@ namespace core_net { namespace cdt {
 
          bool is_datastream(const QualType& qt) {
             auto str_name = qt.getAsString();
-            auto ds_re    = std::regex("(((class eosio::)?datastream<[a-zA-Z]+[a-zA-Z0-9]*.*>)|(DataStream)) &");
+            auto ds_re    = std::regex("(((class (core_net|eosio)::)?datastream<[a-zA-Z]+[a-zA-Z0-9]*.*>)|(DataStream)) &");
             if (std::regex_match(str_name, ds_re))
                return true;
             return false;
@@ -153,7 +153,8 @@ namespace core_net { namespace cdt {
             for (const auto& base : cxx_decl->bases()) {
                if (const clang::Type *base_type = base.getType().getTypePtrOrNull()) {
                   if (const auto* cur_cxx_decl = base_type->getAsCXXRecordDecl()) {
-                     if (cur_cxx_decl->getQualifiedNameAsString() == "eosio::contract") {
+                     auto qname = cur_cxx_decl->getQualifiedNameAsString();
+                     if (qname == "core_net::contract" || qname == "eosio::contract") {
                         return true;;
                      }
                   }
@@ -169,17 +170,17 @@ namespace core_net { namespace cdt {
             std::string nm = decl->getNameAsString()+"_"+decl->getParent()->getNameAsString();
 
             if (cg.is_eosio_contract(decl, cg.contract_name)) {
-               ss << "\n\n#include <eosio/datastream.hpp>\n";
-               ss << "#include <eosio/name.hpp>\n";
+               ss << "\n\n#include <core_net/datastream.hpp>\n";
+               ss << "#include <core_net/name.hpp>\n";
                ss << "extern \"C\" {\n";
-               ss << "__attribute__((eosio_wasm_import))\n";
+               ss << "__attribute__((core_net_wasm_import))\n";
                ss << "uint32_t action_data_size();\n";
-               ss << "__attribute__((eosio_wasm_import))\n";
+               ss << "__attribute__((core_net_wasm_import))\n";
                ss << "uint32_t read_action_data(void*, uint32_t);\n";
-               const auto& return_ty = decl->getReturnType().getAsString();	
-               if (return_ty != "void") {	
-                  ss << "__attribute__((eosio_wasm_import))\n";	
-                  ss << "void set_action_return_value(void*, size_t);\n";	
+               const auto& return_ty = decl->getReturnType().getAsString();
+               if (return_ty != "void") {
+                  ss << "__attribute__((core_net_wasm_import))\n";
+                  ss << "void set_action_return_value(void*, size_t);\n";
                }
                ss << "__attribute__((weak, " << attr << "(\"";
                ss << get_str(decl);
@@ -192,7 +193,7 @@ namespace core_net { namespace cdt {
                ss << "buff = as >= " << max_stack_size << " ? malloc(as) : alloca(as);\n";
                ss << "::read_action_data(buff, as);\n";
                ss << "}\n";
-               ss << "eosio::datastream<const char*> ds{(char*)buff, as};\n";
+               ss << "core_net::datastream<const char*> ds{(char*)buff, as};\n";
                int i=0;
                for (auto param : decl->parameters()) {
                   clang::LangOptions lang_opts;
@@ -210,10 +211,10 @@ namespace core_net { namespace cdt {
 
                // Create contract object
                ss << decl->getParent()->getQualifiedNameAsString()
-                  << " obj {eosio::name{r},eosio::name{c},ds};\n";
+                  << " obj {core_net::name{r},core_net::name{c},ds};\n";
 
                if (base_is_eosio_contract_class(decl)) {
-                  ss << "obj.set_exec_type(eosio::contract::exec_type_t::action);\n";
+                  ss << "obj.set_exec_type(core_net::contract::exec_type_t::action);\n";
                }
 
                const auto& call_action = [&]() {
@@ -230,7 +231,7 @@ namespace core_net { namespace cdt {
                }
                call_action();
                if (return_ty != "void") {
-                  ss << "const auto& packed_result = eosio::pack(result);\n";
+                  ss << "const auto& packed_result = core_net::pack(result);\n";
                   ss << "set_action_return_value((void*)packed_result.data(), packed_result.size());\n";
                }
                ss << "}}\n";
@@ -240,29 +241,29 @@ namespace core_net { namespace cdt {
 
          void create_action_dispatch(CXXMethodDecl* decl) {
             auto func = [](CXXMethodDecl* d) { return generation_utils::get_action_name(d); };
-            create_dispatch("eosio_wasm_action", "__eosio_action_", func, decl);
+            create_dispatch("core_net_wasm_action", "__core_net_action_", func, decl);
          }
 
          void create_notify_dispatch(CXXMethodDecl* decl) {
             auto func = [](CXXMethodDecl* d) { return generation_utils::get_notify_pair(d); };
-            create_dispatch("eosio_wasm_notify", "__eosio_notify_", func, decl);
+            create_dispatch("core_net_wasm_notify", "__core_net_notify_", func, decl);
          }
 
          // Generate sync call dispatcher
          void create_call_dispatch(CXXMethodDecl* decl) {
-            const std::string attr = "eosio_wasm_call";
-            const std::string func_name = "__eosio_call_";
+            const std::string attr = "core_net_wasm_call";
+            const std::string func_name = "__core_net_call_";
             const std::string call_name = generation_utils::get_call_name(decl);
             constexpr static uint32_t max_stack_size = 512;
             codegen& cg = codegen::get();
             std::string nm = decl->getNameAsString()+"_"+decl->getParent()->getNameAsString();
             if (cg.is_eosio_contract(decl, cg.contract_name)) {
-               ss << "\n\n#include <eosio/datastream.hpp>\n";
-               ss << "#include <eosio/call.hpp>\n";
+               ss << "\n\n#include <core_net/datastream.hpp>\n";
+               ss << "#include <core_net/call.hpp>\n";
                ss << "extern \"C\" {\n";
                const auto& return_ty = decl->getReturnType().getAsString();
                if (return_ty != "void") {
-                  ss << "__attribute__((eosio_wasm_import))\n";
+                  ss << "__attribute__((core_net_wasm_import))\n";
                   ss << "void set_call_return_value(void*, size_t);\n";
                }
                ss << "__attribute__((weak, " << attr << "(\"";
@@ -270,8 +271,8 @@ namespace core_net { namespace cdt {
                ss << ":";
                ss << func_name << nm;
                ss << "\"))) void " << func_name << nm << "(unsigned long long sender, unsigned long long receiver, size_t data_size, void* data) {\n";
-               ss << "eosio::datastream<const char*> ds{(char*)data, data_size};\n";
-               ss << "eosio::call_data_header header; ds >> header;\n";  // skip header
+               ss << "core_net::datastream<const char*> ds{(char*)data, data_size};\n";
+               ss << "core_net::call_data_header header; ds >> header;\n";
                int i=0;
                for (auto param : decl->parameters()) {
                   clang::LangOptions lang_opts;
@@ -289,10 +290,10 @@ namespace core_net { namespace cdt {
 
                // Create contract object
                ss << decl->getParent()->getQualifiedNameAsString()
-                  << " obj {eosio::name{receiver},eosio::name{receiver},ds};\n";
+                  << " obj {core_net::name{receiver},core_net::name{receiver},ds};\n";
 
                if (base_is_eosio_contract_class(decl)) {
-                  ss << "obj.set_exec_type(eosio::contract::exec_type_t::call);\n";
+                  ss << "obj.set_exec_type(core_net::contract::exec_type_t::call);\n";
                }
 
                const auto& call_function = [&]() {
@@ -309,7 +310,7 @@ namespace core_net { namespace cdt {
                }
                call_function();
                if (return_ty != "void") {
-                  ss << "const auto& packed_result = eosio::pack(result);\n";
+                  ss << "const auto& packed_result = core_net::pack(result);\n";
                   ss << "::set_call_return_value((void*)packed_result.data(), packed_result.size());\n";
                }
                ss << "}}\n";
@@ -320,13 +321,13 @@ namespace core_net { namespace cdt {
          // In version 0, call data is packed as header + arguments, where
          // header is `struct header { uint32_t version; uint64_t func_name }`
          static void create_get_sync_call_data_header(std::stringstream& ss) {
-            ss << "\n\n#include <eosio/datastream.hpp>\n";
-            ss << "#include <eosio/call.hpp>\n";
+            ss << "\n\n#include <core_net/datastream.hpp>\n";
+            ss << "#include <core_net/call.hpp>\n";
             ss << "extern \"C\" {\n";
             ss << "__attribute__((weak)) void* __eos_get_sync_call_data_header_(void* data) {\n";
-            ss << "size_t size = sizeof(eosio::call_data_header);\n";
-            ss << "eosio::datastream<const char*> ds{(char*)data, size};\n";
-            ss << "eosio::call_data_header header; ds >> header;\n";
+            ss << "size_t size = sizeof(core_net::call_data_header);\n";
+            ss << "core_net::datastream<const char*> ds{(char*)data, size};\n";
+            ss << "core_net::call_data_header header; ds >> header;\n";
             ss << "void* ptr = malloc(size);\n";
             ss << "memcpy(ptr, &header, size);\n";
             ss << "return ptr;\n";
@@ -336,10 +337,10 @@ namespace core_net { namespace cdt {
          // Generate get_sync_call_data which returns call data which consists of
          // header and arguments
          static void create_get_sync_call_data(std::stringstream& ss) {
-            ss << "\n\n#include <eosio/datastream.hpp>\n";
-            ss << "#include <eosio/name.hpp>\n";
+            ss << "\n\n#include <core_net/datastream.hpp>\n";
+            ss << "#include <core_net/name.hpp>\n";
             ss << "extern \"C\" {\n";
-            ss << "__attribute__((eosio_wasm_import)) uint32_t get_call_data(void*, uint32_t);\n";
+            ss << "__attribute__((core_net_wasm_import)) uint32_t get_call_data(void*, uint32_t);\n";
             ss << "__attribute__((weak)) void* __eos_get_sync_call_data_(unsigned long size) {\n";
             ss << "void* data = malloc(size);\n";   // store data in linear memory
             ss << "::get_call_data(data, size);\n";
@@ -662,12 +663,12 @@ namespace core_net { namespace cdt {
                   std::stringstream& ss = visitor->get_ss();
                   ss << "\n";
                   ss << "extern \"C\" {\n";
-                  ss << "__attribute__((eosio_wasm_import))\n";
+                  ss << "__attribute__((core_net_wasm_import))\n";
                   ss << "void eosio_assert_code(uint32_t, uint64_t);";
-                  ss << "\t__attribute__((weak, eosio_wasm_entry, eosio_wasm_abi(";
+                  ss << "\t__attribute__((weak, core_net_wasm_entry, core_net_wasm_abi(";
                   ss << "\"" << quoted(cg.abi) << "\"";
                   ss << ")))\n";
-                  ss << "\tvoid __insert_eosio_abi(unsigned long long r, unsigned long long c, unsigned long long a){";
+                  ss << "\tvoid __insert_core_net_abi(unsigned long long r, unsigned long long c, unsigned long long a){";
                   ss << "eosio_assert_code(false, 1);";
                   ss << "}\n";
                   ss << "}";

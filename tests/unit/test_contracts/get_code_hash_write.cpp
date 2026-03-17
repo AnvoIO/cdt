@@ -1,17 +1,17 @@
-#include <eosio/eosio.hpp>
-#include <eosio/action.hpp>
-#include <eosio/name.hpp>
+#include <core_net/eosio.hpp>
+#include <core_net/action.hpp>
+#include <core_net/name.hpp>
 
 #include "get_code_hash_table.hpp"
 
-class [[eosio::contract]] get_code_hash_tests : public contract {
+class [[core_net::contract]] get_code_hash_tests : public contract {
 public:
    using contract::contract;
 
    using hash_table = multi_index<name("code.hash"), code_hash>;
 
    // Write this code's hash to database
-   [[eosio::action]]
+   [[core_net::action]]
    void theaction() {
       require_auth(get_self());
       hash_table hashes(get_self(), get_self().value);

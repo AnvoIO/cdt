@@ -464,7 +464,7 @@ void WebAssemblyAsmPrinter::emitEndOfAsmFile(Module &M) {
   }
   if (has_abi) {
      OutStreamer->pushSection();
-     std::string SectionName = ".eosio_abi";
+     std::string SectionName = ".core_net_abi";
      MCSectionWasm *mySection =
          OutContext.getWasmSection(SectionName, SectionKind::getMetadata());
      OutStreamer->switchSection(mySection);
@@ -479,7 +479,7 @@ void WebAssemblyAsmPrinter::emitEndOfAsmFile(Module &M) {
   }
   if (has_eosio_action) {
      OutStreamer->pushSection();
-     std::string SectionName = ".eosio_actions";
+     std::string SectionName = ".core_net_actions";
      MCSectionWasm *mySection =
          OutContext.getWasmSection(SectionName, SectionKind::getMetadata());
      OutStreamer->switchSection(mySection);
@@ -494,7 +494,7 @@ void WebAssemblyAsmPrinter::emitEndOfAsmFile(Module &M) {
   }
   if (has_eosio_notify) {
      OutStreamer->pushSection();
-     std::string SectionName = ".eosio_notify";
+     std::string SectionName = ".core_net_notify";
      MCSectionWasm *mySection =
          OutContext.getWasmSection(SectionName, SectionKind::getMetadata());
      OutStreamer->switchSection(mySection);
@@ -509,7 +509,7 @@ void WebAssemblyAsmPrinter::emitEndOfAsmFile(Module &M) {
   }
   if (has_eosio_call) {
      OutStreamer->pushSection();
-     std::string SectionName = ".eosio_calls";
+     std::string SectionName = ".core_net_calls";
      MCSectionWasm *mySection =
          OutContext.getWasmSection(SectionName, SectionKind::getMetadata());
      OutStreamer->switchSection(mySection);

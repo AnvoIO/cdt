@@ -3,14 +3,14 @@
  *  @copyright defined in eosio.cdt/LICENSE.txt
  */
 
-#include <eosio/tester.hpp>
-#include <eosio/binary_extension.hpp>
-#include <eosio/print.hpp>
+#include <core_net/tester.hpp>
+#include <core_net/binary_extension.hpp>
+#include <core_net/print.hpp>
 
 using std::in_place;
 using std::move;
 
-using eosio::binary_extension;
+using core_net::binary_extension;
 
 // Definitions in `eosio.cdt/libraries/eosio/binary_extension.hpp`
 EOSIO_TEST_BEGIN(binary_extension_test_a)

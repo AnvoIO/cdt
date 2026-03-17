@@ -105,7 +105,7 @@ struct abi {
    std::vector<abi_error_message>         error_messages;
    std::set<abi_action_result>            action_results;
 
-   std::string version_string() const { return std::string("eosio::abi/")+version.str(); }
+   std::string version_string() const { return std::string("core_net::abi/")+version.str(); }
 };
 
 inline void dump( const abi& abi ) {

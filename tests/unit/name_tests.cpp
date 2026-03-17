@@ -6,13 +6,13 @@
 #include <limits>
 #include <string>
 
-#include <eosio/eosio.hpp>
-#include <eosio/tester.hpp>
+#include <core_net/eosio.hpp>
+#include <core_net/tester.hpp>
 
 using std::numeric_limits;
 using std::string;
 
-using eosio::name;
+using core_net::name;
 
 constexpr uint64_t u64max = numeric_limits<uint64_t>::max(); // 18446744073709551615ULL
 
