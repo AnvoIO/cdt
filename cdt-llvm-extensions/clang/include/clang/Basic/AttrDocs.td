@@ -535,56 +535,56 @@ migration for code using ``[[noreturn]]`` after including ``<stdnoreturn.h>``.
   }];
 }
 
-def EosioIgnoreDocs : Documentation {
+def CoreNetIgnoreDocs : Documentation {
   let Category = DocCatFunction;
   let Content = [{
 The ``core_net::ignore`` (or legacy ``eosio::ignore``) attribute marks a template struct as an ignorable type.
   }];
 }
 
-def EosioRicardianDocs : Documentation {
+def CoreNetRicardianDocs : Documentation {
   let Category = DocCatFunction;
   let Content = [{
 The ``core_net::ricardian`` (or legacy ``eosio::ricardian``) attribute specifies filename of ricardian contract.
   }];
 }
 
-def EosioContractDocs : Documentation {
+def CoreNetContractDocs : Documentation {
   let Category = DocCatFunction;
   let Content = [{
 The ``core_net::contract`` (or legacy ``eosio::contract``) attribute marks a class as a smart contract.
   }];
 }
 
-def EosioWasmImportDocs : Documentation {
+def CoreNetWasmImportDocs : Documentation {
   let Category = DocCatFunction;
   let Content = [{
 The ``core_net::wasm_import`` (or legacy ``eosio::wasm_import``) attribute marks a function as a wasm import.
   }];
 }
 
-def EosioActionDocs : Documentation {
+def CoreNetActionDocs : Documentation {
   let Category = DocCatFunction;
   let Content = [{
 The ``core_net::action`` (or legacy ``eosio::action``) attribute marks a method as a contract action.
   }];
 }
 
-def EosioCallDocs : Documentation {
+def CoreNetCallDocs : Documentation {
   let Category = DocCatFunction;
   let Content = [{
 The ``core_net::call`` (or legacy ``eosio::call``) attribute marks a method as a sync call handler.
   }];
 }
 
-def EosioReadOnlyDocs : Documentation {
+def CoreNetReadOnlyDocs : Documentation {
   let Category = DocCatFunction;
   let Content = [{
 The ``core_net::read_only`` (or legacy ``eosio::read_only``) attribute marks a method as a read-only action.
   }];
 }
 
-def EosioTableDocs : Documentation {
+def CoreNetTableDocs : Documentation {
   let Category = DocCatFunction;
   let Content = [{
 The ``core_net::table`` (or legacy ``eosio::table``) attribute marks a record as a contract table.

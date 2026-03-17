@@ -1,4 +1,4 @@
-#include <eosio/call.h>
+#include <core_net/call.h>
 #include <stddef.h>
 
 void test_call( void ) {

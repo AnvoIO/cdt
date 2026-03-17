@@ -2,7 +2,7 @@
 #include <core_net/singleton.hpp>
 using namespace core_net;
 
-class [[eosio::contract]] singleton_example : public contract {
+class [[core_net::contract]] singleton_example : public contract {
    public:
       using contract::contract;
       singleton_example( name receiver, name code, datastream<const char*> ds ) :
@@ -10,12 +10,12 @@ class [[eosio::contract]] singleton_example : public contract {
          singleton_instance(receiver, receiver.value)
          {}
 
-      [[eosio::action]]
+      [[core_net::action]]
       void set( name user, uint64_t value );
-      [[eosio::action]]
+      [[core_net::action]]
       void get( );
 
-      struct [[eosio::table]] testtable {
+      struct [[core_net::table]] testtable {
          name primary_value;
          uint64_t secondary_value;
          uint64_t primary_key() const { return primary_value.value; }

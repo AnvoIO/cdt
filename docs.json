@@ -10,7 +10,7 @@
 		{
 			"name": "doxygen_to_xml",
 			"options": {
-				"INPUT": "libraries/eosiolib",
+				"INPUT": "libraries/core_netlib",
 				"EXCLUDE_PATTERNS": "*.cpp *.c",
 				"ENABLE_PREPROCESSING": "YES",
 				"MACRO_EXPANSION": "YES",

@@ -151,10 +151,10 @@ public:
   SectionSymbol *getSectionSymbol(uint32_t index) const;
   TagSymbol *getTagSymbol(uint32_t index) const;
   TableSymbol *getTableSymbol(uint32_t index) const;
-  std::string getEosioABI() const { return eosioABI; }
-  ArrayRef<StringRef> getEosioActions() const { return eosioActions; }
-  ArrayRef<StringRef> getEosioNotify() const { return eosioNotify; }
-  ArrayRef<StringRef> getEosioCalls() const { return eosioCalls; }
+  std::string getCoreNetABI() const { return coreNetABI; }
+  ArrayRef<StringRef> getCoreNetActions() const { return coreNetActions; }
+  ArrayRef<StringRef> getCoreNetNotify() const { return coreNetNotify; }
+  ArrayRef<StringRef> getCoreNetCalls() const { return coreNetCalls; }
 
 private:
   Symbol *createDefined(const WasmSymbol &sym);
@@ -164,10 +164,10 @@ private:
   void addLegacyIndirectFunctionTableIfNeeded(uint32_t tableSymbolCount);
 
   std::unique_ptr<WasmObjectFile> wasmObj;
-  std::string eosioABI;
-  ArrayRef<StringRef> eosioActions;
-  ArrayRef<StringRef> eosioNotify;
-  ArrayRef<StringRef> eosioCalls;
+  std::string coreNetABI;
+  ArrayRef<StringRef> coreNetActions;
+  ArrayRef<StringRef> coreNetNotify;
+  ArrayRef<StringRef> coreNetCalls;
 };
 
 // .so file.

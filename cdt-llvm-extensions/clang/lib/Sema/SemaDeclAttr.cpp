@@ -356,106 +356,106 @@ bool Sema::checkStringLiteralArgumentAttr(const AttributeCommonInfo &CI,
   return true;
 }
 
-static void handleEosioRicardianAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+static void handleCoreNetRicardianAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
   // Handle the cases where the attribute has a text message.
   StringRef Str;
   if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
       !S.checkStringLiteralArgumentAttr(AL, 0, Str))
     return;
-   D->addAttr(EosioRicardianAttr::Create(S.Context, Str, {AL.getRange()}));
+   D->addAttr(CoreNetRicardianAttr::Create(S.Context, Str, {AL.getRange()}));
 }
 
-static void handleEosioNotifyAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
-  // Handle the cases where the attribute has a text message.
-  StringRef Str;
-  if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
-      !S.checkStringLiteralArgumentAttr(AL, 0, Str))
-    return;
-
-   D->addAttr(EosioNotifyAttr::Create(S.Context, Str, {AL.getRange()}));
-}
-
-static void handleEosioContractAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
-  // Handle the cases where the attribute has a text message.
-  StringRef Str;
-  if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
-      !S.checkStringLiteralArgumentAttr(AL, 0, Str))
-    return;
-  D->addAttr(EosioContractAttr::Create(S.Context, Str, {AL.getRange()}));
-}
-
-static void handleEosioABIAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+static void handleCoreNetNotifyAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
   // Handle the cases where the attribute has a text message.
   StringRef Str;
   if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
       !S.checkStringLiteralArgumentAttr(AL, 0, Str))
     return;
 
-  D->addAttr(EosioWasmABIAttr::Create(S.Context, Str, {AL.getRange()}));
+   D->addAttr(CoreNetNotifyAttr::Create(S.Context, Str, {AL.getRange()}));
 }
 
-static void handleEosioWasmActionAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+static void handleCoreNetContractAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+  // Handle the cases where the attribute has a text message.
+  StringRef Str;
+  if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
+      !S.checkStringLiteralArgumentAttr(AL, 0, Str))
+    return;
+  D->addAttr(CoreNetContractAttr::Create(S.Context, Str, {AL.getRange()}));
+}
+
+static void handleCoreNetABIAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
   // Handle the cases where the attribute has a text message.
   StringRef Str;
   if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
       !S.checkStringLiteralArgumentAttr(AL, 0, Str))
     return;
 
-  D->addAttr(EosioWasmActionAttr::Create(S.Context, Str, {AL.getRange()}));
+  D->addAttr(CoreNetWasmABIAttr::Create(S.Context, Str, {AL.getRange()}));
 }
 
-static void handleEosioWasmNotifyAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+static void handleCoreNetWasmActionAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
   // Handle the cases where the attribute has a text message.
   StringRef Str;
   if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
       !S.checkStringLiteralArgumentAttr(AL, 0, Str))
     return;
 
-  D->addAttr(EosioWasmNotifyAttr::Create(S.Context, Str, {AL.getRange()}));
+  D->addAttr(CoreNetWasmActionAttr::Create(S.Context, Str, {AL.getRange()}));
 }
 
-static void handleEosioWasmCallAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+static void handleCoreNetWasmNotifyAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
   // Handle the cases where the attribute has a text message.
   StringRef Str;
   if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
       !S.checkStringLiteralArgumentAttr(AL, 0, Str))
     return;
 
-  D->addAttr(EosioWasmCallAttr::Create(S.Context, Str, {AL.getRange()}));
+  D->addAttr(CoreNetWasmNotifyAttr::Create(S.Context, Str, {AL.getRange()}));
 }
 
-static void handleEosioActionAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+static void handleCoreNetWasmCallAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
   // Handle the cases where the attribute has a text message.
   StringRef Str;
   if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
       !S.checkStringLiteralArgumentAttr(AL, 0, Str))
     return;
 
-  D->addAttr(EosioActionAttr::Create(S.Context, Str, {AL.getRange()}));
+  D->addAttr(CoreNetWasmCallAttr::Create(S.Context, Str, {AL.getRange()}));
 }
 
-static void handleEosioCallAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+static void handleCoreNetActionAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
   // Handle the cases where the attribute has a text message.
   StringRef Str;
   if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
       !S.checkStringLiteralArgumentAttr(AL, 0, Str))
     return;
 
-  D->addAttr(EosioCallAttr::Create(S.Context, Str, {AL.getRange()}));
+  D->addAttr(CoreNetActionAttr::Create(S.Context, Str, {AL.getRange()}));
 }
 
-static void handleEosioReadOnlyAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
-  D->addAttr(EosioReadOnlyAttr::Create(S.Context, {AL.getRange()}));
-}
-
-static void handleEosioTableAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+static void handleCoreNetCallAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
   // Handle the cases where the attribute has a text message.
   StringRef Str;
   if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
       !S.checkStringLiteralArgumentAttr(AL, 0, Str))
     return;
 
-  D->addAttr(EosioTableAttr::Create(S.Context, Str, {AL.getRange()}));
+  D->addAttr(CoreNetCallAttr::Create(S.Context, Str, {AL.getRange()}));
+}
+
+static void handleCoreNetReadOnlyAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+  D->addAttr(CoreNetReadOnlyAttr::Create(S.Context, {AL.getRange()}));
+}
+
+static void handleCoreNetTableAttribute(Sema &S, Decl *D, const ParsedAttr &AL) {
+  // Handle the cases where the attribute has a text message.
+  StringRef Str;
+  if (AL.isArgExpr(0) && AL.getArgAsExpr(0) &&
+      !S.checkStringLiteralArgumentAttr(AL, 0, Str))
+    return;
+
+  D->addAttr(CoreNetTableAttr::Create(S.Context, Str, {AL.getRange()}));
 }
 
 /// Check if the argument \p ArgNum of \p Attr is a ASCII string literal.
@@ -8793,47 +8793,47 @@ ProcessDeclAttribute(Sema &S, Scope *scope, Decl *D, const ParsedAttr &AL,
     S.Diag(AL.getLoc(), diag::err_attribute_invalid_on_decl)
         << AL << D->getLocation();
     break;
-  case ParsedAttr::AT_EosioWasmImport:
-    handleSimpleAttribute<EosioWasmImportAttr>(S, D, AL);
+  case ParsedAttr::AT_CoreNetWasmImport:
+    handleSimpleAttribute<CoreNetWasmImportAttr>(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioWasmEntry:
-    handleSimpleAttribute<EosioWasmEntryAttr>(S, D, AL);
+  case ParsedAttr::AT_CoreNetWasmEntry:
+    handleSimpleAttribute<CoreNetWasmEntryAttr>(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioIgnore:
-    handleSimpleAttribute<EosioIgnoreAttr>(S, D, AL);
+  case ParsedAttr::AT_CoreNetIgnore:
+    handleSimpleAttribute<CoreNetIgnoreAttr>(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioAction:
-    handleEosioActionAttribute(S, D, AL);
+  case ParsedAttr::AT_CoreNetAction:
+    handleCoreNetActionAttribute(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioCall:
-    handleEosioCallAttribute(S, D, AL);
+  case ParsedAttr::AT_CoreNetCall:
+    handleCoreNetCallAttribute(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioReadOnly:
-    handleEosioReadOnlyAttribute(S, D, AL);
+  case ParsedAttr::AT_CoreNetReadOnly:
+    handleCoreNetReadOnlyAttribute(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioTable:
-    handleEosioTableAttribute(S, D, AL);
+  case ParsedAttr::AT_CoreNetTable:
+    handleCoreNetTableAttribute(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioWasmABI:
-    handleEosioABIAttribute(S, D, AL);
+  case ParsedAttr::AT_CoreNetWasmABI:
+    handleCoreNetABIAttribute(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioWasmAction:
-    handleEosioWasmActionAttribute(S, D, AL);
+  case ParsedAttr::AT_CoreNetWasmAction:
+    handleCoreNetWasmActionAttribute(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioWasmNotify:
-    handleEosioWasmNotifyAttribute(S, D, AL);
+  case ParsedAttr::AT_CoreNetWasmNotify:
+    handleCoreNetWasmNotifyAttribute(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioWasmCall:
-    handleEosioWasmCallAttribute(S, D, AL);
+  case ParsedAttr::AT_CoreNetWasmCall:
+    handleCoreNetWasmCallAttribute(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioContract:
-    handleEosioContractAttribute(S, D, AL);
+  case ParsedAttr::AT_CoreNetContract:
+    handleCoreNetContractAttribute(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioRicardian:
-    handleEosioRicardianAttribute(S, D, AL);
+  case ParsedAttr::AT_CoreNetRicardian:
+    handleCoreNetRicardianAttribute(S, D, AL);
     break;
-  case ParsedAttr::AT_EosioNotify:
-    handleEosioNotifyAttribute(S, D, AL);
+  case ParsedAttr::AT_CoreNetNotify:
+    handleCoreNetNotifyAttribute(S, D, AL);
     break;
   case ParsedAttr::AT_Interrupt:
     handleInterruptAttr(S, D, AL);

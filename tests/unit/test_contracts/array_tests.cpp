@@ -77,7 +77,7 @@ class [[core_net::contract]] array_tests : public contract {
 
    // test parameter and return value using std::array
    [[core_net::action]]
-   // cleos -v push action eosio testre '[[1,2,3,4]]' -p eosio@active
+   // cleos -v push action core testre '[[1,2,3,4]]' -p core@active
    std::array<int,4> testre(std::array<int,4> input){
       std::array<int,4> arr = input;
       for(auto & v : arr) v += 1;
@@ -86,7 +86,7 @@ class [[core_net::contract]] array_tests : public contract {
 
    // test return value using std::array
    [[core_net::action]]
-   // cleos -v push action eosio testre2 '[[1,2,3,4]]' -p eosio@active
+   // cleos -v push action core testre2 '[[1,2,3,4]]' -p core@active
    std::array<int,4> testre2(std::vector<int> input){
       std::array<int,4> arr;
       for(size_t i=0; i<4; ++i) arr[i] = input[i+1];
@@ -95,7 +95,7 @@ class [[core_net::contract]] array_tests : public contract {
 
    // test return using std::vector
    [[core_net::action]]
-   // cleos -v push action eosio testrev '[[1,2,3,4]]' -p eosio@active
+   // cleos -v push action core testrev '[[1,2,3,4]]' -p core@active
    std::vector<int> testrev(std::vector<int> input){
       std::vector<int> vec = input;
       for(auto & v : vec) v += 1;

@@ -1,4 +1,4 @@
-#include <eosio/transaction.h>
+#include <core_net/transaction.h>
 #include <stddef.h>
 
 void test_transaction( void ) {

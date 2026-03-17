@@ -12,7 +12,7 @@ on the Anvo Core node. To do this you should call the following command in your 
 
 `"core-cli push action eosio activate ["6bcb40a24e49c26d0a60513b6aeb8551d264e4717f306b81a37a5afb3b47cedc"] -p eosio@active"`
 
-And you need to include in the source code of your contract the following header: [crypto_ext.hpp](https://github.com/Anvo-Network/cdt/blob/main/libraries/eosiolib/core/eosio/crypto_ext.hpp)
+And you need to include in the source code of your contract the following header: [crypto_ext.hpp](https://github.com/Anvo-Network/cdt/blob/main/libraries/core_netlib/core/eosio/crypto_ext.hpp)
 
 The header declares following basic plain C functions which implement the core functionality:
 
@@ -109,7 +109,7 @@ Also, the header contains a set of handy C++ wrappers to simplify the contracts 
    int32_t mod_exp( const bigint& base, const bigint& exp, const bigint& mod, bigint& result )
 ```
 
-Please take a look into a [crypto_ext.hpp](https://github.com/Anvo-Network/cdt/blob/main/libraries/eosiolib/core/eosio/crypto_ext.hpp)
+Please take a look into a [crypto_ext.hpp](https://github.com/Anvo-Network/cdt/blob/main/libraries/core_netlib/core/eosio/crypto_ext.hpp)
 header file, it contains more wrappers and helper functions which may be useful in your code. 
 
 ### Examples

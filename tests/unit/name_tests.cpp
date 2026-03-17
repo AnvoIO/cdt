@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <limits>
@@ -16,7 +16,7 @@ using core_net::name;
 
 constexpr uint64_t u64max = numeric_limits<uint64_t>::max(); // 18446744073709551615ULL
 
-// Definitions in `eosio.cdt/libraries/eosio/name.hpp`
+// Definitions in `cdt/libraries/core_net/name.hpp`
 EOSIO_TEST_BEGIN(name_type_test_ctr_num)
    //// constexpr name()
    CHECK_EQUAL( name{}.value, 0ULL )

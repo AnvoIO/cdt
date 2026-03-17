@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <string>
@@ -20,7 +20,7 @@ static constexpr int64_t asset_mask{(1LL << 62) - 1};
 static constexpr int64_t asset_min{-asset_mask}; // -4611686018427387903
 static constexpr int64_t asset_max{ asset_mask}; //  4611686018427387903
 
-// Definitions in `eosio.cdt/libraries/eosio/asset.hpp`
+// Definitions in `cdt/libraries/core_net/asset.hpp`
 EOSIO_TEST_BEGIN(asset_type_test)
    static constexpr symbol s0{"A", 0};
    static constexpr symbol s1{"Z", 0};
@@ -356,7 +356,7 @@ EOSIO_TEST_BEGIN(asset_type_test)
    CHECK_EQUAL( ( asset{1LL, sym_no_prec} >= asset{1LL, sym_no_prec} ), true )
 EOSIO_TEST_END
 
-// Definitions in `eosio.cdt/libraries/eosio/asset.hpp`
+// Definitions in `cdt/libraries/core_net/asset.hpp`
 EOSIO_TEST_BEGIN(extended_asset_type_test)
    static constexpr symbol sym_no_prec{"SYMBOLL",0};
    static constexpr symbol sym_prec{"SYMBOLL",63};

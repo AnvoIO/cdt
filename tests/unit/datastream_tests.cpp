@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <array>
@@ -56,7 +56,7 @@ struct be_test {
    CORE_NET_SERIALIZE( be_test, (val) )
 };
 
-// Definitions in `eosio.cdt/libraries/eosio/datastream.hpp`
+// Definitions in `cdt/libraries/core_net/datastream.hpp`
 EOSIO_TEST_BEGIN(datastream_test)
    static constexpr uint16_t buffer_size{256};
    char datastream_buffer[buffer_size]{}; // Buffer for the datastream to point to
@@ -143,7 +143,7 @@ EOSIO_TEST_BEGIN(datastream_test)
    CHECK_EQUAL( ds.remaining(), -1)
 EOSIO_TEST_END
 
-// Definitions in `eosio.cdt/libraries/eosio/datastream.hpp`
+// Definitions in `cdt/libraries/core_net/datastream.hpp`
 EOSIO_TEST_BEGIN(datastream_specialization_test)
    static constexpr uint16_t buffer_size{256};
    char datastream_buffer[buffer_size]{}; // Buffer for the datastream to point to
@@ -215,7 +215,7 @@ EOSIO_TEST_BEGIN(datastream_specialization_test)
    CHECK_EQUAL( ds.remaining(), 0 )
 EOSIO_TEST_END
 
-// Definitions in `eosio.cdt/libraries/eosio/datastream.hpp`
+// Definitions in `cdt/libraries/core_net/datastream.hpp`
 EOSIO_TEST_BEGIN(datastream_stream_test)
    static constexpr uint16_t buffer_size{256};
    char datastream_buffer[buffer_size]; // Buffer for the datastream to point to
@@ -597,7 +597,7 @@ EOSIO_TEST_BEGIN(datastream_stream_test)
    CHECK_EQUAL( csc, sc )
 EOSIO_TEST_END
 
-// Definitions in `eosio.cdt/libraries/eosio/datastream.hpp`
+// Definitions in `cdt/libraries/core_net/datastream.hpp`
 EOSIO_TEST_BEGIN(misc_datastream_test)
    // ---------------------------
    // vector<char> pack(const T&)

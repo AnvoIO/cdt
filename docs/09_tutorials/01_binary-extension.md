@@ -2,7 +2,7 @@
 content_title: core_net::binary_extension
 ---
 
-You can find the implementation of `core_net::binary_extension` within the CDT repository in the file [binary_extension.hpp](https://github.com/Anvo-Network/cdt/blob/main/libraries/eosiolib/core/eosio/binary_extension.hpp).
+You can find the implementation of `core_net::binary_extension` within the CDT repository in the file [binary_extension.hpp](https://github.com/Anvo-Network/cdt/blob/main/libraries/core_netlib/core/eosio/binary_extension.hpp).
 
 The primary concern when using this type is when you are adding a new field to a smart contract's data structure that is currently utilized in an `core_net::multi_index` type (AKA a _table_), or when adding a new parameter to an action declaration.
 

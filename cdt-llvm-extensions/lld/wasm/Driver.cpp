@@ -402,6 +402,7 @@ static void readConfigs(opt::InputArgList &args) {
   config->emitRelocs = args.hasArg(OPT_emit_relocs);
   config->experimentalPic = args.hasArg(OPT_experimental_pic);
   config->entry = getEntry(args);
+  config->systemAccount = args.getLastArgValue(OPT_system_account, "core");
   config->exportAll = args.hasArg(OPT_export_all);
   config->exportTable = args.hasArg(OPT_export_table);
   config->growableTable = args.hasArg(OPT_growable_table);
@@ -1124,7 +1125,7 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
 
   // CDT: If the entry symbol is "apply" and it doesn't exist yet,
   // create a synthetic placeholder. The Writer's createDispatchFunction()
-  // will fill in the actual body from __eosio_action_* symbols.
+  // will fill in the actual body from __core_net_action_* symbols.
   Symbol *entrySym = nullptr;
   if (!config->relocatable && !config->entry.empty()) {
     entrySym = handleUndefined(config->entry, "--entry");
@@ -1242,16 +1243,16 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
   // Any remaining lazy symbols should be demoted to Undefined
   demoteLazySymbols();
 
-  // CDT: Mark eosio action/notify dispatcher symbols as live so they
+  // CDT: Mark core_net action/notify dispatcher symbols as live so they
   // survive garbage collection. These symbols are referenced by
   // the synthetic apply() dispatch function generated in Writer.cpp.
   for (ObjFile *file : symtab->objectFiles) {
-    for (auto action : file->getEosioActions()) {
+    for (auto action : file->getCoreNetActions()) {
       std::string symName = action.str().substr(action.str().find(":") + 1);
       if (Symbol *sym = symtab->find(symName))
         sym->markLive();
     }
-    for (auto notify : file->getEosioNotify()) {
+    for (auto notify : file->getCoreNetNotify()) {
       // Notify format: code_name::action:symbol_name — extract after last ':'
       std::string snotif = notify.str();
       std::string symName = snotif.substr(snotif.rfind(":") + 1);
@@ -1272,7 +1273,7 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
 
   // CDT: Mark sync_call handler symbols as live (same pattern as actions/notify)
   for (ObjFile *file : symtab->objectFiles) {
-    for (auto call : file->getEosioCalls()) {
+    for (auto call : file->getCoreNetCalls()) {
       std::string symName = call.str().substr(call.str().find(":") + 1);
       if (Symbol *sym = symtab->find(symName))
         sym->markLive();

@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <core_net/tester.hpp>
@@ -12,7 +12,7 @@ using std::move;
 
 using core_net::binary_extension;
 
-// Definitions in `eosio.cdt/libraries/eosio/binary_extension.hpp`
+// Definitions in `cdt/libraries/core_net/binary_extension.hpp`
 EOSIO_TEST_BEGIN(binary_extension_test_a)
    //// constexpr binary_extension()
    // constexpr bool has_value()const

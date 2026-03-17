@@ -147,7 +147,7 @@ namespace core_net { namespace cdt {
          }
 
          // Return `true` if the method `decl`'s base class is `core_net::contract`
-         bool base_is_eosio_contract_class(const clang::CXXMethodDecl* decl) {
+         bool base_is_core_net_contract_class(const clang::CXXMethodDecl* decl) {
             auto cxx_decl = decl->getParent();
             // on this point it could be just an attribute so let's check base classes
             for (const auto& base : cxx_decl->bases()) {
@@ -169,7 +169,7 @@ namespace core_net { namespace cdt {
             codegen& cg = codegen::get();
             std::string nm = decl->getNameAsString()+"_"+decl->getParent()->getNameAsString();
 
-            if (cg.is_eosio_contract(decl, cg.contract_name)) {
+            if (cg.is_core_net_contract(decl, cg.contract_name)) {
                ss << "\n\n#include <core_net/datastream.hpp>\n";
                ss << "#include <core_net/name.hpp>\n";
                ss << "extern \"C\" {\n";
@@ -213,7 +213,7 @@ namespace core_net { namespace cdt {
                ss << decl->getParent()->getQualifiedNameAsString()
                   << " obj {core_net::name{r},core_net::name{c},ds};\n";
 
-               if (base_is_eosio_contract_class(decl)) {
+               if (base_is_core_net_contract_class(decl)) {
                   ss << "obj.set_exec_type(core_net::contract::exec_type_t::action);\n";
                }
 
@@ -257,7 +257,7 @@ namespace core_net { namespace cdt {
             constexpr static uint32_t max_stack_size = 512;
             codegen& cg = codegen::get();
             std::string nm = decl->getNameAsString()+"_"+decl->getParent()->getNameAsString();
-            if (cg.is_eosio_contract(decl, cg.contract_name)) {
+            if (cg.is_core_net_contract(decl, cg.contract_name)) {
                ss << "\n\n#include <core_net/datastream.hpp>\n";
                ss << "#include <core_net/call.hpp>\n";
                ss << "extern \"C\" {\n";
@@ -292,7 +292,7 @@ namespace core_net { namespace cdt {
                ss << decl->getParent()->getQualifiedNameAsString()
                   << " obj {core_net::name{receiver},core_net::name{receiver},ds};\n";
 
-               if (base_is_eosio_contract_class(decl)) {
+               if (base_is_core_net_contract_class(decl)) {
                   ss << "obj.set_exec_type(core_net::contract::exec_type_t::call);\n";
                }
 
@@ -354,7 +354,7 @@ namespace core_net { namespace cdt {
             static std::set<std::string> _notify_set; //used for validations
             static std::set<std::string> _call_set; //used for validations
 
-            if (decl->isEosioAction()) {
+            if (decl->isCoreNetAction()) {
                name = generation_utils::get_action_name(decl);
                validate_name(name, [&](auto s) {
                   CDT_ERROR("codegen_error", decl->getLocation(), std::string("action name (")+s+") is not a valid name");
@@ -372,11 +372,11 @@ namespace core_net { namespace cdt {
                   cg.actions.insert(full_action_name); // insert the method action, so we don't create the dispatcher twice
                }
 
-               if (decl->isEosioReadOnly()) {
+               if (decl->isCoreNetReadOnly()) {
                   read_only_actions.insert(decl);
                }
             }
-            else if (decl->isEosioNotify()) {
+            else if (decl->isCoreNetNotify()) {
                name = generation_utils::get_notify_pair(decl);
                auto first = name.substr(0, name.find("::"));
                if (first != "*")
@@ -403,7 +403,7 @@ namespace core_net { namespace cdt {
             }
 
             // We allow a method to be tagged as both `action` and `call`
-            if (decl->isEosioCall()) {
+            if (decl->isCoreNetCall()) {
                static std::unordered_map<uint64_t, std::string> _call_id_map;
 
                name = generation_utils::get_call_name(decl);
@@ -574,7 +574,7 @@ namespace core_net { namespace cdt {
          }
 
          virtual bool VisitCXXRecordDecl(CXXRecordDecl* decl) {
-            if (decl->isEosioContract()) {
+            if (decl->isCoreNetContract()) {
                auto process_data_member = [this]( CXXRecordDecl* rd ) {
                   for (auto it = rd->decls_begin(); it != rd->decls_end(); ++it) {
                      if (auto* f = dyn_cast<FieldDecl>(*it) ) {

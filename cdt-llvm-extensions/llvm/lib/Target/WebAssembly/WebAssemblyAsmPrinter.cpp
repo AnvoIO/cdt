@@ -419,9 +419,9 @@ void WebAssemblyAsmPrinter::emitEndOfAsmFile(Module &M) {
 
   bool has_import = false;
   bool has_abi    = false;
-  bool has_eosio_action = false;
-  bool has_eosio_notify = false;
-  bool has_eosio_call   = false;
+  bool has_core_net_action = false;
+  bool has_core_net_notify = false;
+  bool has_core_net_call   = false;
 
   // When a function's address is taken, a TABLE_INDEX relocation is emitted
   // against the function symbol at the use site.  However the relocation
@@ -441,11 +441,11 @@ void WebAssemblyAsmPrinter::emitEndOfAsmFile(Module &M) {
     if (F.hasFnAttribute("eosio_wasm_abi"))
       has_abi = true;
     if (F.hasFnAttribute("eosio_wasm_action"))
-      has_eosio_action = true;
+      has_core_net_action = true;
     if (F.hasFnAttribute("eosio_wasm_notify"))
-      has_eosio_notify = true;
+      has_core_net_notify = true;
     if (F.hasFnAttribute("eosio_wasm_call"))
-      has_eosio_call = true;
+      has_core_net_call = true;
   }
 
   if (has_import) {
@@ -477,7 +477,7 @@ void WebAssemblyAsmPrinter::emitEndOfAsmFile(Module &M) {
      }
      OutStreamer->popSection();
   }
-  if (has_eosio_action) {
+  if (has_core_net_action) {
      OutStreamer->pushSection();
      std::string SectionName = ".core_net_actions";
      MCSectionWasm *mySection =
@@ -492,7 +492,7 @@ void WebAssemblyAsmPrinter::emitEndOfAsmFile(Module &M) {
      }
      OutStreamer->popSection();
   }
-  if (has_eosio_notify) {
+  if (has_core_net_notify) {
      OutStreamer->pushSection();
      std::string SectionName = ".core_net_notify";
      MCSectionWasm *mySection =
@@ -507,7 +507,7 @@ void WebAssemblyAsmPrinter::emitEndOfAsmFile(Module &M) {
      }
      OutStreamer->popSection();
   }
-  if (has_eosio_call) {
+  if (has_core_net_call) {
      OutStreamer->pushSection();
      std::string SectionName = ".core_net_calls";
      MCSectionWasm *mySection =

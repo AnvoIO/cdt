@@ -1,18 +1,18 @@
 #include <hello.hpp>
 
-[[eosio::action]]
+[[core_net::action]]
 void hello::hi( name nm ) {
    print_f("Name : %\n", nm);
 }
 
-[[eosio::action]]
+[[core_net::action]]
 void hello::check( name nm ) {
    print_f("Name : %\n", nm);
    core_net::check(nm == "hello"_n, "check name not equal to `hello`");
 }
 
 // Checks the input param `nm` and returns serialized std::pair<int, std::string> instance.
-[[eosio::action]]
+[[core_net::action]]
 std::pair<int, std::string> hello::checkwithrv( name nm ) {
    print_f("Name : %\n", nm);
 

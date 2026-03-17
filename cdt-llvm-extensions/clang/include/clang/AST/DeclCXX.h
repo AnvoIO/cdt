@@ -504,19 +504,19 @@ public:
 
   /// Iterator that traverses the base classes of a class.
   using base_class_const_iterator = const CXXBaseSpecifier *;
-  bool isEosioContract() const { return hasAttr<EosioContractAttr>(); }
-  bool isEosioAction() const { return hasAttr<EosioActionAttr>(); }
-  bool isEosioCall() const { return hasAttr<EosioCallAttr>(); }
-  bool isEosioTable() const { return hasAttr<EosioTableAttr>(); }
-  bool isEosioIgnore() const { return hasAttr<EosioIgnoreAttr>(); }
-  bool hasEosioRicardian() const { return hasAttr<EosioRicardianAttr>(); }
-  bool isEosioReadOnly() const { return hasAttr<EosioReadOnlyAttr>(); }
-  EosioActionAttr* getEosioActionAttr() const { return getAttr<EosioActionAttr>(); }
-  EosioCallAttr* getEosioCallAttr() const { return getAttr<EosioCallAttr>(); }
-  EosioTableAttr*  getEosioTableAttr() const { return getAttr<EosioTableAttr>(); }
-  EosioContractAttr*  getEosioContractAttr() const { return getAttr<EosioContractAttr>(); }
-  EosioRicardianAttr*  getEosioRicardianAttr() const { return getAttr<EosioRicardianAttr>(); }
-  EosioReadOnlyAttr* getEosioReadOnlyAttr() const { return getAttr<EosioReadOnlyAttr>(); }
+  bool isCoreNetContract() const { return hasAttr<CoreNetContractAttr>(); }
+  bool isCoreNetAction() const { return hasAttr<CoreNetActionAttr>(); }
+  bool isCoreNetCall() const { return hasAttr<CoreNetCallAttr>(); }
+  bool isCoreNetTable() const { return hasAttr<CoreNetTableAttr>(); }
+  bool isCoreNetIgnore() const { return hasAttr<CoreNetIgnoreAttr>(); }
+  bool hasCoreNetRicardian() const { return hasAttr<CoreNetRicardianAttr>(); }
+  bool isCoreNetReadOnly() const { return hasAttr<CoreNetReadOnlyAttr>(); }
+  CoreNetActionAttr* getCoreNetActionAttr() const { return getAttr<CoreNetActionAttr>(); }
+  CoreNetCallAttr* getCoreNetCallAttr() const { return getAttr<CoreNetCallAttr>(); }
+  CoreNetTableAttr*  getCoreNetTableAttr() const { return getAttr<CoreNetTableAttr>(); }
+  CoreNetContractAttr*  getCoreNetContractAttr() const { return getAttr<CoreNetContractAttr>(); }
+  CoreNetRicardianAttr*  getCoreNetRicardianAttr() const { return getAttr<CoreNetRicardianAttr>(); }
+  CoreNetReadOnlyAttr* getCoreNetReadOnlyAttr() const { return getAttr<CoreNetReadOnlyAttr>(); }
 
   CXXRecordDecl *getCanonicalDecl() override {
     return cast<CXXRecordDecl>(RecordDecl::getCanonicalDecl());
@@ -2034,18 +2034,18 @@ public:
 
   bool isStatic() const;
   bool isInstance() const { return !isStatic(); }
-  bool isEosioAction() const { return hasAttr<EosioActionAttr>(); }
-  bool isEosioCall() const { return hasAttr<EosioCallAttr>(); }
-  bool isEosioNotify() const { return hasAttr<EosioNotifyAttr>(); }
-  bool isEosioContract() const { return hasAttr<EosioContractAttr>(); }
-  bool hasEosioRicardian() const { return hasAttr<EosioRicardianAttr>(); }
-  bool isEosioReadOnly() const { return hasAttr<EosioReadOnlyAttr>(); }
-  EosioActionAttr* getEosioActionAttr() const { return getAttr<EosioActionAttr>(); }
-  EosioCallAttr* getEosioCallAttr() const { return getAttr<EosioCallAttr>(); }
-  EosioNotifyAttr* getEosioNotifyAttr() const { return getAttr<EosioNotifyAttr>(); }
-  EosioContractAttr* getEosioContractAttr() const { return getAttr<EosioContractAttr>(); }
-  EosioRicardianAttr* getEosioRicardianAttr() const { return getAttr<EosioRicardianAttr>(); }
-  EosioReadOnlyAttr* getEosioReadOnlyAttr() const { return getAttr<EosioReadOnlyAttr>(); }
+  bool isCoreNetAction() const { return hasAttr<CoreNetActionAttr>(); }
+  bool isCoreNetCall() const { return hasAttr<CoreNetCallAttr>(); }
+  bool isCoreNetNotify() const { return hasAttr<CoreNetNotifyAttr>(); }
+  bool isCoreNetContract() const { return hasAttr<CoreNetContractAttr>(); }
+  bool hasCoreNetRicardian() const { return hasAttr<CoreNetRicardianAttr>(); }
+  bool isCoreNetReadOnly() const { return hasAttr<CoreNetReadOnlyAttr>(); }
+  CoreNetActionAttr* getCoreNetActionAttr() const { return getAttr<CoreNetActionAttr>(); }
+  CoreNetCallAttr* getCoreNetCallAttr() const { return getAttr<CoreNetCallAttr>(); }
+  CoreNetNotifyAttr* getCoreNetNotifyAttr() const { return getAttr<CoreNetNotifyAttr>(); }
+  CoreNetContractAttr* getCoreNetContractAttr() const { return getAttr<CoreNetContractAttr>(); }
+  CoreNetRicardianAttr* getCoreNetRicardianAttr() const { return getAttr<CoreNetRicardianAttr>(); }
+  CoreNetReadOnlyAttr* getCoreNetReadOnlyAttr() const { return getAttr<CoreNetReadOnlyAttr>(); }
 
   /// Returns true if the given operator is implicitly static in a record
   /// context.

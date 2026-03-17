@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <core_net/tester.hpp>
@@ -8,9 +8,9 @@
 
 using core_net::public_key;
 using core_net::signature;
-using namespace eosio::native;
+using namespace core_net::native;
 
-// Definitions in `eosio.cdt/libraries/eosio/crypto.hpp`
+// Definitions in `cdt/libraries/core_net/crypto.hpp`
 EOSIO_TEST_BEGIN(public_key_type_test)
    // -----------------------------------------------------
    // bool operator==(const public_key&, const public_key&)
@@ -23,7 +23,7 @@ EOSIO_TEST_BEGIN(public_key_type_test)
    CHECK_EQUAL( (public_key(std::in_place_index<0>, std::array<char, 33>{1}) != public_key(std::in_place_index<0>, std::array<char, 33>{})), true  )
 EOSIO_TEST_END
 
-// Definitions in `eosio.cdt/libraries/eosio/crypto.hpp`
+// Definitions in `cdt/libraries/core_net/crypto.hpp`
 EOSIO_TEST_BEGIN(signature_type_test)
    // ---------------------------------------------------
    // bool operator==(const signature&, const signature&)

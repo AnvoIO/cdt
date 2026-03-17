@@ -1,14 +1,14 @@
-#include <eosio/name.hpp>
-#include <eosio/action.hpp>
-#include "native/eosio/intrinsics.hpp"
-#include "native/eosio/crt.hpp"
+#include <core_net/name.hpp>
+#include <core_net/action.hpp>
+#include "native/core_net/intrinsics.hpp"
+#include "native/core_net/crt.hpp"
 #include <cstdint>
 #include <functional>
 #include <stdio.h>
 #include <setjmp.h>
 
-eosio::cdt::output_stream std_out;
-eosio::cdt::output_stream std_err;
+core_net::cdt::output_stream std_out;
+core_net::cdt::output_stream std_err;
 
 extern "C" {
    int main(int, char**);
@@ -44,9 +44,9 @@ extern "C" {
 
    void _prints_l(const char* cstr, uint32_t len, uint8_t which) {
       for (int i=0; i < len; i++) {
-         if (which == eosio::cdt::output_stream_kind::std_out)
+         if (which == core_net::cdt::output_stream_kind::std_out)
             std_out.push(cstr[i]);
-         else if (which == eosio::cdt::output_stream_kind::std_err)
+         else if (which == core_net::cdt::output_stream_kind::std_err)
             std_err.push(cstr[i]);
          if (!___disable_output)
             ___putc(cstr[i]);
@@ -55,9 +55,9 @@ extern "C" {
 
    void _prints(const char* cstr, uint8_t which) {
       for (int i=0; cstr[i] != '\0'; i++) {
-         if (which == eosio::cdt::output_stream_kind::std_out)
+         if (which == core_net::cdt::output_stream_kind::std_out)
             std_out.push(cstr[i]);
-         else if (which == eosio::cdt::output_stream_kind::std_err)
+         else if (which == core_net::cdt::output_stream_kind::std_err)
             std_err.push(cstr[i]);
          if (!___disable_output)
             ___putc(cstr[i]);
@@ -72,7 +72,7 @@ extern "C" {
    }
 
    int _wrap_main(int argc, char** argv) {
-      using namespace eosio::native;
+      using namespace core_net::native;
       int ret_val = 0;
       ___heap = _mmap();
       ___heap_ptr = ___heap;
@@ -84,10 +84,10 @@ extern "C" {
 
       // preset the print functions
       intrinsics::set_intrinsic<intrinsics::prints_l>([](const char* cs, uint32_t l) {
-            _prints_l(cs, l, eosio::cdt::output_stream_kind::std_out);
+            _prints_l(cs, l, core_net::cdt::output_stream_kind::std_out);
          });
       intrinsics::set_intrinsic<intrinsics::prints>([](const char* cs) {
-            _prints(cs, eosio::cdt::output_stream_kind::std_out);
+            _prints(cs, core_net::cdt::output_stream_kind::std_out);
          });
       intrinsics::set_intrinsic<intrinsics::printi>([](int64_t v) {
             printf("%lli", v);
@@ -136,7 +136,7 @@ extern "C" {
             printf("0x%04x%04x%04x%04x", tmp[0], tmp[1], tmp[2], tmp[3]);
          });
       intrinsics::set_intrinsic<intrinsics::printn>([](uint64_t nm) {
-            std::string s = eosio::name(nm).to_string();
+            std::string s = core_net::name(nm).to_string();
             prints_l(s.c_str(), s.length());
          });
       intrinsics::set_intrinsic<intrinsics::printhex>([](const void* data, uint32_t len) {

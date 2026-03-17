@@ -1,1 +1,1 @@
-#include <eosio/eosio.hpp>
+#include <core_net/core_net.hpp>

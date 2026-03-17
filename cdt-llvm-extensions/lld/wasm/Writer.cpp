@@ -1590,8 +1590,8 @@ void Writer::createDispatchFunction() {
    // Count actions/notifications
    int total_actions = 0, total_notifs = 0;
    for (ObjFile *file : symtab->objectFiles) {
-      total_actions += file->getEosioActions().size();
-      total_notifs += file->getEosioNotify().size();
+      total_actions += file->getCoreNetActions().size();
+      total_notifs += file->getCoreNetNotify().size();
    }
    if (total_actions == 0 && total_notifs == 0) {
       // Create an empty function body (just return)
@@ -1654,8 +1654,8 @@ void Writer::createDispatchFunction() {
       std::set<StringRef> has_dispatched;
       bool need_else = false;
       for (ObjFile *File : symtab->objectFiles) {
-        if (!File->getEosioActions().empty()) {
-            for (auto act : File->getEosioActions()) {
+        if (!File->getCoreNetActions().empty()) {
+            for (auto act : File->getCoreNetActions()) {
               if (has_dispatched.insert(act).second) {
                 create_if(OS, act.str(), need_else);
                 act_cnt++;
@@ -1666,13 +1666,13 @@ void Writer::createDispatchFunction() {
       if (act_cnt > 0)
         writeU8(OS, OPCODE_ELSE, "ELSE");
 
-      // do not fail if self == eosio
+      // do not fail if self == system account
       writeU8(OS, OPCODE_GET_LOCAL, "GET_LOCAL");
       writeUleb128(OS, 0, "self");
       writeU8(OS, OPCODE_I64_CONST, "I64.CONST");
-      encodeSLEB128((int64_t)core_net::cdt::string_to_name("eosio"), OS);
+      encodeSLEB128((int64_t)core_net::cdt::string_to_name(config->systemAccount.str().c_str()), OS);
       writeU8(OS, OPCODE_I64_NE, "I64.NE");
-      writeU8(OS, OPCODE_IF, "if receiver != eosio");
+      writeU8(OS, OPCODE_IF, "if receiver != system account");
       writeU8(OS, 0x40, "none");
 
       if (assert_sym && assert_idx != UINT32_MAX) {
@@ -1711,8 +1711,8 @@ void Writer::createDispatchFunction() {
       std::set<StringRef> has_dispatched;
       std::map<std::string, std::vector<std::string>> notify_handlers;
       for (ObjFile *File : symtab->objectFiles) {
-         if (!File->getEosioNotify().empty()) {
-            for (auto notif : File->getEosioNotify()) {
+         if (!File->getCoreNetNotify().empty()) {
+            for (auto notif : File->getCoreNetNotify()) {
               if (has_dispatched.insert(notif).second) {
                 not_cnt++;
                 std::string snotif = notif.str();
@@ -1730,7 +1730,7 @@ void Writer::createDispatchFunction() {
       bool has_onerror_handler = false;
       if (not_cnt > 0) {
          for (auto const& notif0 : notify_handlers) {
-            if (notif0.first == "eosio") {
+            if (notif0.first == config->systemAccount) {
                for (auto const& notif1 : notif0.second) {
                   if (notif1.substr(0, notif1.find(":")) == "onerror") {
                      has_onerror_handler = true;
@@ -1743,12 +1743,12 @@ void Writer::createDispatchFunction() {
       if (!has_onerror_handler) {
          // assert on onerror
          writeU8(OS, OPCODE_I64_CONST, "I64.CONST");
-         uint64_t acnt = core_net::cdt::string_to_name("eosio");
+         uint64_t acnt = core_net::cdt::string_to_name(config->systemAccount.str().c_str());
          encodeSLEB128((int64_t)acnt, OS);
          writeU8(OS, OPCODE_GET_LOCAL, "GET_LOCAL");
          writeUleb128(OS, 1, "code");
          writeU8(OS, OPCODE_I64_EQ, "I64.EQ");
-         writeU8(OS, OPCODE_IF, "IF code==eosio");
+         writeU8(OS, OPCODE_IF, "IF code==system account");
          writeU8(OS, 0x40, "none");
          writeU8(OS, OPCODE_I64_CONST, "I64.CONST");
          uint64_t nm = core_net::cdt::string_to_name("onerror");
@@ -1904,7 +1904,7 @@ void Writer::createCallDispatchFunction() {
    // Check if any sync calls exist
    bool hasCalls = false;
    for (ObjFile *file : symtab->objectFiles) {
-      if (!file->getEosioCalls().empty()) {
+      if (!file->getCoreNetCalls().empty()) {
          hasCalls = true;
          break;
       }
@@ -2017,8 +2017,8 @@ void Writer::createCallDispatchFunction() {
       std::set<StringRef> has_dispatched;
       bool need_else = false;
       for (ObjFile *File : symtab->objectFiles) {
-        if (!File->getEosioCalls().empty()) {
-            for (auto call : File->getEosioCalls()) {
+        if (!File->getCoreNetCalls().empty()) {
+            for (auto call : File->getCoreNetCalls()) {
               if (has_dispatched.insert(call).second) {
                 create_if(OS, call.str(), need_else);
                 call_cnt++;

@@ -4013,17 +4013,17 @@ llvm::Constant *CodeGenModule::GetOrCreateLLVMFunction(
   // Any attempts to use a MultiVersion function should result in retrieving
   // the iFunc instead. Name Mangling will handle the rest of the changes.
   if (const FunctionDecl *FD = cast_or_null<FunctionDecl>(D)) {
-    if (FD->hasAttr<EosioWasmImportAttr>())
+    if (FD->hasAttr<CoreNetWasmImportAttr>())
         isWasmImport = true;
-    if (FD->hasAttr<EosioWasmEntryAttr>())
+    if (FD->hasAttr<CoreNetWasmEntryAttr>())
         isWasmEntry = true;
-    if (FD->hasAttr<EosioWasmABIAttr>())
+    if (FD->hasAttr<CoreNetWasmABIAttr>())
         isWasmABI = true;
-    if (FD->hasAttr<EosioWasmActionAttr>())
+    if (FD->hasAttr<CoreNetWasmActionAttr>())
         isWasmAction = true;
-    if (FD->hasAttr<EosioWasmNotifyAttr>())
+    if (FD->hasAttr<CoreNetWasmNotifyAttr>())
         isWasmNotify = true;
-    if (FD->hasAttr<EosioWasmCallAttr>())
+    if (FD->hasAttr<CoreNetWasmCallAttr>())
         isWasmCall = true;
     // For the device mark the function as one that should be emitted.
     if (getLangOpts().OpenMPIsDevice && OpenMPRuntime &&
@@ -4156,15 +4156,15 @@ llvm::Constant *CodeGenModule::GetOrCreateLLVMFunction(
      }
   if (isWasmAction)
      if (const FunctionDecl *FD = cast_or_null<FunctionDecl>(D)) {
-        F->addFnAttr("eosio_wasm_action", FD->getEosioWasmAction());
+        F->addFnAttr("eosio_wasm_action", FD->getCoreNetWasmAction());
      }
   if (isWasmNotify)
      if (const FunctionDecl *FD = cast_or_null<FunctionDecl>(D)) {
-        F->addFnAttr("eosio_wasm_notify", FD->getEosioWasmNotify());
+        F->addFnAttr("eosio_wasm_notify", FD->getCoreNetWasmNotify());
      }
   if (isWasmCall)
      if (const FunctionDecl *FD = cast_or_null<FunctionDecl>(D)) {
-        F->addFnAttr("eosio_wasm_call", FD->getEosioWasmCall());
+        F->addFnAttr("eosio_wasm_call", FD->getCoreNetWasmCall());
      }
 
   if (!DontDefer) {

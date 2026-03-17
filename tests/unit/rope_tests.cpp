@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <core_net/core_net.hpp>
@@ -8,7 +8,7 @@
 #include <core_net/tester.hpp>
 #include <string>
 
-using namespace eosio::native;
+using namespace core_net::native;
 
 EOSIO_TEST_BEGIN(rope_test)
    core_net::rope r("test string 0");

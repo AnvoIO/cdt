@@ -152,7 +152,7 @@ public:
   ArrayRef<StringRef> actions() const { return Actions; }
   ArrayRef<StringRef> notify() const { return Notify; }
   ArrayRef<StringRef> calls() const { return Calls; }
-  StringRef get_eosio_abi() const { return eosio_abi; }
+  StringRef get_core_net_abi() const { return core_net_abi; }
   uint32_t startFunction() const { return StartFunction; }
   uint32_t getNumImportedGlobals() const { return NumImportedGlobals; }
   uint32_t getNumImportedTables() const { return NumImportedTables; }
@@ -272,7 +272,7 @@ private:
   Error parseProducersSection(ReadContext &Ctx);
   Error parseTargetFeaturesSection(ReadContext &Ctx);
   Error parseRelocSection(StringRef Name, ReadContext &Ctx);
-  Error parseEosioABISection(ReadContext &Ctx);
+  Error parseCoreNetABISection(ReadContext &Ctx);
   Error parseCallsSection(ReadContext &Ctx);
 
   wasm::WasmObjectHeader Header;
@@ -297,7 +297,7 @@ private:
   std::vector<wasm::WasmFunction> Functions;
   std::vector<WasmSymbol> Symbols;
   std::vector<wasm::WasmDebugName> DebugNames;
-  StringRef eosio_abi;
+  StringRef core_net_abi;
   uint32_t StartFunction = -1;
   bool HasLinkingSection = false;
   bool HasDylinkSection = false;

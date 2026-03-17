@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <algorithm>
@@ -50,7 +50,7 @@ struct D2 : public D1 {
    }
 };
 
-// Definitions in `eosio.cdt/libraries/eosio/serialize.hpp`
+// Definitions in `cdt/libraries/core_net/serialize.hpp`
 EOSIO_TEST_BEGIN(serialize_test)
    static constexpr uint16_t buffer_size{256};
    char ds_buffer[buffer_size]{}; // Buffer for the datastream to point to

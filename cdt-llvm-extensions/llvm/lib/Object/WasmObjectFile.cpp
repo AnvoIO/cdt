@@ -369,12 +369,12 @@ Error WasmObjectFile::parseSection(WasmSection &Sec) {
   }
 }
 
-Error WasmObjectFile::parseEosioABISection(ReadContext& Ctx) {
+Error WasmObjectFile::parseCoreNetABISection(ReadContext& Ctx) {
    StringRef sr = readString(Ctx);
-   eosio_abi = sr;
+   core_net_abi = sr;
 
    if (Ctx.Ptr != Ctx.End)
-      return make_error<GenericBinaryError>("eosio abi section ended prematurely",
+      return make_error<GenericBinaryError>("core_net abi section ended prematurely",
                                           object_error::parse_failed);
    return Error::success();
 
@@ -1116,7 +1116,7 @@ Error WasmObjectFile::parseCustomSection(WasmSection &Sec, ReadContext &Ctx) {
      if (Error Err = parseAllowedSection(Ctx))
         return Err;
   } else if (Sec.Name == ".eosio_abi") {
-     if (Error Err = parseEosioABISection(Ctx))
+     if (Error Err = parseCoreNetABISection(Ctx))
         return Err;
   } else if (Sec.Name == ".eosio_actions") {
      if (Error Err = parseActionsSection(Ctx))

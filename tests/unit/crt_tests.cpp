@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <cstdint>
@@ -10,18 +10,18 @@
 #include <core_net/tester.hpp>
 #include <core_net/crt.hpp>
 
-using eosio::cdt::output_stream;
+using core_net::cdt::output_stream;
 
 EOSIO_TEST_BEGIN(output_stream_push)
    std_err.clear();
    const char* msg = "abc";
-   _prints(msg, eosio::cdt::output_stream_kind::std_err);
+   _prints(msg, core_net::cdt::output_stream_kind::std_err);
    CHECK_EQUAL(std_err.to_string(), "abc");
    CHECK_EQUAL(std_err.index(), 3);
 
    std_err.clear();
    const char* msg2 = "";
-   _prints(msg2, eosio::cdt::output_stream_kind::std_err);
+   _prints(msg2, core_net::cdt::output_stream_kind::std_err);
    CHECK_EQUAL(std_err.to_string(), "");
    CHECK_EQUAL(std_err.index(), 0);
 
@@ -35,7 +35,7 @@ EOSIO_TEST_BEGIN(output_stream_push_overflow)
 
    std::string large_msg('x', initial_capacity + 1);
 
-   _prints(large_msg.c_str(), eosio::cdt::output_stream_kind::std_err);
+   _prints(large_msg.c_str(), core_net::cdt::output_stream_kind::std_err);
    CHECK_EQUAL(std_err.to_string().capacity() > initial_capacity, true);
    CHECK_EQUAL(std_err.index(), large_msg.size());
 
@@ -46,7 +46,7 @@ EOSIO_TEST_BEGIN(output_stream_get_and_push)
    std_err.clear();
    std::string example_msg("abcdef");
 
-   _prints(example_msg.c_str(), eosio::cdt::output_stream_kind::std_err);
+   _prints(example_msg.c_str(), core_net::cdt::output_stream_kind::std_err);
    CHECK_EQUAL(strcmp(std_err.get(), "abcdef") , 0);
 
    std_err.push('g');

@@ -1,15 +1,15 @@
 #include <core_net/core_net.hpp>
 using namespace core_net;
 
-class [[eosio::contract]] hello : public contract {
+class [[core_net::contract]] hello : public contract {
    public:
       using contract::contract;
 
-      [[eosio::action]] 
+      [[core_net::action]] 
       void hi( name nm );
-      [[eosio::action]] 
+      [[core_net::action]] 
       void check( name nm );
-      [[eosio::action]]
+      [[core_net::action]]
       std::pair<int, std::string> checkwithrv( name nm );
 
       using hi_action = action_wrapper<"hi"_n, &hello::hi>;

@@ -23,7 +23,7 @@ class [[core_net::contract]] simple_tests : public contract {
 
       [[core_net::action("test4")]] 
       void test4(name to) {
-         transfer_contract::transfer_action trans("eosio.token"_n, {_self, "active"_n});
+         transfer_contract::transfer_action trans("core.token"_n, {_self, "active"_n});
          trans.send(_self, to, asset{100, {"TST", 4}}, "memo");
       }
 
@@ -73,15 +73,15 @@ class [[core_net::contract]] simple_tests : public contract {
          return b;
       }
 
-      [[core_net::on_notify("eosio.token::transfer")]] 
+      [[core_net::on_notify("core.token::transfer")]]
       void on_transfer(name from, name to, asset quant, std::string memo) {
-         check(get_first_receiver() == "eosio.token"_n, "should be eosio.token");
+         check(get_first_receiver() == "core.token"_n, "should be core.token");
          print_f("On notify : % % % %", from, to, quant, memo);
       }
 
       [[core_net::on_notify("*::transfer")]] 
       void on_transfer2(name from, name to, asset quant, std::string memo) {
-         check(get_first_receiver() != "eosio.token"_n, "should not be eosio.token");
+         check(get_first_receiver() != "core.token"_n, "should not be core.token");
          print_f("On notify 2 : % % % %", from, to, quant, memo);
       }
 
@@ -105,5 +105,5 @@ extern "C" void post_dispatch(name self, name original_receiver, name action) {
    print_f("post_dispatch : % % %\n", self, original_receiver, action);
    std::set<name> valid_actions = {"test1"_n, "test2"_n, "test4"_n, "test5"_n};
    check(valid_actions.count(action) == 0, "valid action should have dispatched");
-   check(self == "eosio"_n, "should only be eosio for action failures");
+   check(self == "core"_n, "should only be core for action failures");
 }

@@ -1,4 +1,4 @@
-//===- EosioSoftfloat ---------------===//
+//===- CoreNetSoftfloat ---------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //
@@ -34,11 +34,11 @@
 
 using namespace llvm;
 
-#define DEBUG_TYPE "eosio_softfloat"
+#define DEBUG_TYPE "core_net_softfloat"
 
 namespace {
-  // EosioSoftfloat - Mutate the apply function as needed
-  struct EosioSoftfloatPass : public PassInfoMixin<EosioSoftfloatPass> {
+  // CoreNetSoftfloat - Mutate the apply function as needed
+  struct CoreNetSoftfloatPass : public PassInfoMixin<CoreNetSoftfloatPass> {
 
     PreservedAnalyses run(Function &F, FunctionAnalysisManager &FAM) {
        auto  f32add = F.getParent()->getOrInsertFunction("_eosio_f32_add", AttributeList{},
@@ -166,12 +166,12 @@ PassPluginLibraryInfo getPassPluginInfo()
     PB.registerPipelineStartEPCallback(
         [&](ModulePassManager &MPM, auto)
         {
-          MPM.addPass(createModuleToFunctionPassAdaptor(EosioSoftfloatPass()));
+          MPM.addPass(createModuleToFunctionPassAdaptor(CoreNetSoftfloatPass()));
           return true;
         });
   };
 
-  return {LLVM_PLUGIN_API_VERSION, "EosioSoftfloatPass", "3.0.0", callback};
+  return {LLVM_PLUGIN_API_VERSION, "CoreNetSoftfloatPass", "3.0.0", callback};
 };
 
 /* When a plugin is loaded by the driver, it will call this entry point to

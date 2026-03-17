@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <string>
@@ -13,7 +13,7 @@ using std::string;
 
 using core_net::check;
 
-// Definitions in `eosio.cdt/libraries/eosiolib/system.hpp`
+// Definitions in `cdt/libraries/core_netlib/system.hpp`
 EOSIO_TEST_BEGIN(system_test)
    // ------------------------------------
    // inline void check(bool, const char*)

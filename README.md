@@ -6,14 +6,28 @@ In addition to being a general purpose WebAssembly toolchain, specific features 
 
 ## Universal Compatibility
 
-CDT 5.x compiles contracts for **all** Antelope-compatible chains — whether running native Anvo Network naming (`core.*` system accounts) or EOSIO/Antelope compatibility mode (`eosio.*` system accounts). Both header styles produce byte-identical WASM output:
+CDT 5.x compiles contracts for **all** Antelope-compatible chains — whether running native Anvo Network naming (`core.*` system accounts) or EOSIO/Antelope compatibility mode (`eosio.*` system accounts).
 
-| Target chain | Recommended headers | System accounts in code |
-|---|---|---|
-| Anvo Network (native) | `#include <core_net/core_net.hpp>` | `"core.token"_n` |
-| Compatibility mode (EOS, Telos, WAX, UX, Libre, etc.) | `#include <eosio/eosio.hpp>` | `"eosio.token"_n` |
+| Target chain | Headers | System accounts | Compiler flag |
+|---|---|---|---|
+| **Anvo Network** (default) | `#include <core_net/core_net.hpp>` | `"core.token"_n` | *(none — default)* |
+| **Compatibility mode** (EOS, Telos, WAX, UX, Libre, etc.) | `#include <eosio/eosio.hpp>` | `"eosio.token"_n` | `--system-account=eosio` |
 
-Both `core_net::` and `eosio::` headers are included in CDT 5.x and compile to identical bytecode. The choice of header determines your namespace (`core_net::` or `eosio::`), while the account names you use in your contract code (`"core.token"_n` vs `"eosio.token"_n`) determine which chain the contract targets. You can even mix — use `core_net::` headers with `"eosio.token"_n` account names if you prefer the newer API surface on a compatibility-mode chain.
+Both `core_net::` and `eosio::` headers are included in CDT 5.x and compile to identical bytecode. The choice of header determines your namespace (`core_net::` or `eosio::`), while the account names you use in your contract code (`"core.token"_n` vs `"eosio.token"_n`) determine which chain the contract targets.
+
+### System account compatibility switch
+
+The CDT linker generates a dispatch function that references the system account name. By default, this is `core` (for Anvo Network). When targeting legacy Antelope chains, pass `--system-account=eosio` to use the EOSIO system account:
+
+```sh
+# Anvo Network (default — no flag needed)
+cdt-cpp -o mycontract.wasm mycontract.cpp
+
+# Legacy Antelope chain (EOS, Telos, WAX, etc.)
+cdt-cpp --system-account=eosio -o mycontract.wasm mycontract.cpp
+```
+
+This flag controls the system account name used in the auto-generated `apply()` dispatcher. It affects how `onerror` notifications and action dispatch are handled at the protocol level. The flag can also be passed directly to the linker via `cdt-ld --system-account=eosio`.
 
 ## Repo organization
 

@@ -4738,7 +4738,7 @@ bool RecordDecl::isInjectedClassName() const {
     cast<RecordDecl>(getDeclContext())->getDeclName() == getDeclName();
 }
 
-bool RecordDecl::isEosioIgnore() const { return hasAttr<EosioIgnoreAttr>(); }
+bool RecordDecl::isCoreNetIgnore() const { return hasAttr<CoreNetIgnoreAttr>(); }
 
 bool RecordDecl::isLambda() const {
   if (auto RD = dyn_cast<CXXRecordDecl>(this))
@@ -4746,16 +4746,16 @@ bool RecordDecl::isLambda() const {
   return false;
 }
 
-bool FunctionDecl::isEosioWasmABI()const { return hasAttr<EosioWasmABIAttr>(); }
-StringRef FunctionDecl::getWasmABI()const { return getAttr<EosioWasmABIAttr>()->getAbi(); }
-bool FunctionDecl::isEosioWasmEntry()const { return hasAttr<EosioWasmEntryAttr>(); }
-bool FunctionDecl::isEosioWasmImport()const { return hasAttr<EosioWasmImportAttr>(); }
-bool FunctionDecl::isEosioWasmAction()const { return hasAttr<EosioWasmActionAttr>(); }
-StringRef FunctionDecl::getEosioWasmAction()const { return getAttr<EosioWasmActionAttr>()->getName(); }
-bool FunctionDecl::isEosioWasmNotify()const { return hasAttr<EosioWasmNotifyAttr>(); }
-StringRef FunctionDecl::getEosioWasmNotify()const { return getAttr<EosioWasmNotifyAttr>()->getName(); }
-bool FunctionDecl::isEosioWasmCall()const { return hasAttr<EosioWasmCallAttr>(); }
-StringRef FunctionDecl::getEosioWasmCall()const { return getAttr<EosioWasmCallAttr>()->getName(); }
+bool FunctionDecl::isCoreNetWasmABI()const { return hasAttr<CoreNetWasmABIAttr>(); }
+StringRef FunctionDecl::getWasmABI()const { return getAttr<CoreNetWasmABIAttr>()->getAbi(); }
+bool FunctionDecl::isCoreNetWasmEntry()const { return hasAttr<CoreNetWasmEntryAttr>(); }
+bool FunctionDecl::isCoreNetWasmImport()const { return hasAttr<CoreNetWasmImportAttr>(); }
+bool FunctionDecl::isCoreNetWasmAction()const { return hasAttr<CoreNetWasmActionAttr>(); }
+StringRef FunctionDecl::getCoreNetWasmAction()const { return getAttr<CoreNetWasmActionAttr>()->getName(); }
+bool FunctionDecl::isCoreNetWasmNotify()const { return hasAttr<CoreNetWasmNotifyAttr>(); }
+StringRef FunctionDecl::getCoreNetWasmNotify()const { return getAttr<CoreNetWasmNotifyAttr>()->getName(); }
+bool FunctionDecl::isCoreNetWasmCall()const { return hasAttr<CoreNetWasmCallAttr>(); }
+StringRef FunctionDecl::getCoreNetWasmCall()const { return getAttr<CoreNetWasmCallAttr>()->getName(); }
 
 bool RecordDecl::isCapturedRecord() const {
   return hasAttr<CapturedRecordAttr>();

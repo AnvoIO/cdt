@@ -1,7 +1,7 @@
 #pragma once
-#include <eosio/testing/tester.hpp>
+#include <core_net/testing/tester.hpp>
 
-namespace eosio::testing {
+namespace core_net::testing {
    struct contracts {
       static std::vector<uint8_t> array_tests_wasm() { return read_wasm("${CMAKE_BINARY_DIR}/../unit/test_contracts/array_tests.wasm"); }
       static std::vector<char>    array_tests_abi() { return read_abi("${CMAKE_BINARY_DIR}/../unit/test_contracts/array_tests.abi"); }
@@ -57,4 +57,4 @@ namespace eosio::testing {
       static std::vector<uint8_t> cust_entry_wasm() { return read_wasm("${CMAKE_BINARY_DIR}/../unit/test_contracts/sync_call_cust_entry.wasm"); }
       static std::vector<char>    cust_entry_abi() { return read_abi("${CMAKE_BINARY_DIR}/../unit/test_contracts/sync_call_cust_entry.abi"); }
    };
-} //ns eosio::testing
+} //ns core_net::testing

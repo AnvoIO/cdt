@@ -8,7 +8,7 @@
 #include <string_view>
 #include <tuple>
 
-#include <eosio/print.hpp>
+#include <core_net/print.hpp>
 
 namespace bluegrass { namespace meta {
    template <typename T>

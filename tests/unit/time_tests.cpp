@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <core_net/tester.hpp>
@@ -24,7 +24,7 @@ static constexpr int64_t i64max = numeric_limits<int64_t>::max(); //  9223372036
 static constexpr uint32_t u32min = numeric_limits<uint32_t>::min(); // 0
 static constexpr uint32_t u32max = numeric_limits<uint32_t>::max(); // 4294967295
 
-// Definitions in `eosio.cdt/libraries/eosio/time.hpp`
+// Definitions in `cdt/libraries/core_net/time.hpp`
 EOSIO_TEST_BEGIN(microseconds_type_test)
    //// explicit microseconds(uint64_t)/int64_t count()
    CHECK_EQUAL( microseconds{}._count, 0ULL )
@@ -120,7 +120,7 @@ EOSIO_TEST_BEGIN(microseconds_type_test)
    CHECK_EQUAL( days(60LL), microseconds{24LL*60LL*60LL*60LL*1000000LL} )
 EOSIO_TEST_END
 
-// Definitions in `eosio.cdt/libraries/eosio/time.hpp`
+// Definitions in `cdt/libraries/core_net/time.hpp`
 EOSIO_TEST_BEGIN(time_point_type_test)
    static const microseconds ms0 { 0LL};
    static const microseconds ms1 { 1LL};
@@ -219,7 +219,7 @@ EOSIO_TEST_BEGIN(time_point_type_test)
    CHECK_EQUAL( time_point{ microseconds{2147483647000000LL} }.to_string(), "2038-01-19T03:14:07");
 EOSIO_TEST_END
 
-// Definitions in `eosio.cdt/libraries/eosio/time.hpp`
+// Definitions in `cdt/libraries/core_net/time.hpp`
 EOSIO_TEST_BEGIN(time_point_sec_type_test)
    static const microseconds ms0 { 0LL};
    static const microseconds ms1 { 1LL};
@@ -397,7 +397,7 @@ EOSIO_TEST_BEGIN(time_point_sec_type_test)
    CHECK_EQUAL( time_point_sec{2147483647}.to_string(), "2038-01-19T03:14:07");
 EOSIO_TEST_END
 
-// Definitions in `eosio.cdt/libraries/eosio/time.hpp`
+// Definitions in `cdt/libraries/core_net/time.hpp`
 EOSIO_TEST_BEGIN(block_timestamp_type_test)
    static const int64_t bt_epoch{946684800000LL};
 

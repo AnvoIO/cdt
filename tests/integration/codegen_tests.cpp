@@ -17,11 +17,11 @@ using mvo = fc::mutable_variant_object;
 BOOST_AUTO_TEST_SUITE(codegen_tests)
 
 BOOST_FIXTURE_TEST_CASE( simple_tests, tester ) try {
-   create_accounts( { "test"_n, "eosio.token"_n, "someone"_n, "other"_n } );
+   create_accounts( { "test"_n, "core.token"_n, "someone"_n, "other"_n } );
    produce_block();
 
-   set_code( "eosio.token"_n,  contracts::transfer_wasm() );
-   set_abi(  "eosio.token"_n,  contracts::transfer_abi().data() );
+   set_code( "core.token"_n,  contracts::transfer_wasm() );
+   set_abi(  "core.token"_n,  contracts::transfer_abi().data() );
 
    set_code( "someone"_n, contracts::transfer_wasm() );
    set_abi(  "someone"_n,  contracts::transfer_abi().data() );
@@ -67,25 +67,25 @@ BOOST_FIXTURE_TEST_CASE( simple_tests, tester ) try {
 
 } FC_LOG_AND_RETHROW()
 
-BOOST_FIXTURE_TEST_CASE( simple_eosio_tests, tester ) try {
-   set_code( "eosio"_n, contracts::simple_wasm() );
-   set_abi( "eosio"_n,  contracts::simple_wrong_abi().data() );
+BOOST_FIXTURE_TEST_CASE( simple_core_net_tests, tester ) try {
+   set_code( "core"_n, contracts::simple_wasm() );
+   set_abi( "core"_n,  contracts::simple_wrong_abi().data() );
    produce_blocks();
-   push_action("eosio"_n, "test1"_n, "eosio"_n,
+   push_action("core"_n, "test1"_n, "core"_n,
          mvo()
          ("nm", "bucky"));
 
-   BOOST_CHECK_THROW(push_action("eosio"_n, "test1"_n, "eosio"_n, mvo()("nm", "notbucky")),
+   BOOST_CHECK_THROW(push_action("core"_n, "test1"_n, "core"_n, mvo()("nm", "notbucky")),
          fc::exception);
 
-   push_action("eosio"_n, "test2"_n, "eosio"_n,
+   push_action("core"_n, "test2"_n, "core"_n,
          mvo()
          ("arg0", 33)
          ("arg1", "some string"));
-   BOOST_CHECK_THROW(push_action("eosio"_n, "test2"_n, "eosio"_n, mvo() ("arg0", 30)("arg1", "some string")), fc::exception);
-   BOOST_CHECK_THROW(push_action("eosio"_n, "test2"_n, "eosio"_n, mvo() ("arg0", 33)("arg1", "not some string")), fc::exception);
+   BOOST_CHECK_THROW(push_action("core"_n, "test2"_n, "core"_n, mvo() ("arg0", 30)("arg1", "some string")), fc::exception);
+   BOOST_CHECK_THROW(push_action("core"_n, "test2"_n, "core"_n, mvo() ("arg0", 33)("arg1", "not some string")), fc::exception);
 
-   push_action("eosio"_n, "test3"_n, "eosio"_n,
+   push_action("core"_n, "test3"_n, "core"_n,
          mvo()
          ("arg0", 33)
          ("arg1", "some string"));

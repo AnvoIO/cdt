@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <array>
@@ -12,7 +12,7 @@ using std::array;
 
 using core_net::fixed_bytes;
 
-// Definitions in `eosio.cdt/libraries/eosio/fixed_bytes.hpp`
+// Definitions in `cdt/libraries/core_net/fixed_bytes.hpp`
 EOSIO_TEST_BEGIN(fixed_bytes_test)
    //// constexpr fixed_bytes()
    // static constexpr size_t padded_bytes()

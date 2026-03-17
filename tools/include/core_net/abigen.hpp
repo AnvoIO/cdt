@@ -66,7 +66,7 @@ namespace core_net::cdt {
 
       void add_action( const clang::CXXRecordDecl* decl ) {
          abi_action ret;
-         auto action_name = decl->getEosioActionAttr()->getName();
+         auto action_name = decl->getCoreNetActionAttr()->getName();
 
          if (!checked_actions.insert(get_action_name(decl)).second)
             CDT_CHECK_WARN(!rcs[get_action_name(decl)].empty(), "abigen_warning", decl->getLocation(), "Action <"+get_action_name(decl)+"> does not have a ricardian contract");
@@ -93,7 +93,7 @@ namespace core_net::cdt {
       void add_action( const clang::CXXMethodDecl* decl ) {
          abi_action ret;
 
-         auto action_name = decl->getEosioActionAttr()->getName();
+         auto action_name = decl->getCoreNetActionAttr()->getName();
 
          if (!checked_actions.insert(get_action_name(decl)).second)
             CDT_CHECK_WARN(!rcs[get_action_name(decl)].empty(), "abigen_warning", decl->getLocation(), "Action <"+get_action_name(decl)+"> does not have a ricardian contract");
@@ -134,7 +134,7 @@ namespace core_net::cdt {
       void add_call( const clang::CXXMethodDecl* decl ) {
          abi_call ret;
 
-         auto call_name = decl->getEosioCallAttr()->getName();
+         auto call_name = decl->getCoreNetCallAttr()->getName();
 
          if (call_name.empty()) {
             validate_hash_id( decl->getNameAsString(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
@@ -256,7 +256,7 @@ namespace core_net::cdt {
          tables.insert(decl);
          abi_table t;
          t.type = decl->getNameAsString();
-         auto table_name = decl->getEosioTableAttr()->getName();
+         auto table_name = decl->getCoreNetTableAttr()->getName();
          if (!table_name.empty()) {
             validate_name( table_name.str(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
             t.name = table_name.str();
@@ -815,14 +815,14 @@ namespace core_net::cdt {
                has_added_clauses = true;
             }
 
-            if (decl->isEosioAction() && ag.is_eosio_contract(decl, ag.get_contract_name())) {
+            if (decl->isCoreNetAction() && ag.is_core_net_contract(decl, ag.get_contract_name())) {
                ag.add_struct(decl);
                ag.add_action(decl);
                for (auto param : decl->parameters()) {
                   ag.add_type( param->getType() );
                }
             }
-            if (decl->isEosioCall() && ag.is_eosio_contract(decl, ag.get_contract_name())) {
+            if (decl->isCoreNetCall() && ag.is_core_net_contract(decl, ag.get_contract_name())) {
                ag.add_struct(decl);
                ag.add_call(decl);
                for (auto param : decl->parameters()) {
@@ -837,11 +837,11 @@ namespace core_net::cdt {
                ag.add_contracts(ag.parse_contracts());
                has_added_clauses = true;
             }
-            if ((decl->isEosioAction() || decl->isEosioTable()) && ag.is_eosio_contract(decl, ag.get_contract_name())) {
+            if ((decl->isCoreNetAction() || decl->isCoreNetTable()) && ag.is_core_net_contract(decl, ag.get_contract_name())) {
                ag.add_struct(decl);
-               if (decl->isEosioAction())
+               if (decl->isCoreNetAction())
                   ag.add_action(decl);
-               if (decl->isEosioTable())
+               if (decl->isCoreNetTable())
                   ag.add_table(decl);
                for (auto field : decl->fields()) {
                   ag.add_type( field->getType() );
@@ -889,10 +889,10 @@ namespace core_net::cdt {
                if (d->getName() == "multi_index" || d->getName() == "singleton") {
                   // second template parameter is table type
                   const auto* table_type = d->getTemplateArgs()[1].getAsType().getTypePtr()->getAsCXXRecordDecl();
-                  if ((table_type->isEosioTable() && ag.is_eosio_contract(table_type, ag.get_contract_name())) || defined_in_contract(d)) {
+                  if ((table_type->isCoreNetTable() && ag.is_core_net_contract(table_type, ag.get_contract_name())) || defined_in_contract(d)) {
                      // first parameter is table name
                      ag.add_table(d->getTemplateArgs()[0].getAsIntegral().getExtValue(), table_type);
-                     if (table_type->isEosioTable())
+                     if (table_type->isCoreNetTable())
                         ag.add_struct(table_type);
                   }
                }
@@ -909,24 +909,24 @@ namespace core_net::cdt {
       const clang::CXXRecordDecl* contract_class = nullptr;
    public:
       virtual bool VisitCXXRecordDecl(clang::CXXRecordDecl* cxx_decl) {
-         if (cxx_decl->isEosioContract()) {
-            bool is_eosio_contract = false;
+         if (cxx_decl->isCoreNetContract()) {
+            bool is_core_net_contract = false;
             // on this point it could be just an attribute so let's check base classes
             for (const auto& base : cxx_decl->bases()) {
                if (const clang::Type *base_type = base.getType().getTypePtrOrNull()) {
                   if (const auto* cur_cxx_decl = base_type->getAsCXXRecordDecl()) {
                      auto qname = cur_cxx_decl->getQualifiedNameAsString();
                      if (qname == "core_net::contract" || qname == "eosio::contract") {
-                        is_eosio_contract = true;
+                        is_core_net_contract = true;
                         break;
                      }
                   }
                }
             }
-            if (!is_eosio_contract)
+            if (!is_core_net_contract)
                return true;
             
-            auto attr_name = cxx_decl->getEosioContractAttr()->getName();
+            auto attr_name = cxx_decl->getCoreNetContractAttr()->getName();
             auto name = attr_name.empty() ? cxx_decl->getName() : attr_name;
             if (name == llvm::StringRef(ag.get_contract_name())) {
                contract_class = cxx_decl;

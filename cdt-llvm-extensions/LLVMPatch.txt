@@ -55,6 +55,8 @@ file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/InputFiles.cpp ${LLVM_DEST}/lld/wasm
 file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/InputFiles.h ${LLVM_DEST}/lld/wasm/InputFiles.h)
 file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/Writer.cpp ${LLVM_DEST}/lld/wasm/Writer.cpp)
 file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/Driver.cpp ${LLVM_DEST}/lld/wasm/Driver.cpp)
+file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/Options.td ${LLVM_DEST}/lld/wasm/Options.td)
+file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/Config.h ${LLVM_DEST}/lld/wasm/Config.h)
 
 ### Patches LLVM
 # defines all attributes for LLVM

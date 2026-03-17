@@ -1,4 +1,4 @@
-#include <eosio/chain.h>
+#include <core_net/chain.h>
 #include <stddef.h>
 
 void test_chain( void ) {

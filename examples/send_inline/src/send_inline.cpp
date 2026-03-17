@@ -1,6 +1,6 @@
 #include <send_inline.hpp>
 #include <hello.hpp>
-[[eosio::action]]
+[[core_net::action]]
 void send_inline::test( name user, name inline_code ) {
    print_f( "Hello % from send_inline", user );
    // constructor takes two arguments (the code the contract is deployed on and the set of permissions)

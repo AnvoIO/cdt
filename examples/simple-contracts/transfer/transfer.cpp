@@ -1,15 +1,15 @@
-#include <eosio/eosio.hpp>
+#include <core_net/core_net.hpp>
 
-using namespace eosio; 
+using namespace core_net; 
 
 CONTRACT enf: public contract {
    public:
       using contract::contract;
 
-      [[eosio::action]] void fixtransfer() {
+      [[core_net::action]] void fixtransfer() {
             action(
                 permission_level{get_self(), name("active")},
-                name("eosio.token"),
+                name("core.token"),
                 name("transfer"),
                 std::make_tuple(get_self(), name("webaccount1"), "1.000 EOS", "llvm16 fixed trans")
             ).send();

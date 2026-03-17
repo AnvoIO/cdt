@@ -70,10 +70,10 @@ public:
       int64_t ram_bytes;
       int64_t net_weight;
       int64_t cpu_weight;
-      get_resource_limits( "eosio"_n, ram_bytes, net_weight,  cpu_weight ) ;
+      get_resource_limits( "core"_n, ram_bytes, net_weight,  cpu_weight ) ;
       core_net::cout << "Get resource: ram_bytes=" << ram_bytes << " net_weight=" << net_weight << " cpu_weight=" << cpu_weight << " \n";
-      set_resource_limits( "eosio"_n, ram_bytes  , net_weight  ,  cpu_weight );
-      get_resource_limits( "eosio"_n, ram_bytes, net_weight,  cpu_weight ) ;
+      set_resource_limits( "core"_n, ram_bytes  , net_weight  ,  cpu_weight );
+      get_resource_limits( "core"_n, ram_bytes, net_weight,  cpu_weight ) ;
       core_net::cout << "Get resource: ram_bytes=" << ram_bytes << " net_weight=" << net_weight << " cpu_weight=" << cpu_weight << " \n";
       return true;
    }
@@ -82,10 +82,10 @@ public:
       int64_t ram_bytes;
       int64_t net_weight;
       int64_t cpu_weight;
-      get_resource_limits( "eosio"_n, ram_bytes, net_weight,  cpu_weight ) ;
+      get_resource_limits( "core"_n, ram_bytes, net_weight,  cpu_weight ) ;
       core_net::cout << "Get resource: ram_bytes=" << ram_bytes << " net_weight=" << net_weight << " cpu_weight=" << cpu_weight << " \n";
-      set_resource_limit( "eosio"_n.value, "ram"_n.value  , ram_bytes );
-      get_resource_limits( "eosio"_n, ram_bytes, net_weight,  cpu_weight ) ;
+      set_resource_limit( "core"_n.value, "ram"_n.value  , ram_bytes );
+      get_resource_limits( "core"_n, ram_bytes, net_weight,  cpu_weight ) ;
       core_net::cout << "Get resource: ram_bytes=" << ram_bytes << " net_weight=" << net_weight << " cpu_weight=" << cpu_weight << " \n";
       return true;
    }
@@ -99,9 +99,9 @@ public:
    }
    ACTION_TYPE
    bool setpriv() {
-      bool ispr = is_privileged("eosio"_n);
-      core_net::cout << "eosio is privileged : " << ispr << "\n";
-      set_privileged("eosio"_n, ispr);      
+      bool ispr = is_privileged("core"_n);
+      core_net::cout << "core is privileged : " << ispr << "\n";
+      set_privileged("core"_n, ispr);      
       return true;
    }
 /*  all tested

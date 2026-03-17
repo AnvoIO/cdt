@@ -1,4 +1,4 @@
-#include <eosio/permission.h>
+#include <core_net/permission.h>
 #include <stddef.h>
 
 void test_permission( void ) {

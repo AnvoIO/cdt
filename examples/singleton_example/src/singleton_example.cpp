@@ -1,6 +1,6 @@
 #include <singleton_example.hpp>
 
-[[eosio::action]]
+[[core_net::action]]
 void singleton_example::set( name user, uint64_t value ) {
    auto entry_stored = singleton_instance.get_or_create(user, testtablerow);
    entry_stored.primary_value = user;
@@ -8,7 +8,7 @@ void singleton_example::set( name user, uint64_t value ) {
    singleton_instance.set(entry_stored, user);
 }
 
-[[eosio::action]]
+[[core_net::action]]
 void singleton_example::get( ) {
    if (singleton_instance.exists())
       core_net::print(

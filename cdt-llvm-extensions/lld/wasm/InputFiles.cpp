@@ -429,10 +429,10 @@ void ObjFile::parse(bool ignoreComdats) {
     }
   }
 
-  eosioABI     = wasmObj->get_eosio_abi();
-  eosioActions = wasmObj->actions();
-  eosioNotify  = wasmObj->notify();
-  eosioCalls   = wasmObj->calls();
+  coreNetABI     = wasmObj->get_core_net_abi();
+  coreNetActions = wasmObj->actions();
+  coreNetNotify  = wasmObj->notify();
+  coreNetCalls   = wasmObj->calls();
 
   ArrayRef<StringRef> comdats = wasmObj->linkingData().Comdats;
   for (StringRef comdat : comdats) {

@@ -3,7 +3,7 @@
 
 // Test the validation of the types of arguments passed in call_wrapper.
 // Expected error:
-// build/bin/../include/eosiolib/contracts/eosio/detail.hpp:60:7: error: static_assert failed due to requirement 'detail::is_same<sync_call_invalid_arg_nums::empty &, unsigned int>::value'
+// build/bin/../include/core_netlib/contracts/eosio/detail.hpp:60:7: error: static_assert failed due to requirement 'detail::is_same<sync_call_invalid_arg_nums::empty &, unsigned int>::value'
 //   static_assert(detail::is_same<typename convert<T>::type, typename convert<typename std::tuple_element<I, deduced<Function>>::type>::type>::value);
 class [[core_net::contract]] sync_call_invalid_arg_nums : public core_net::contract{
 public:

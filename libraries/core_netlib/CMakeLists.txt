@@ -2,7 +2,7 @@ file(GLOB HEADERS "*.hpp"
                   "*.h")
 
 add_library(core_net
-            eosiolib.cpp
+            core_netlib.cpp
             crypto.cpp
             base64.cpp
             ${HEADERS})
@@ -38,7 +38,7 @@ add_custom_command( TARGET core_net_cmem POST_BUILD COMMAND ${CMAKE_COMMAND} -E 
 
 if (ENABLE_NATIVE_COMPILER)
    add_native_library(native_core_net
-                      eosiolib.cpp
+                      core_netlib.cpp
                       crypto.cpp
                       malloc.cpp
                       base64.cpp
@@ -48,4 +48,4 @@ if (ENABLE_NATIVE_COMPILER)
    add_custom_command( TARGET native_core_net POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:native_core_net> ${BASE_BINARY_DIR}/lib )
 endif()
 
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/../eosiolib DESTINATION ${BASE_BINARY_DIR}/include FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/../core_netlib DESTINATION ${BASE_BINARY_DIR}/include FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")

@@ -1,6 +1,6 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <core_net/tester.hpp>
@@ -13,7 +13,7 @@ using std::move;
 using core_net::datastream;
 using core_net::string;
 
-// Definitions found in `eosio.cdt/libraries/eosiolib/core/eosio/string.hpp`
+// Definitions found in `cdt/libraries/core_netlib/core/core_net/string.hpp`
 
 //// template <size_t N>
 //// string(const char (&str)[N])

@@ -1,14 +1,14 @@
 /**
  *  @file
- *  @copyright defined in eosio.cdt/LICENSE.txt
+ *  @copyright defined in cdt/LICENSE.txt
  */
 
 #include <core_net/tester.hpp>
 #include <core_net/crypto_ext.hpp>
 
-using namespace eosio::native;
+using namespace core_net::native;
 
-// Definitions in `eosio.cdt/libraries/eosio/crypto_ext.hpp`
+// Definitions in `cdt/libraries/core_net/crypto_ext.hpp`
 EOSIO_TEST_BEGIN(ec_point_test)
    std::string x_str = "0123456789abcdeffedcba9876543210";
    std::string y_str = "fedcba98765432100123456789abcdef";

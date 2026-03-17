@@ -1,7 +1,7 @@
 #include <core_net/core_net.hpp>
 #include <core_net/tester.hpp>
 
-using namespace eosio::native;
+using namespace core_net::native;
 
 EOSIO_TEST_BEGIN(print_test)
    CHECK_PRINT("27", [](){ core_net::print((uint8_t)27); });

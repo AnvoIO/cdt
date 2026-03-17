@@ -123,7 +123,7 @@ struct generation_utils {
       auto check = [&](const clang::Type* pt) {
         if (auto tst = llvm::dyn_cast<clang::TemplateSpecializationType>(pt))
          if (auto rt = llvm::dyn_cast<clang::RecordType>(tst->desugar()))
-            return rt->getDecl()->isEosioIgnore();
+            return rt->getDecl()->isCoreNetIgnore();
 
          return false;
       };
@@ -142,7 +142,7 @@ struct generation_utils {
       auto get = [&](const clang::Type* pt) {
          if (auto tst = llvm::dyn_cast<clang::TemplateSpecializationType>(pt))
             if (auto decl = llvm::dyn_cast<clang::RecordType>(tst->desugar()))
-               return decl->getDecl()->isEosioIgnore() ? tst->template_arguments()[0].getAsType() : type;
+               return decl->getDecl()->isCoreNetIgnore() ? tst->template_arguments()[0].getAsType() : type;
          return type;
       };
 
@@ -171,47 +171,47 @@ struct generation_utils {
       }
    }
 
-   static inline bool has_eosio_ricardian( const clang::CXXMethodDecl* decl ) {
-      return decl->hasEosioRicardian();
+   static inline bool has_core_net_ricardian( const clang::CXXMethodDecl* decl ) {
+      return decl->hasCoreNetRicardian();
    }
-   static inline bool has_eosio_ricardian( const clang::CXXRecordDecl* decl ) {
-      return decl->hasEosioRicardian();
+   static inline bool has_core_net_ricardian( const clang::CXXRecordDecl* decl ) {
+      return decl->hasCoreNetRicardian();
    }
 
-   static inline std::string get_eosio_ricardian( const clang::CXXMethodDecl* decl ) {
-      return decl->getEosioRicardianAttr()->getName().str();
+   static inline std::string get_core_net_ricardian( const clang::CXXMethodDecl* decl ) {
+      return decl->getCoreNetRicardianAttr()->getName().str();
    }
-   static inline std::string get_eosio_ricardian( const clang::CXXRecordDecl* decl ) {
-      return decl->getEosioRicardianAttr()->getName().str();
+   static inline std::string get_core_net_ricardian( const clang::CXXRecordDecl* decl ) {
+      return decl->getCoreNetRicardianAttr()->getName().str();
    }
 
    static inline std::string get_action_name( const clang::CXXMethodDecl* decl ) {
       std::string action_name = "";
-      auto tmp = decl->getEosioActionAttr()->getName();
+      auto tmp = decl->getCoreNetActionAttr()->getName();
       if (!tmp.empty())
          return tmp.str();
       return decl->getNameAsString();
    }
    static inline std::string get_call_name( const clang::CXXMethodDecl* decl ) {
-      auto tmp = decl->getEosioCallAttr()->getName();
+      auto tmp = decl->getCoreNetCallAttr()->getName();
       if (!tmp.empty())
          return tmp.str();
       return decl->getNameAsString();
    }
    static inline std::string get_call_name( const clang::CXXRecordDecl* decl ) {
-      auto tmp = decl->getEosioCallAttr()->getName();
+      auto tmp = decl->getCoreNetCallAttr()->getName();
       if (!tmp.empty())
          return tmp.str();
       return decl->getName().str();
    }
    static inline std::string get_notify_pair( const clang::CXXMethodDecl* decl ) {
       std::string notify_pair = "";
-      auto tmp = decl->getEosioNotifyAttr()->getName();
+      auto tmp = decl->getCoreNetNotifyAttr()->getName();
       return tmp.str();
    }
    static inline std::string get_action_name( const clang::CXXRecordDecl* decl ) {
       std::string action_name = "";
-      auto tmp = decl->getEosioActionAttr()->getName();
+      auto tmp = decl->getCoreNetActionAttr()->getName();
       if (!tmp.empty())
          return tmp.str();
       return decl->getName().str();
@@ -286,12 +286,12 @@ struct generation_utils {
       return clause_pairs;
    }
 
-   static inline bool is_eosio_contract( const clang::CXXMethodDecl* decl, const std::string& cn ) {
+   static inline bool is_core_net_contract( const clang::CXXMethodDecl* decl, const std::string& cn ) {
       llvm::StringRef name;
-      if (decl->isEosioContract())
-         name = decl->getEosioContractAttr()->getName();
-      else if (decl->getParent()->isEosioContract())
-         name = decl->getParent()->getEosioContractAttr()->getName();
+      if (decl->isCoreNetContract())
+         name = decl->getCoreNetContractAttr()->getName();
+      else if (decl->getParent()->isCoreNetContract())
+         name = decl->getParent()->getCoreNetContractAttr()->getName();
       if (name.empty()) {
          name = decl->getParent()->getName();
       }
@@ -299,15 +299,15 @@ struct generation_utils {
       return cn == parsed_contract_name;
    }
 
-   static inline bool is_eosio_contract( const clang::CXXRecordDecl* decl, const std::string& cn ) {
+   static inline bool is_core_net_contract( const clang::CXXRecordDecl* decl, const std::string& cn ) {
       llvm::StringRef name;
       auto pd = llvm::dyn_cast<clang::CXXRecordDecl>(decl->getParent());
-      if (decl->isEosioContract()) {
-         auto nm = decl->getEosioContractAttr()->getName();
+      if (decl->isCoreNetContract()) {
+         auto nm = decl->getCoreNetContractAttr()->getName();
          name = nm.empty() ? decl->getName() : nm;
       }
-      else if (pd && pd->isEosioContract()) {
-         auto nm = pd->getEosioContractAttr()->getName();
+      else if (pd && pd->isCoreNetContract()) {
+         auto nm = pd->getCoreNetContractAttr()->getName();
          name = nm.empty() ? pd->getName() : nm;
       }
       parsed_contract_name = name.str();

@@ -146,6 +146,10 @@ static cl::opt<std::string> mllvm_opt(
     cl::desc("Pass arguments to llvm"),
     cl::ZeroOrMore,
     cl::cat(LD_CAT));
+static cl::opt<std::string> system_account_opt(
+    "system-account",
+    cl::desc("System account name for dispatch (default: core)"),
+    cl::cat(LD_CAT));
 /// End of ld options
 
 #ifndef ONLY_LD
@@ -436,7 +440,7 @@ static void GetCompDefaults(std::vector<std::string>& copts) {
 #ifdef CPP_COMP
       copts.emplace_back("-fno-exceptions");
       copts.emplace_back("-fno-rtti");
-      // get eosio type and fstream include errors when moving to
+      // get core_net type and fstream include errors when moving to
       // -std=c++20 -fmodules
       copts.emplace_back("-fmodules-ts");
       copts.emplace_back("-D_GNU_SOURCE=1");
@@ -531,6 +535,11 @@ static void GetLdDefaults(std::vector<std::string>& ldopts) {
          ldopts.emplace_back("-mllvm");
          ldopts.emplace_back(mllvm_opt);
       }
+
+      if (!system_account_opt.empty())
+         ldopts.emplace_back("--system-account=" + system_account_opt);
+      else
+         ldopts.emplace_back("--system-account=core");
 
    } else {
 #ifdef __APPLE__
@@ -738,16 +747,16 @@ static Options CreateOptions(bool add_defaults=true) {
       copts.emplace_back("-I"+sysroot_opt+"/include/libcxx");
       copts.emplace_back("-I"+sysroot_opt+"/include/libc");
 
-      // only allow capi for native builds and for eosio-cc
+      // only allow capi for native builds and for core-net-cc
       if (fnative_opt) {
-        copts.emplace_back("-I"+sysroot_opt+"/include/eosiolib/capi");
-        copts.emplace_back("-I"+sysroot_opt+"/include/eosiolib/native");
+        copts.emplace_back("-I"+sysroot_opt+"/include/core_netlib/capi");
+        copts.emplace_back("-I"+sysroot_opt+"/include/core_netlib/native");
       }
 #ifndef CPP_COMP
-      copts.emplace_back("-I"+sysroot_opt+"/include/eosiolib/capi");
+      copts.emplace_back("-I"+sysroot_opt+"/include/core_netlib/capi");
 #endif
-      copts.emplace_back("-I"+sysroot_opt+"/include/eosiolib/core");
-      copts.emplace_back("-I"+sysroot_opt+"/include/eosiolib/contracts");
+      copts.emplace_back("-I"+sysroot_opt+"/include/core_netlib/core");
+      copts.emplace_back("-I"+sysroot_opt+"/include/core_netlib/contracts");
 
       ldopts.emplace_back("-L"+sysroot_opt+"/lib");
 #ifndef __APPLE__
@@ -766,14 +775,14 @@ static Options CreateOptions(bool add_defaults=true) {
       ldopts.emplace_back("-L"+core_net::cdt::whereami::where()+"/../lib");
 
       if (fnative_opt) {
-        copts.emplace_back("-I"+core_net::cdt::whereami::where()+"/../include/eosiolib/capi");
-        copts.emplace_back("-I"+core_net::cdt::whereami::where()+"/../include/eosiolib/native");
+        copts.emplace_back("-I"+core_net::cdt::whereami::where()+"/../include/core_netlib/capi");
+        copts.emplace_back("-I"+core_net::cdt::whereami::where()+"/../include/core_netlib/native");
       }
 #ifndef CPP_COMP
-      copts.emplace_back("-I"+core_net::cdt::whereami::where()+"/../include/eosiolib/capi");
+      copts.emplace_back("-I"+core_net::cdt::whereami::where()+"/../include/core_netlib/capi");
 #endif
-      copts.emplace_back("-I"+core_net::cdt::whereami::where()+"/../include/eosiolib/core");
-      copts.emplace_back("-I"+core_net::cdt::whereami::where()+"/../include/eosiolib/contracts");
+      copts.emplace_back("-I"+core_net::cdt::whereami::where()+"/../include/core_netlib/core");
+      copts.emplace_back("-I"+core_net::cdt::whereami::where()+"/../include/core_netlib/contracts");
 
 #ifndef __APPLE__
       ldopts.emplace_back("-L"+core_net::cdt::whereami::where()+"/../lib64");

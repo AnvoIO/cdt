@@ -1,20 +1,20 @@
-#include <eosio/action.h>
-#include <eosio/chain.h>
-#include <eosio/crypto.h>
-#include <eosio/db.h>
-#include <eosio/permission.h>
-#include <eosio/print.h>
-#include <eosio/privileged.h>
-#include <eosio/system.h>
-#include <eosio/transaction.h>
-#include <eosio/types.h>
-#include "native/eosio/intrinsics.hpp"
-#include "native/eosio/crt.hpp"
+#include <core_net/action.h>
+#include <core_net/chain.h>
+#include <core_net/crypto.h>
+#include <core_net/db.h>
+#include <core_net/permission.h>
+#include <core_net/print.h>
+#include <core_net/privileged.h>
+#include <core_net/system.h>
+#include <core_net/transaction.h>
+#include <core_net/types.h>
+#include "native/core_net/intrinsics.hpp"
+#include "native/core_net/crt.hpp"
 #include <softfloat.hpp>
 #include <float.h>
 
 // Boilerplate
-using namespace eosio::native;
+using namespace core_net::native;
 extern "C" {
    void get_resource_limits( capi_name account, int64_t* ram_bytes, int64_t* net_weight, int64_t* cpu_weight ) {
       return intrinsics::get().exec<intrinsics::get_resource_limits>(account, ram_bytes, net_weight, cpu_weight);
@@ -871,16 +871,16 @@ extern "C" {
 
    void eosio_assert(uint32_t test, const char* msg) {
       if (test == 0) {
-         _prints(msg, eosio::cdt::output_stream_kind::std_err);
-         _prints_l("\n", 1, eosio::cdt::output_stream_kind::none);
+         _prints(msg, core_net::cdt::output_stream_kind::std_err);
+         _prints_l("\n", 1, core_net::cdt::output_stream_kind::none);
          longjmp(*___env_ptr, 1);
       }
    }
 
    void eosio_assert_message(uint32_t test, const char* msg, uint32_t len) {
       if (test == 0) {
-         _prints_l(msg, len, eosio::cdt::output_stream_kind::std_err);
-         _prints_l("\n", 1, eosio::cdt::output_stream_kind::none);
+         _prints_l(msg, len, core_net::cdt::output_stream_kind::std_err);
+         _prints_l("\n", 1, core_net::cdt::output_stream_kind::none);
          longjmp(*___env_ptr, 1);
       }
    }
@@ -889,8 +889,8 @@ extern "C" {
       if (test == 0) {
          char buff[32];
          snprintf(buff, 32, "%llu", code);
-         _prints(buff, eosio::cdt::output_stream_kind::std_err);
-         _prints_l("\n", 1, eosio::cdt::output_stream_kind::none);
+         _prints(buff, core_net::cdt::output_stream_kind::std_err);
+         _prints_l("\n", 1, core_net::cdt::output_stream_kind::none);
          longjmp(*___env_ptr, 1);
       }
    }

@@ -4,7 +4,7 @@ content_title: The eosio::binary_extension Type
 
 Let's fully explain what the `eosio::binary_extension` type is, what it does, and why we need it for contract upgrades in certain situations.
 
-You can find the implementation of `eosio::binary_extension` within the CDT repository in the file: `libraries/eosiolib/core/eosio/binary_extension.hpp`.
+You can find the implementation of `eosio::binary_extension` within the CDT repository in the file: `libraries/core_netlib/core/eosio/binary_extension.hpp`.
 
 Our primary concern when using this type is when we are adding a new field to a smart contract's data structure that is currently utilized in an `eosio::multi_index` type (AKA a _table_), or when adding a new parameter to an action declaration.
 

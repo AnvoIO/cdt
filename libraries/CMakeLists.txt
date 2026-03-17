@@ -20,11 +20,15 @@ set(CMAKE_CXX_EXTENSIONS ON)
 
 add_subdirectory(libc)
 add_subdirectory(libc++)
-add_subdirectory(eosiolib)
+add_subdirectory(core_netlib)
 add_subdirectory(rt)
 
 if (ENABLE_NATIVE_COMPILER)
    add_subdirectory(native)
 endif()
+
+# Always copy native headers to the build tree — unit tests use -fnative
+# and need these headers even when ENABLE_NATIVE_COMPILER=OFF
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/native/native DESTINATION ${BASE_BINARY_DIR}/include/core_netlib FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/meta_refl/include/bluegrass DESTINATION ${BASE_BINARY_DIR}/include)

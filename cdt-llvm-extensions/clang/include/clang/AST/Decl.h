@@ -2123,16 +2123,16 @@ public:
 
   void setRangeEnd(SourceLocation E) { EndRangeLoc = E; }
 
-  bool isEosioWasmABI()const;
+  bool isCoreNetWasmABI()const;
   StringRef getWasmABI()const;
-  bool isEosioWasmEntry()const;
-  bool isEosioWasmImport()const;
-  bool isEosioWasmAction()const;
-  StringRef getEosioWasmAction()const;
-  bool isEosioWasmNotify()const;
-  StringRef getEosioWasmNotify()const;
-  bool isEosioWasmCall()const;
-  StringRef getEosioWasmCall()const;
+  bool isCoreNetWasmEntry()const;
+  bool isCoreNetWasmImport()const;
+  bool isCoreNetWasmAction()const;
+  StringRef getCoreNetWasmAction()const;
+  bool isCoreNetWasmNotify()const;
+  StringRef getCoreNetWasmNotify()const;
+  bool isCoreNetWasmCall()const;
+  StringRef getCoreNetWasmCall()const;
 
   /// Returns the location of the ellipsis of a variadic function.
   SourceLocation getEllipsisLoc() const {
@@ -4059,7 +4059,7 @@ public:
     return const_cast<RecordDecl*>(this)->getMostRecentDecl();
   }
 
-  bool isEosioIgnore() const;
+  bool isCoreNetIgnore() const;
 
   bool hasFlexibleArrayMember() const {
     return RecordDeclBits.HasFlexibleArrayMember;

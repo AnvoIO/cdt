@@ -1,4 +1,4 @@
-#include <eosio/system.h>
+#include <core_net/system.h>
 #include <stddef.h>
 
 void test_system( void ) {

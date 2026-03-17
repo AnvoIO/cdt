@@ -1,4 +1,4 @@
-//===- EosioApply ---------------===//
+//===- CoreNetApply ---------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //
@@ -33,19 +33,19 @@
 
 using namespace llvm;
 
-#define DEBUG_TYPE "eosio_apply"
+#define DEBUG_TYPE "core_net_apply"
 static cl::opt<std::string> entry_opt (
    "entry",
    cl::desc("Specify entry point")
 );
 
 namespace {
-  // EosioApply - Mutate the apply function as needed
-  struct EosioApplyPass : public PassInfoMixin<EosioApplyPass> {
+  // CoreNetApply - Mutate the apply function as needed
+  struct CoreNetApplyPass : public PassInfoMixin<CoreNetApplyPass> {
 
     PreservedAnalyses run(Function &F, FunctionAnalysisManager &FAM) {
        if (F.hasFnAttribute("eosio_wasm_entry") || F.getName().equals("apply")) {
-         outs() << "Running Eosio Apply Pass on: " << F.getName() << '\n';
+         outs() << "Running CoreNet Apply Pass on: " << F.getName() << '\n';
          auto wasm_ctors = F.getParent()->getOrInsertFunction("__wasm_call_ctors", AttributeList{}, Type::getVoidTy(F.getContext()));
          auto wasm_dtors = F.getParent()->getOrInsertFunction("__cxa_finalize", AttributeList{}, Type::getVoidTy(F.getContext()), Type::getInt32Ty(F.getContext()));
 
@@ -86,12 +86,12 @@ PassPluginLibraryInfo getPassPluginInfo()
     PB.registerPipelineStartEPCallback(
         [&](ModulePassManager &MPM, auto)
         {
-          MPM.addPass(createModuleToFunctionPassAdaptor(EosioApplyPass()));
+          MPM.addPass(createModuleToFunctionPassAdaptor(CoreNetApplyPass()));
           return true;
         });
   };
 
-  return {LLVM_PLUGIN_API_VERSION, "EosioApplyPass", "3.0.0", callback};
+  return {LLVM_PLUGIN_API_VERSION, "CoreNetApplyPass", "3.0.0", callback};
 };
 
 /* When a plugin is loaded by the driver, it will call this entry point to
