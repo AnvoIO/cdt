@@ -1,5 +1,7 @@
 # CDT (Contract Development Toolkit)
 
+> **[What's New in CDT 5.x](WHATS_NEW.md)** — Breaking changes, new features, and migration guide
+
 Contract Development Toolkit (CDT) is a C/C++ toolchain targeting WebAssembly (WASM) and a set of tools to facilitate development of smart contracts written in C/C++ that are meant to be deployed to [Anvo Network](https://github.com/Anvo-Network/) and compatible blockchains.
 
 In addition to being a general purpose WebAssembly toolchain, specific features and optimizations are available to support building smart contracts. This toolchain is built around [Clang 16](https://github.com/llvm/llvm-project), which means that CDT inherits the optimizations and analyses from that version of LLVM, but as the WASM target is still considered experimental, some optimizations are incomplete or not available.
