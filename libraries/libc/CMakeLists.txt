@@ -12,7 +12,8 @@ file(GLOB STDIO_SOURCES "cdt-musl/src/stdio/*.c")
 file(GLOB STDLIB_SOURCES "cdt-musl/src/stdlib/*.c")
 file(GLOB STRING_SOURCES "cdt-musl/src/string/*.c")
 file(GLOB TIME_SOURCES "cdt-musl/src/time/*.c")
-file(GLOB THREAD_SOURCES "cdt-musl/src/thread/*.c") #only for __lock __unlock
+file(GLOB THREAD_SOURCES "cdt-musl/src/thread/*.c")
+file(GLOB MALLOC_SOURCES "cdt-musl/src/malloc/*.c")
 
 set(INTERNAL_SOURCES cdt-musl/src/internal/floatscan.c cdt-musl/src/internal/intscan.c cdt-musl/src/internal/shgetc.c cdt-musl/src/internal/libc.c)
 
@@ -23,8 +24,10 @@ if(__APPLE)
 endif()
 
 file(GLOB HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/include/*.h"
+                  "${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/include/sys/*.h"
                   "${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/src/internal/*.h"
-                  "${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/arch/eos/*.h")
+                  "${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/arch/wasm32/*.h"
+                  "${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/arch/wasm32/bits/*.h")
 
 add_library(c
             ${CRYPT_SOURCES}
@@ -43,17 +46,15 @@ add_library(c
             ${STRING_SOURCES}
             ${TIME_SOURCES}
             ${THREAD_SOURCES}
-            "cdt-musl/src/malloc/posix_memalign.c"
-            "cdt-musl/src/malloc/memalign.c"
+            ${MALLOC_SOURCES}
             ${HEADERS})
-
 
 target_include_directories(c
                            PUBLIC
                            ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/include
                            ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/src/internal
                            ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/src/crypt
-                           ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/arch/eos
+                           ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/arch/wasm32
                            ${CMAKE_SOURCE_DIR})
 
 add_custom_command( TARGET c POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:c> ${BASE_BINARY_DIR}/lib )
@@ -76,8 +77,7 @@ if (ENABLE_NATIVE_COMPILER)
                ${STRING_SOURCES}
                ${TIME_SOURCES}
                ${THREAD_SOURCES}
-               "cdt-musl/src/malloc/posix_memalign.c"
-               "cdt-musl/src/malloc/memalign.c"
+               ${MALLOC_SOURCES}
                ${HEADERS})
 
    target_include_directories(native_c
@@ -85,7 +85,7 @@ if (ENABLE_NATIVE_COMPILER)
                               ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/include
                               ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/src/internal
                               ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/src/crypt
-                              ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/arch/eos
+                              ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/arch/wasm32
                               ${CMAKE_SOURCE_DIR})
 
 
@@ -94,4 +94,5 @@ endif()
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/include/ DESTINATION ${BASE_BINARY_DIR}/include/libc/)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/src/internal/ DESTINATION ${BASE_BINARY_DIR}/include/libc/)
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/arch/eos/ DESTINATION ${BASE_BINARY_DIR}/include/libc/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/arch/wasm32/ DESTINATION ${BASE_BINARY_DIR}/include/libc/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/cdt-musl/arch/wasm32/bits/ DESTINATION ${BASE_BINARY_DIR}/include/libc/bits/)
