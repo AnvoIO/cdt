@@ -31,7 +31,7 @@ include(${EXTENSION_SOURCE}/SetLLVMTargets.txt)
 set_llvm_targets()
 
 ### Patches CLANG
-# adds definition and declaration for Eosio Types 
+# adds definition and declaration for contract attribute types
 # support for C and C++
 file(COPY_FILE ${EXTENSION_SOURCE}/clang/include/clang/AST/DeclCXX.h ${LLVM_DEST}/clang/include/clang/AST/DeclCXX.h)
 file(COPY_FILE ${EXTENSION_SOURCE}/clang/include/clang/AST/Decl.h ${LLVM_DEST}/clang/include/clang/AST/Decl.h)
@@ -50,7 +50,7 @@ file(COPY_FILE ${EXTENSION_SOURCE}/clang/lib/Sema/SemaDeclAttr.cpp ${LLVM_DEST}/
 
 ### Patches WASM
 # creates, allocates, and populates structures needed to generate WASM
-# includes eosioABI eosioNotify eosioACtions
+# includes ABI, Notify, Actions custom sections
 file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/InputFiles.cpp ${LLVM_DEST}/lld/wasm/InputFiles.cpp)
 file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/InputFiles.h ${LLVM_DEST}/lld/wasm/InputFiles.h)
 file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/Writer.cpp ${LLVM_DEST}/lld/wasm/Writer.cpp)
@@ -70,21 +70,21 @@ file(COPY_FILE ${EXTENSION_SOURCE}/llvm/include/llvm/Object/Wasm.h ${LLVM_DEST}/
 file(COPY_FILE ${EXTENSION_SOURCE}/llvm/lib/Object/WasmObjectFile.cpp ${LLVM_DEST}/llvm/lib/Object/WasmObjectFile.cpp)
 file(COPY_FILE ${EXTENSION_SOURCE}/llvm/lib/Target/WebAssembly/WebAssemblyAsmPrinter.cpp ${LLVM_DEST}/llvm/lib/Target/WebAssembly/WebAssemblyAsmPrinter.cpp)
 
-### Add Customer Eosio Parsers into LLVM source
+### Add Custom Transform Passes into LLVM source
 # adds directories to Transforms cmake
 # registered as added step to parsing
-# Impliment as PassManger to upgrade to LLVM 17+
+# Implement as PassManager to upgrade to LLVM 17+
 if(EXISTS ${LLVM_DEST}/llvm/lib/Transforms)
-  file(COPY ${EXTENSION_SOURCE}/llvm/lib/Transforms/EosioApply DESTINATION ${LLVM_DEST}/llvm/lib/Transforms )
-  file(COPY ${EXTENSION_SOURCE}/llvm/lib/Transforms/EosioSoftfloat DESTINATION ${LLVM_DEST}/llvm/lib/Transforms )
+  file(COPY ${EXTENSION_SOURCE}/llvm/lib/Transforms/CoreNetApply DESTINATION ${LLVM_DEST}/llvm/lib/Transforms )
+  file(COPY ${EXTENSION_SOURCE}/llvm/lib/Transforms/CoreNetSoftfloat DESTINATION ${LLVM_DEST}/llvm/lib/Transforms )
   # Add new targets to cmake if needed
   set(LLVM_LIB_TRANSFORMS_CMAKE ${LLVM_DEST}/llvm/lib/Transforms/CMakeLists.txt)
   file(READ ${LLVM_LIB_TRANSFORMS_CMAKE} LLVM_LIB_CMAKE_CONTENTS)
-  if(NOT LLVM_LIB_CMAKE_CONTENTS MATCHES "EosioApply")
-    file(APPEND ${LLVM_LIB_TRANSFORMS_CMAKE} "add_subdirectory(EosioApply)\n")
+  if(NOT LLVM_LIB_CMAKE_CONTENTS MATCHES "CoreNetApply")
+    file(APPEND ${LLVM_LIB_TRANSFORMS_CMAKE} "add_subdirectory(CoreNetApply)\n")
   endif()
-  if(NOT LLVM_LIB_CMAKE_CONTENTS MATCHES "EosioSoftfloat")
-    file(APPEND ${LLVM_LIB_TRANSFORMS_CMAKE} "add_subdirectory(EosioSoftfloat)\n")
+  if(NOT LLVM_LIB_CMAKE_CONTENTS MATCHES "CoreNetSoftfloat")
+    file(APPEND ${LLVM_LIB_TRANSFORMS_CMAKE} "add_subdirectory(CoreNetSoftfloat)\n")
   endif()
 else()
   message(FATAL_ERROR "Cannot find LLVM source please load git submodules and try again")
