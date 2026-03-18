@@ -4,6 +4,7 @@
 #include "print.hpp"
 #include "check.hpp"
 #include "varint.hpp"
+#include <cassert>
 
 #include <vector>
 

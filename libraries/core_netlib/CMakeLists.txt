@@ -22,12 +22,16 @@ add_library(core_net_cmem
 
 set_target_properties(core_net_malloc PROPERTIES LINKER_LANGUAGE C)
 
+# libc++ headers MUST come before musl headers (libc++ has wrapper
+# headers for stddef.h, math.h, etc. that use #include_next)
+set(CDT_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+get_filename_component(CDT_ROOT_DIR ${CDT_ROOT_DIR} ABSOLUTE)
 target_include_directories(core_net PUBLIC
+                                 ${CDT_ROOT_DIR}/llvm/libcxx/include
                                  ${CMAKE_SOURCE_DIR}/libc/cdt-musl/include
                                  ${CMAKE_SOURCE_DIR}/libc/cdt-musl/src/internal
                                  ${CMAKE_SOURCE_DIR}/libc/cdt-musl/src/crypt
-                                 ${CMAKE_SOURCE_DIR}/libc/cdt-musl/arch/eos
-                                 ${CMAKE_SOURCE_DIR}/libc++/cdt-libcxx/include
+                                 ${CMAKE_SOURCE_DIR}/libc/cdt-musl/arch/wasm32
                                  ${CMAKE_SOURCE_DIR})
 
 target_link_libraries( core_net c c++ )

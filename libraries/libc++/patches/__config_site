@@ -1,0 +1,23 @@
+/* __config_site for Anvo CDT WASM smart contracts
+ * Generated for musl libc, single-threaded WASM target. */
+
+#ifndef _LIBCPP_CONFIG_SITE
+#define _LIBCPP_CONFIG_SITE
+
+#define _LIBCPP_HAS_NO_THREADS
+#define _LIBCPP_HAS_MUSL_LIBC
+#define _LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS
+#define _LIBCPP_DISABLE_AVAILABILITY
+#define _LIBCPP_HAS_NO_FILESYSTEM_LIBRARY
+#define _LIBCPP_HAS_NO_RANDOM_DEVICE
+#define _LIBCPP_HAS_NO_LOCALIZATION
+#define _LIBCPP_HAS_NO_FSTREAM
+#define _LIBCPP_HAS_NO_MONOTONIC_CLOCK
+#define _LIBCPP_ENABLE_ASSERTIONS_DEFAULT 0
+
+/* Wasm-specific */
+#ifndef __ELF__
+#define __ELF__ 1
+#endif
+
+#endif
