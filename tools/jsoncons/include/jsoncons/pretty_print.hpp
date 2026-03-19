@@ -1,102 +1,89 @@
-// Copyright 2013 Daniel Parker
+// Copyright 2013-2024 Daniel Parker
 // Distributed under the Boost license, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // See https://github.com/danielaparker/jsoncons for latest version
 
-#ifndef JSONCONS_PRETTYPRINT_HPP
-#define JSONCONS_PRETTYPRINT_HPP
+#ifndef JSONCONS_PRETTY_PRINT_HPP
+#define JSONCONS_PRETTY_PRINT_HPP
 
-#include <limits>
 #include <string>
-#include <vector>
 #include <exception>
-#include <cstdlib>
 #include <cstring>
 #include <ostream>
 #include <memory>
 #include <typeinfo>
 #include <cstring>
 #include <jsoncons/json_exception.hpp>
-#include <jsoncons/jsoncons_utilities.hpp>
-#include <jsoncons/json_serializing_options.hpp>
-#include <jsoncons/json_serializer.hpp>
+#include <jsoncons/json_options.hpp>
+#include <jsoncons/json_encoder.hpp>
 #include <jsoncons/json_type_traits.hpp>
-#include <jsoncons/json_error_category.hpp>
-
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wswitch"
-#endif
+#include <jsoncons/json_error.hpp>
 
 namespace jsoncons {
 
-template<class Json>
+template <typename Json>
 class json_printable
 {
 public:
-    typedef typename Json::char_type char_type;
+    using char_type = typename Json::char_type;
 
-    json_printable(const Json& o, indenting line_indent)
-       : o_(&o), indenting_(line_indent)
+    json_printable(const Json& j, indenting indent)
+       : j_(&j), indenting_(indent)
     {
     }
 
-    json_printable(const Json& o,
-                   const basic_json_serializing_options<char_type>& options,
-                   indenting line_indent)
-       : o_(&o), options_(options), indenting_(line_indent)
+    json_printable(const Json& j,
+                   const basic_json_encode_options<char_type>& options,
+                   indenting indent)
+       : j_(&j), options_(options), indenting_(indent)
     {
     }
 
     void dump(std::basic_ostream<char_type>& os) const
     {
-        o_->dump(os, options_, indenting_);
+        j_->dump(os, options_, indenting_);
     }
 
-    friend std::basic_ostream<char_type>& operator<<(std::basic_ostream<char_type>& os, const json_printable<Json>& o)
+    friend std::basic_ostream<char_type>& operator<<(std::basic_ostream<char_type>& os, const json_printable<Json>& pr)
     {
-        o.dump(os);
+        pr.dump(os);
         return os;
     }
 
-    const Json *o_;
-    basic_json_serializing_options<char_type> options_;
+    const Json *j_;
+    basic_json_encode_options<char_type> options_;
     indenting indenting_;
 private:
     json_printable();
 };
 
-template<class Json>
-json_printable<Json> print(const Json& val)
+template <typename Json>
+json_printable<Json> print(const Json& j)
 {
-    return json_printable<Json>(val, indenting::no_indent);
+    return json_printable<Json>(j, indenting::no_indent);
 }
 
-template<class Json>
-json_printable<Json> print(const Json& val,
-                           const basic_json_serializing_options<typename Json::char_type>& options)
+template <typename Json>
+json_printable<Json> print(const Json& j,
+                           const basic_json_encode_options<typename Json::char_type>& options)
 {
-    return json_printable<Json>(val, options, indenting::no_indent);
+    return json_printable<Json>(j, options, indenting::no_indent);
 }
 
-template<class Json>
-json_printable<Json> pretty_print(const Json& val)
+template <typename Json>
+json_printable<Json> pretty_print(const Json& j)
 {
-    return json_printable<Json>(val, indenting::indent);
+    return json_printable<Json>(j, indenting::indent);
 }
 
-template<class Json>
-json_printable<Json> pretty_print(const Json& val,
-                                  const basic_json_serializing_options<typename Json::char_type>& options)
+template <typename Json>
+json_printable<Json> pretty_print(const Json& j,
+                                  const basic_json_encode_options<typename Json::char_type>& options)
 {
-    return json_printable<Json>(val, options, indenting::indent);
+    return json_printable<Json>(j, options, indenting::indent);
 }
 
 }
-
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
 
 #endif
