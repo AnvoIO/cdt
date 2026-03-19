@@ -25,7 +25,7 @@ class ABIMerger {
       }
       ojson merge(ojson other) {
          ojson ret;
-         ret["____comment"] = abi["____comment"];
+         ret["____comment"] = ojson(abi["____comment"]);
          ret["version"]  = merge_version(other);
          ret["types"]    = merge_types(other);
          ret["structs"]  = merge_structs(other);

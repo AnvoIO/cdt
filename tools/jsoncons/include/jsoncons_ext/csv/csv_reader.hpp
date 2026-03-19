@@ -1,4 +1,4 @@
-// Copyright 2013 Daniel Parker
+// Copyright 2013-2024 Daniel Parker
 // Distributed under the Boost license, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -8,227 +8,335 @@
 #define JSONCONS_CSV_CSV_READER_HPP
 
 #include <string>
-#include <sstream>
 #include <vector>
-#include <istream>
-#include <cstdlib>
 #include <stdexcept>
+#include <memory> // std::allocator
+#include <utility> // std::move
+#include <istream> // std::basic_istream
+#include <jsoncons/source.hpp>
 #include <jsoncons/json_exception.hpp>
-#include <jsoncons/json_content_handler.hpp>
-#include <jsoncons/parse_error_handler.hpp>
-#include <jsoncons_ext/csv/csv_error_category.hpp>
+#include <jsoncons/json_visitor.hpp>
+#include <jsoncons_ext/csv/csv_error.hpp>
 #include <jsoncons_ext/csv/csv_parser.hpp>
 #include <jsoncons/json.hpp>
 #include <jsoncons/json_reader.hpp>
 #include <jsoncons/json_decoder.hpp>
-#include <jsoncons_ext/csv/csv_serializing_options.hpp>
+#include <jsoncons/source_adaptor.hpp>
+#include <jsoncons_ext/csv/csv_options.hpp>
 
 namespace jsoncons { namespace csv {
 
-template<class CharT,class Allocator=std::allocator<char>>
-class basic_csv_reader 
-{
-    struct stack_item
+    template <typename CharT,typename Source=jsoncons::stream_source<CharT>,typename Allocator=std::allocator<char>>
+    class basic_csv_reader 
     {
-        stack_item()
-           : array_begun_(false)
+        struct stack_item
+        {
+            stack_item() noexcept
+               : array_begun_(false)
+            {
+            }
+
+            bool array_begun_;
+        };
+        using char_type = CharT;
+        using temp_allocator_type = Allocator;
+        using char_allocator_type = typename std::allocator_traits<temp_allocator_type>:: template rebind_alloc<CharT>;
+
+        basic_csv_reader(const basic_csv_reader&) = delete; 
+        basic_csv_reader& operator = (const basic_csv_reader&) = delete; 
+
+        basic_default_json_visitor<CharT> default_visitor_;
+        text_source_adaptor<Source> source_;
+        basic_json_visitor<CharT>& visitor_;
+        basic_csv_parser<CharT,Allocator> parser_;
+
+    public:
+        // Structural characters
+        static constexpr size_t default_max_buffer_size = 16384;
+        //!  Parse an input stream of CSV text into a json object
+        /*!
+          \param is The input stream to read from
+        */
+
+        template <typename Sourceable>
+        basic_csv_reader(Sourceable&& source,
+                         basic_json_visitor<CharT>& visitor, 
+                         const Allocator& alloc = Allocator())
+
+           : basic_csv_reader(std::forward<Sourceable>(source), 
+                              visitor, 
+                              basic_csv_decode_options<CharT>(), 
+                              default_csv_parsing(), 
+                              alloc)
         {
         }
 
-        bool array_begun_;
-    };
-    typedef CharT char_type;
-    typedef Allocator allocator_type;
-    typedef typename std::allocator_traits<allocator_type>:: template rebind_alloc<CharT> char_allocator_type;
+        template <typename Sourceable>
+        basic_csv_reader(Sourceable&& source,
+                         basic_json_visitor<CharT>& visitor,
+                         const basic_csv_decode_options<CharT>& options, 
+                         const Allocator& alloc = Allocator())
 
-    basic_csv_reader(const basic_csv_reader&) = delete; 
-    basic_csv_reader& operator = (const basic_csv_reader&) = delete; 
-
-    basic_csv_parser<CharT,Allocator> parser_;
-    std::basic_istream<CharT>& is_;
-    std::vector<CharT,char_allocator_type> buffer_;
-    size_t buffer_length_;
-    size_t buffer_position_;
-    bool eof_;
-    size_t index_;
-public:
-    // Structural characters
-    static const size_t default_max_buffer_length = 16384;
-    //!  Parse an input stream of CSV text into a json object
-    /*!
-      \param is The input stream to read from
-    */
-
-    basic_csv_reader(std::basic_istream<CharT>& is,
-                     basic_json_content_handler<CharT>& handler)
-
-       : parser_(handler),
-         is_(is),
-         buffer_length_(default_max_buffer_length),
-         buffer_position_(0),
-         eof_(false),
-         index_(0)
-    {
-        buffer_.reserve(buffer_length_);
-    }
-
-    basic_csv_reader(std::basic_istream<CharT>& is,
-                     basic_json_content_handler<CharT>& handler,
-                     basic_csv_serializing_options<CharT,Allocator> options)
-
-       : parser_(handler,options),
-         is_(is),
-         buffer_length_(default_max_buffer_length),
-         buffer_position_(0),
-         eof_(false),
-         index_(0)
-    {
-        buffer_.reserve(buffer_length_);
-    }
-
-    basic_csv_reader(std::basic_istream<CharT>& is,
-                     basic_json_content_handler<CharT>& handler,
-                     parse_error_handler& err_handler)
-       :
-         parser_(handler,err_handler),
-         is_(is),
-         buffer_length_(default_max_buffer_length),
-         buffer_position_(0),
-         eof_(false),
-         index_(0)
-    {
-        buffer_.reserve(buffer_length_);
-    }
-
-    basic_csv_reader(std::basic_istream<CharT>& is,
-                     basic_json_content_handler<CharT>& handler,
-                     parse_error_handler& err_handler,
-                     basic_csv_serializing_options<CharT,Allocator> options)
-       :
-         parser_(handler,err_handler,options),
-         is_(is),
-         buffer_length_(default_max_buffer_length),
-         buffer_position_(0),
-         eof_(false),
-         index_(0)
-    {
-        buffer_.reserve(buffer_length_);
-    }
-
-    ~basic_csv_reader()
-    {
-    }
-
-    void read()
-    {
-        parser_.reset();
-        while (!eof_ && !parser_.done())
+            : basic_csv_reader(std::forward<Sourceable>(source), 
+                               visitor, 
+                               options, 
+                               default_csv_parsing(),
+                               alloc)
         {
-            if (!(index_ < buffer_.size()))
+        }
+
+        template <typename Sourceable>
+        basic_csv_reader(Sourceable&& source,
+                         basic_json_visitor<CharT>& visitor,
+                         std::function<bool(csv_errc,const ser_context&)> err_handler, 
+                         const Allocator& alloc = Allocator())
+            : basic_csv_reader(std::forward<Sourceable>(source), 
+                               visitor, 
+                               basic_csv_decode_options<CharT>(), 
+                               err_handler,
+                               alloc)
+        {
+        }
+
+        template <typename Sourceable>
+        basic_csv_reader(Sourceable&& source,
+                         basic_json_visitor<CharT>& visitor,
+                         const basic_csv_decode_options<CharT>& options,
+                         std::function<bool(csv_errc,const ser_context&)> err_handler, 
+                         const Allocator& alloc = Allocator())
+           : source_(std::forward<Sourceable>(source)),
+             visitor_(visitor),
+             parser_(options, err_handler, alloc)
+             
+        {
+        }
+
+        ~basic_csv_reader() noexcept = default;
+
+        void read()
+        {
+            std::error_code ec;
+            read(ec);
+            if (ec)
             {
-                if (!is_.eof())
+                JSONCONS_THROW(ser_error(ec,parser_.line(),parser_.column()));
+            }
+        }
+
+        void read(std::error_code& ec)
+        {
+            read_internal(ec);
+        }
+
+        std::size_t line() const
+        {
+            return parser_.line();
+        }
+
+        std::size_t column() const
+        {
+            return parser_.column();
+        }
+
+        bool eof() const
+        {
+            return parser_.source_exhausted() && source_.eof();
+        }
+
+    private:
+
+        void read_internal(std::error_code& ec)
+        {
+            if (source_.is_error())
+            {
+                ec = csv_errc::source_error;
+                return;
+            }   
+            while (!parser_.stopped())
+            {
+                if (parser_.source_exhausted())
                 {
-                    buffer_.clear();
-                    buffer_.resize(buffer_length_);
-                    is_.read(buffer_.data(), buffer_length_);
-                    buffer_.resize(static_cast<size_t>(is_.gcount()));
-                    if (buffer_.size() == 0)
+                    auto s = source_.read_buffer(ec);
+                    if (ec) return;
+                    if (s.size() > 0)
                     {
-                        eof_ = true;
+                        parser_.update(s.data(),s.size());
                     }
-                    index_ = 0;
                 }
-                else
-                {
-                    eof_ = true;
-                }
-            }
-            if (!eof_)
-            {
-                parser_.parse(buffer_.data(),index_,buffer_.size());
-                index_ = parser_.index();
+                parser_.parse_some(visitor_, ec);
+                if (ec) return;
             }
         }
-        parser_.end_parse();
-    }
+    };
 
-    bool eof() const
+    template <typename CharT,typename Source=jsoncons::stream_source<CharT>,typename Allocator=std::allocator<char>>
+    class legacy_basic_csv_reader 
     {
-        return eof_;
-    }
+        struct stack_item
+        {
+            stack_item() noexcept
+               : array_begun_(false)
+            {
+            }
 
-    size_t buffer_length() const
-    {
-        return buffer_length_;
-    }
+            bool array_begun_;
+        };
+        using char_type = CharT;
+        using temp_allocator_type = Allocator;
+        using char_allocator_type = typename std::allocator_traits<temp_allocator_type>:: template rebind_alloc<CharT>;
 
-    void buffer_length(size_t length)
-    {
-        buffer_length_ = length;
-        buffer_.reserve(buffer_length_);
-    }
+        legacy_basic_csv_reader(const legacy_basic_csv_reader&) = delete; 
+        legacy_basic_csv_reader& operator = (const legacy_basic_csv_reader&) = delete; 
 
-#if !defined(JSONCONS_NO_DEPRECATED)
+        basic_default_json_visitor<CharT> default_visitor_;
+        text_source_adaptor<Source> source_;
+        basic_json_visitor<CharT>& visitor_;
+        basic_csv_parser<CharT,Allocator> parser_;
 
-    size_t buffer_capacity() const
-    {
-        return buffer_length_;
-    }
+    public:
+        // Structural characters
+        static constexpr size_t default_max_buffer_size = 16384;
+        //!  Parse an input stream of CSV text into a json object
+        /*!
+          \param is The input stream to read from
+        */
 
-    void buffer_capacity(size_t length)
-    {
-        buffer_length_ = length;
-        buffer_.reserve(buffer_length_);
-    }
-#endif
-};
+        template <typename Sourceable>
+        legacy_basic_csv_reader(Sourceable&& source,
+                         basic_json_visitor<CharT>& visitor, 
+                         const Allocator& alloc = Allocator())
 
-template <class Json>
-Json decode_csv(typename Json::string_view_type s)
-{
-    json_decoder<Json> decoder;
+           : legacy_basic_csv_reader(std::forward<Sourceable>(source), 
+                              visitor, 
+                              basic_csv_decode_options<CharT>(), 
+                              default_csv_parsing(), 
+                              alloc)
+        {
+        }
 
-    basic_csv_parser<typename Json::char_type> parser(decoder);
-    parser.reset();
-    parser.parse(s.data(), 0, s.size());
-    parser.end_parse();
-    return decoder.get_result();
-}
+        template <typename Sourceable>
+        legacy_basic_csv_reader(Sourceable&& source,
+                         basic_json_visitor<CharT>& visitor,
+                         const basic_csv_decode_options<CharT>& options, 
+                         const Allocator& alloc = Allocator())
 
-template <class Json,class Allocator>
-Json decode_csv(typename Json::string_view_type s, const basic_csv_serializing_options<typename Json::char_type,Allocator>& options)
-{
-    json_decoder<Json,Allocator> decoder;
+            : legacy_basic_csv_reader(std::forward<Sourceable>(source), 
+                               visitor, 
+                               options, 
+                               default_csv_parsing(),
+                               alloc)
+        {
+        }
 
-    basic_csv_parser<typename Json::char_type,Allocator> parser(decoder, options);
-    parser.reset();
-    parser.parse(s.data(), 0, s.size());
-    parser.end_parse();
-    return decoder.get_result();
-}
+        template <typename Sourceable>
+        legacy_basic_csv_reader(Sourceable&& source,
+                         basic_json_visitor<CharT>& visitor,
+                         std::function<bool(csv_errc,const ser_context&)> err_handler, 
+                         const Allocator& alloc = Allocator())
+            : legacy_basic_csv_reader(std::forward<Sourceable>(source), 
+                               visitor, 
+                               basic_csv_decode_options<CharT>(), 
+                               err_handler,
+                               alloc)
+        {
+        }
 
-template <class Json>
-Json decode_csv(std::basic_istream<typename Json::char_type>& is)
-{
-    json_decoder<Json> decoder;
+        template <typename Sourceable>
+        legacy_basic_csv_reader(Sourceable&& source,
+                         basic_json_visitor<CharT>& visitor,
+                         const basic_csv_decode_options<CharT>& options,
+                         std::function<bool(csv_errc,const ser_context&)> err_handler, 
+                         const Allocator& alloc = Allocator(),
+                         typename std::enable_if<!std::is_constructible<jsoncons::basic_string_view<CharT>,Sourceable>::value>::type* = 0)
+           : source_(std::forward<Sourceable>(source)),
+             visitor_(visitor),
+             parser_(options, err_handler, alloc)
+        {
+        }
 
-    basic_csv_reader<typename Json::char_type> reader(is,decoder);
-    reader.read();
-    return decoder.get_result();
-}
+        template <typename Sourceable>
+        legacy_basic_csv_reader(Sourceable&& source,
+                         basic_json_visitor<CharT>& visitor,
+                         const basic_csv_decode_options<CharT>& options,
+                         std::function<bool(csv_errc,const ser_context&)> err_handler, 
+                         const Allocator& alloc = Allocator(),
+                         typename std::enable_if<std::is_constructible<jsoncons::basic_string_view<CharT>,Sourceable>::value>::type* = 0)
+           : source_(),
+             visitor_(visitor),
+             parser_(options, err_handler, alloc)             
+        {
+            jsoncons::basic_string_view<CharT> sv(std::forward<Sourceable>(source));
+            auto r = unicode_traits::detect_encoding_from_bom(sv.data(), sv.size());
+            if (!(r.encoding == unicode_traits::encoding_kind::utf8 || r.encoding == unicode_traits::encoding_kind::undetected))
+            {
+                JSONCONS_THROW(ser_error(json_errc::illegal_unicode_character,parser_.line(),parser_.column()));
+            }
+            std::size_t offset = (r.ptr - sv.data());
+            parser_.update(sv.data()+offset,sv.size()-offset);
+        }
 
-template <class Json,class Allocator>
-Json decode_csv(std::basic_istream<typename Json::char_type>& is, const basic_csv_serializing_options<typename Json::char_type,Allocator>& options)
-{
-    json_decoder<Json,Allocator> decoder;
+        ~legacy_basic_csv_reader() noexcept = default;
 
-    basic_csv_reader<typename Json::char_type,Allocator> reader(is,decoder,options);
-    reader.read();
-    return decoder.get_result();
-}
+        void read()
+        {
+            std::error_code ec;
+            read(ec);
+            if (ec)
+            {
+                JSONCONS_THROW(ser_error(ec,parser_.line(),parser_.column()));
+            }
+        }
 
-typedef basic_csv_reader<char> csv_reader;
-typedef basic_csv_reader<wchar_t> wcsv_reader;
+        void read(std::error_code& ec)
+        {
+            read_internal(ec);
+        }
+
+        std::size_t line() const
+        {
+            return parser_.line();
+        }
+
+        std::size_t column() const
+        {
+            return parser_.column();
+        }
+
+        bool eof() const
+        {
+            return parser_.source_exhausted() && source_.eof();
+        }
+
+    private:
+
+        void read_internal(std::error_code& ec)
+        {
+            if (source_.is_error())
+            {
+                ec = csv_errc::source_error;
+                return;
+            }   
+            while (!parser_.stopped())
+            {
+                if (parser_.source_exhausted())
+                {
+                    auto s = source_.read_buffer(ec);
+                    if (ec) return;
+                    if (s.size() > 0)
+                    {
+                        parser_.update(s.data(),s.size());
+                    }
+                }
+                parser_.parse_some(visitor_, ec);
+                if (ec) return;
+            }
+        }
+    };
+
+    using csv_string_reader = basic_csv_reader<char,string_source<char>>;
+    using wcsv_string_reader = basic_csv_reader<wchar_t,string_source<wchar_t>>;
+    using csv_stream_reader = basic_csv_reader<char,stream_source<char>>;
+    using wcsv_stream_reader = basic_csv_reader<wchar_t,stream_source<wchar_t>>;
 
 }}
 
