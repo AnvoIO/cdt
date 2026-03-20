@@ -8,3 +8,6 @@
 	path = llvm
 	url = https://github.com/llvm/llvm-project
 	branch = release/16.x
+[submodule "tools/jsoncons"]
+	path = tools/jsoncons
+	url = https://github.com/danielaparker/jsoncons.git
