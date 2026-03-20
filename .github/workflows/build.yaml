@@ -108,7 +108,14 @@ jobs:
                 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
       - name: Build
-        run: cmake --build build -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
+        run: |
+          # Limit parallelism to avoid OOM on small CI runners (2 vCPU / 7 GB)
+          # LLVM compilation units can consume 1-2 GB each
+          JOBS=2
+          if [ "$(nproc 2>/dev/null || sysctl -n hw.ncpu)" -gt 3 ]; then
+            JOBS=$(( $(nproc 2>/dev/null || sysctl -n hw.ncpu) / 2 ))
+          fi
+          cmake --build build -j $JOBS
 
       - name: Show ccache stats
         if: always()
