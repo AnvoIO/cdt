@@ -83,3 +83,6 @@
 [submodule "boost-detail"]
 	path = libraries/boost/libs/detail
 	url = https://github.com/boostorg/detail.git
+[submodule "tools/external/wabt"]
+	path = tools/external/wabt
+	url = https://github.com/AnvoIO/cdt-wabt.git
