@@ -1,4 +1,4 @@
-name: Upload Release .deb
+name: Upload Release Artifacts
 
 on:
   release:
@@ -6,19 +6,23 @@ on:
 
 jobs:
   upload:
-    name: Upload Release .deb
+    name: Upload Release Artifacts
     runs-on: ubuntu-latest
     permissions:
       contents: write
       actions: read
     steps:
-      - name: Download build artifact
+      - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          name: cdt_ubuntu_package_amd64
+          path: artifacts
+
       - name: Upload to release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release upload ${{ github.event.release.tag_name }} cdt_*_amd64.deb \
-            --repo ${{ github.repository }}
+          find artifacts -type f \( -name '*.deb' -o -name '*.tar.gz' -o -name '*.rb' \) | while read f; do
+            echo "Uploading: $f"
+            gh release upload ${{ github.event.release.tag_name }} "$f" \
+              --repo ${{ github.repository }} || true
+          done
