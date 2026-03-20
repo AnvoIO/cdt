@@ -1,6 +1,6 @@
 [submodule "libraries/libc/cdt-musl"]
 	path = libraries/libc/cdt-musl
-	url = https://github.com/Anvo-Network/cdt-musl.git
+	url = https://github.com/AnvoIO/cdt-musl.git
 [submodule "libraries/native/softfloat"]
 	path = libraries/native/softfloat
 	url = https://github.com/AntelopeIO/berkeley-softfloat-3
