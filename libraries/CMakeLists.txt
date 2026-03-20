@@ -22,6 +22,7 @@ add_subdirectory(libc)
 add_subdirectory(libc++)
 add_subdirectory(core_netlib)
 add_subdirectory(rt)
+add_subdirectory(boost)
 
 if (ENABLE_NATIVE_COMPILER)
    add_subdirectory(native)
