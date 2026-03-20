@@ -86,3 +86,6 @@
 [submodule "tools/external/wabt"]
 	path = tools/external/wabt
 	url = https://github.com/AnvoIO/cdt-wabt.git
+[submodule "libraries/meta_refl"]
+	path = libraries/meta_refl
+	url = https://github.com/AnvoIO/cdt-meta-refl.git
