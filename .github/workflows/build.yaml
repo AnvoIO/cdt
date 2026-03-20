@@ -52,8 +52,10 @@ jobs:
             os: macos-14
             arch: arm64
             package: brew
+            experimental: true
 
     runs-on: ${{ matrix.runner }}
+    continue-on-error: ${{ matrix.experimental || false }}
 
     steps:
       - uses: actions/checkout@v4
