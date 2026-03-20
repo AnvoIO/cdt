@@ -2,9 +2,7 @@ name: "Build & Test"
 
 on:
   push:
-    branches:
-      - main
-      - "release/*"
+    branches: [main, "release/*"]
   pull_request:
   workflow_dispatch:
 
@@ -16,50 +14,136 @@ defaults:
   run:
     shell: bash
 
+env:
+  CCACHE_MAXSIZE: "1.5G"
+  CCACHE_COMPRESS: "true"
+  CCACHE_COMPRESSLEVEL: "6"
+  CCACHE_DIR: "${{ github.workspace }}/.ccache"
+
 jobs:
-  Build:
-    name: Build & Test
+  build:
+    name: "${{ matrix.name }}"
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-24.04
+          - name: "Ubuntu 22.04 x86_64"
+            runner: ubuntu-22.04
+            os: ubuntu-22.04
             arch: amd64
-          # ARM64 builds require self-hosted runner
-          # - os: [self-hosted, arm64]
-          #   arch: arm64
-    runs-on: ${{ matrix.os }}
+            package: deb
+          - name: "Ubuntu 24.04 x86_64"
+            runner: ubuntu-24.04
+            os: ubuntu-24.04
+            arch: amd64
+            package: deb
+          - name: "Ubuntu 22.04 ARM64"
+            runner: ubuntu-22.04-arm
+            os: ubuntu-22.04
+            arch: arm64
+            package: deb
+          - name: "Ubuntu 24.04 ARM64"
+            runner: ubuntu-24.04-arm
+            os: ubuntu-24.04
+            arch: arm64
+            package: deb
+          - name: "macOS Sonoma ARM64"
+            runner: macos-14
+            os: macos-14
+            arch: arm64
+            package: brew
+
+    runs-on: ${{ matrix.runner }}
+
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Install dependencies
+      # ── Install dependencies ──
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake git libxml2-dev python3
+          sudo apt-get install -y \
+            build-essential cmake git libxml2-dev python3 ccache
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install cmake ccache
+
+      # ── ccache setup ──
+      - name: Get LLVM submodule hash
+        id: llvm-hash
+        run: |
+          echo "hash=$(git submodule status llvm | awk '{print $1}' | tr -d '-+')" >> "$GITHUB_OUTPUT"
+
+      - name: Restore ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.os }}-${{ matrix.arch }}-${{ steps.llvm-hash.outputs.hash }}
+          restore-keys: |
+            ccache-${{ matrix.os }}-${{ matrix.arch }}-
+
+      - name: Zero ccache stats
+        run: ccache --zero-stats
+
+      - name: Prepend ccache to PATH (Linux)
+        if: runner.os == 'Linux'
+        run: echo "/usr/lib/ccache" >> "$GITHUB_PATH"
+
+      - name: Prepend ccache to PATH (macOS)
+        if: runner.os == 'macOS'
+        run: echo "$(brew --prefix ccache)/libexec" >> "$GITHUB_PATH"
+
+      # ── Build ──
+      - name: Configure
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release \
+                -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+                -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
       - name: Build
-        run: |
-          mkdir build
-          cd build
-          cmake -DCMAKE_BUILD_TYPE=Release ..
-          make -j $(nproc)
+        run: cmake --build build -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
 
+      - name: Show ccache stats
+        if: always()
+        run: ccache --show-stats
+
+      # ── Tests ──
       - name: Run tests
         run: |
           cd build/tests
-          ctest -j $(nproc) --output-on-failure
+          ctest -j $(nproc 2>/dev/null || sysctl -n hw.ncpu) --output-on-failure
 
-      - name: Package
-        if: matrix.arch == 'amd64'
+      # ── Package (.deb) ──
+      - name: Generate .deb package
+        if: matrix.package == 'deb'
         run: |
           cd build/packages
-          bash generate_package.sh deb ubuntu-24.04 amd64
+          bash generate_package.sh deb ${{ matrix.os }} ${{ matrix.arch }}
 
-      - name: Upload package
-        if: matrix.arch == 'amd64'
+      - name: Upload .deb package
+        if: matrix.package == 'deb'
         uses: actions/upload-artifact@v4
         with:
-          name: cdt_ubuntu_package_amd64
-          path: build/packages/cdt*amd64.deb
+          name: cdt-${{ matrix.os }}-${{ matrix.arch }}-deb
+          path: build/packages/*.deb
+
+      # ── Package (.bottle) ──
+      - name: Generate Homebrew bottle
+        if: matrix.package == 'brew'
+        run: |
+          cd build/packages
+          bash generate_package.sh brew
+
+      - name: Upload Homebrew bottle
+        if: matrix.package == 'brew'
+        uses: actions/upload-artifact@v4
+        with:
+          name: cdt-${{ matrix.os }}-${{ matrix.arch }}-bottle
+          path: |
+            build/packages/*.tar.gz
+            build/packages/*.rb
