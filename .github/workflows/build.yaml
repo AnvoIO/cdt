@@ -47,12 +47,15 @@ jobs:
             os: ubuntu-24.04
             arch: arm64
             package: deb
-          - name: "macOS Sonoma ARM64"
-            runner: macos-14
-            os: macos-14
-            arch: arm64
-            package: brew
-            experimental: true
+          # macOS Apple Silicon — disabled until native test linking is fixed (#16)
+          # The WASM toolchain builds fine; native musl weak_alias symbols
+          # don't resolve in Mach-O static archives.
+          # - name: "macOS Sonoma ARM64"
+          #   runner: macos-14
+          #   os: macos-14
+          #   arch: arm64
+          #   package: brew
+          #   experimental: true
 
     runs-on: ${{ matrix.runner }}
     continue-on-error: ${{ matrix.experimental || false }}
