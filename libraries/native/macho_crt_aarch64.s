@@ -1,10 +1,10 @@
-.global _start
+.global start
 .global ____putc
 .global __mmap
-.global __setjmp
-.global __longjmp
+.global _setjmp
+.global _longjmp
 
-_start:
+start:
    mov x29, sp
    ldr x0, [sp]          // argc
    add x1, sp, #8        // argv
@@ -34,7 +34,7 @@ __mmap:
    svc #0x80
    ret
 
-__setjmp:
+_setjmp:
    stp x19, x20, [x0, #0]
    stp x21, x22, [x0, #16]
    stp x23, x24, [x0, #32]
@@ -46,7 +46,7 @@ __setjmp:
    mov x0, #0
    ret
 
-__longjmp:
+_longjmp:
    ldp x19, x20, [x0, #0]
    ldp x21, x22, [x0, #16]
    ldp x23, x24, [x0, #32]
