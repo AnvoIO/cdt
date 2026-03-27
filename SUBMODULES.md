@@ -11,7 +11,7 @@ upstream changes. Always pin to a specific tested commit.
 | `llvm` | `llvm/llvm-project` | LLVM 16 | LLVM 16 monorepo | CDT extensions via `cdt-llvm-extensions/` overlay |
 | `libraries/libc/cdt-musl` | `AntelopeIO/cdt-musl` | `9e6b206` | musl libc ~1.1 | WASM-targeted C standard library |
 | `libraries/libc++/cdt-libcxx` | `AntelopeIO/cdt-libcxx` | `dd2d7b0` | libc++ from LLVM 9 era | WASM-targeted C++ standard library |
-| `libraries/native/softfloat` | `AntelopeIO/berkeley-softfloat-3` | `203b6df` | Berkeley SoftFloat 3 | Includes float64 infinity fix |
+| `libraries/native/softfloat` | `AnvoIO/berkeley-softfloat-3` | `7f136c2` | Berkeley SoftFloat 3 | Fork of AntelopeIO; adds `__builtin_memcpy` fix for WASM builds |
 
 ## Updating a submodule
 
