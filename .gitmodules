@@ -3,7 +3,7 @@
 	url = https://github.com/AnvoIO/cdt-musl.git
 [submodule "libraries/native/softfloat"]
 	path = libraries/native/softfloat
-	url = https://github.com/AntelopeIO/berkeley-softfloat-3
+	url = https://github.com/AnvoIO/berkeley-softfloat-3
 [submodule "llvm"]
 	path = llvm
 	url = https://github.com/llvm/llvm-project
