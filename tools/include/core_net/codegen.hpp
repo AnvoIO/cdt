@@ -63,6 +63,19 @@ namespace core_net { namespace cdt {
          size_t                                source_index = 0;
          std::map<std::string, std::string>    tmp_files;
          bool                                  warn_action_read_only;
+         std::string                           system_account = "core";
+
+         // Dispatch mappings: action_name -> symbol_name
+         // e.g. "transfer" -> "__core_net_action_transfer_token"
+         std::map<std::string, std::string> action_dispatch_map;
+
+         // Notify mappings: "code::action" -> symbol_name
+         // e.g. "eosio.token::transfer" -> "__core_net_notify_transfer_mycontract"
+         std::map<std::string, std::string> notify_dispatch_map;
+
+         // Call mappings: call_name -> symbol_name
+         // e.g. "my_func" -> "__core_net_call_my_func_mycontract"
+         std::map<std::string, std::string> call_dispatch_map;
 
          using generation_utils::generation_utils;
 
@@ -82,6 +95,10 @@ namespace core_net { namespace cdt {
          void set_warn_action_read_only(bool w) {
             warn_action_read_only = w;
          }
+
+         void set_system_account(std::string sa) {
+            system_account = sa;
+         }
    };
 
    class core_net_codegen_visitor : public RecursiveASTVisitor<core_net_codegen_visitor>, public generation_utils {
@@ -91,9 +108,12 @@ namespace core_net { namespace cdt {
          StringRef main_name;
          std::stringstream ss;
          CompilerInstance* ci;
-         bool apply_was_found = false;
 
       public:
+         bool apply_was_found = false;
+         bool sync_call_was_found = false;
+         bool pre_dispatch_found = false;
+         bool post_dispatch_found = false;
          std::vector<CXXMethodDecl*> action_decls;
          std::vector<CXXMethodDecl*> notify_decls;
 
@@ -242,11 +262,19 @@ namespace core_net { namespace cdt {
          void create_action_dispatch(CXXMethodDecl* decl) {
             auto func = [](CXXMethodDecl* d) { return generation_utils::get_action_name(d); };
             create_dispatch("core_net_wasm_action", "__core_net_action_", func, decl);
+            // Record the action_name -> symbol_name mapping for apply() generation
+            std::string action_name = generation_utils::get_action_name(decl);
+            std::string symbol_name = "__core_net_action_" + decl->getNameAsString() + "_" + decl->getParent()->getNameAsString();
+            cg.action_dispatch_map[action_name] = symbol_name;
          }
 
          void create_notify_dispatch(CXXMethodDecl* decl) {
             auto func = [](CXXMethodDecl* d) { return generation_utils::get_notify_pair(d); };
             create_dispatch("core_net_wasm_notify", "__core_net_notify_", func, decl);
+            // Record the notify_pair -> symbol_name mapping for apply() generation
+            std::string notify_pair = generation_utils::get_notify_pair(decl);
+            std::string symbol_name = "__core_net_notify_" + decl->getNameAsString() + "_" + decl->getParent()->getNameAsString();
+            cg.notify_dispatch_map[notify_pair] = symbol_name;
          }
 
          // Generate sync call dispatcher
@@ -254,6 +282,9 @@ namespace core_net { namespace cdt {
             const std::string attr = "core_net_wasm_call";
             const std::string func_name = "__core_net_call_";
             const std::string call_name = generation_utils::get_call_name(decl);
+            // Record the call_name -> symbol_name mapping for sync_call() generation
+            std::string symbol_name = func_name + decl->getNameAsString() + "_" + decl->getParent()->getNameAsString();
+            cg.call_dispatch_map[call_name] = symbol_name;
             constexpr static uint32_t max_stack_size = 512;
             codegen& cg = codegen::get();
             std::string nm = decl->getNameAsString()+"_"+decl->getParent()->getNameAsString();
@@ -556,8 +587,20 @@ namespace core_net { namespace cdt {
 
          virtual bool VisitDecl(clang::Decl* decl) {
             if (auto* fd = dyn_cast<clang::FunctionDecl>(decl)) {
-               if (fd->getNameInfo().getAsString() == "apply")
-                  apply_was_found = true;
+               auto name = fd->getNameInfo().getAsString();
+               if (name == "apply") {
+                  // Only consider it user-defined if it has a body AND is extern "C" (not std::apply etc.)
+                  if (fd->hasBody() && fd->isExternC())
+                     apply_was_found = true;
+               }
+               if (name == "sync_call") {
+                  if (fd->hasBody() && fd->isExternC())
+                     sync_call_was_found = true;
+               }
+               if (name == "pre_dispatch" && fd->hasBody() && fd->isExternC())
+                  pre_dispatch_found = true;
+               if (name == "post_dispatch" && fd->hasBody() && fd->isExternC())
+                  post_dispatch_found = true;
             } else {
                auto process_global_var = [this]( clang::Decl* d ) {
                   if (auto* vd = dyn_cast<VarDecl>(d)) {
@@ -616,6 +659,247 @@ namespace core_net { namespace cdt {
          explicit core_net_codegen_consumer(CompilerInstance *CI, std::string file)
             : visitor(new core_net_codegen_visitor(CI)), main_file(file), ci(CI) { }
 
+         // Generate the apply() entry point as C++ source code.
+         // This replaces the raw WASM bytecode generation previously done in lld's Writer.cpp.
+         static void generate_apply(std::stringstream& ss, codegen& cg, bool has_pre_dispatch, bool has_post_dispatch) {
+            const uint64_t system_account_name = string_to_name(cg.system_account.c_str());
+            // When user defines pre/post_dispatch with core_net::name params, call directly.
+            // When they're weak (not user-defined), do null check first.
+            std::string post_dispatch_call = has_post_dispatch
+               ? "post_dispatch(core_net::name{receiver}, core_net::name{code}, core_net::name{action})"
+               : "if (&post_dispatch) post_dispatch(receiver, code, action)";
+
+            ss << "\n// --- Generated apply() dispatch ---\n";
+            ss << "extern \"C\" {\n";
+
+            // Forward declarations for host functions and dispatch helpers
+            ss << "__attribute__((core_net_wasm_import))\n";
+            ss << "void core_net_assert_code(uint32_t, uint64_t);\n";
+            ss << "__attribute__((core_net_wasm_import))\n";
+            ss << "void core_net_set_contract_name(uint64_t);\n";
+            ss << "void __wasm_call_ctors();\n";
+            ss << "void __cxa_finalize(void*);\n";
+
+            // Only declare pre/post_dispatch if user has not defined them.
+            // If user defined them, we call them directly (they're already visible via #include).
+            if (!has_pre_dispatch) {
+               ss << "__attribute__((weak))\n";
+               ss << "bool pre_dispatch(unsigned long long, unsigned long long, unsigned long long);\n";
+            }
+            if (!has_post_dispatch) {
+               ss << "__attribute__((weak))\n";
+               ss << "void post_dispatch(unsigned long long, unsigned long long, unsigned long long);\n";
+            }
+
+            // Forward declare all dispatch stub functions
+            for (auto& [action_name, symbol_name] : cg.action_dispatch_map) {
+               ss << "void " << symbol_name << "(unsigned long long, unsigned long long);\n";
+            }
+            for (auto& [notify_pair, symbol_name] : cg.notify_dispatch_map) {
+               ss << "void " << symbol_name << "(unsigned long long, unsigned long long);\n";
+            }
+
+            ss << "\n__attribute__((used))\nvoid apply(unsigned long long receiver, unsigned long long code, unsigned long long action) {\n";
+            ss << "  core_net_set_contract_name(receiver);\n";
+            ss << "  __wasm_call_ctors();\n";
+
+            // pre_dispatch check — if user defined it with name params, cast accordingly
+            if (has_pre_dispatch) {
+               // User's pre_dispatch uses core_net::name — generate matching call
+               ss << "  if (!pre_dispatch(core_net::name{receiver}, core_net::name{code}, core_net::name{action})) {\n";
+               ss << "    __cxa_finalize(0);\n";
+               ss << "    return;\n";
+               ss << "  }\n";
+            } else {
+               ss << "  if (&pre_dispatch && !pre_dispatch(receiver, code, action)) {\n";
+               ss << "    __cxa_finalize(0);\n";
+               ss << "    return;\n";
+               ss << "  }\n";
+            }
+
+            ss << "  if (code == receiver) {\n";
+
+            // Action dispatch
+            bool first_action = true;
+            for (auto& [action_name, symbol_name] : cg.action_dispatch_map) {
+               uint64_t name_value = string_to_name(action_name.c_str());
+               ss << "    " << (first_action ? "if" : "else if");
+               ss << " (action == " << name_value << "ULL) {\n";
+               ss << "      " << symbol_name << "(receiver, code);\n";
+               ss << "    }\n";
+               first_action = false;
+            }
+
+            // No matching action fallthrough
+            if (!cg.action_dispatch_map.empty()) {
+               ss << "    else {\n";
+            }
+            ss << "      if (receiver != " << system_account_name << "ULL) {\n";
+            ss << "        core_net_assert_code(false, 8000000000000000000ULL);\n";
+            ss << "      } else {\n";
+            ss << "        \" << post_dispatch_call << \";\n";
+            ss << "      }\n";
+            if (!cg.action_dispatch_map.empty()) {
+               ss << "    }\n";
+            }
+
+            ss << "  } else {\n";
+
+            // Onerror guard: if no explicit onerror handler registered for system account
+            bool has_onerror = false;
+            for (auto& [notify_pair, symbol_name] : cg.notify_dispatch_map) {
+               auto sep = notify_pair.find("::");
+               if (sep != std::string::npos) {
+                  std::string code_name = notify_pair.substr(0, sep);
+                  std::string action_name = notify_pair.substr(sep + 2);
+                  if (code_name == cg.system_account && action_name == "onerror") {
+                     has_onerror = true;
+                     break;
+                  }
+               }
+            }
+            if (!has_onerror) {
+               uint64_t onerror_name = string_to_name("onerror");
+               ss << "    if (code == " << system_account_name << "ULL && action == " << onerror_name << "ULL) {\n";
+               ss << "      core_net_assert_code(false, 8000000000000000001ULL);\n";
+               ss << "    }\n";
+            }
+
+            // Notification dispatch: group by code, then action within each code group
+            // Separate wildcard handlers from specific-code handlers
+            std::map<std::string, std::map<std::string, std::string>> notify_by_code; // code -> (action -> symbol)
+            std::map<std::string, std::string> wildcard_handlers; // action -> symbol (for code == "*")
+
+            for (auto& [notify_pair, symbol_name] : cg.notify_dispatch_map) {
+               auto sep = notify_pair.find("::");
+               if (sep != std::string::npos) {
+                  std::string code_name = notify_pair.substr(0, sep);
+                  std::string action_name = notify_pair.substr(sep + 2);
+                  if (code_name == "*") {
+                     wildcard_handlers[action_name] = symbol_name;
+                  } else {
+                     notify_by_code[code_name][action_name] = symbol_name;
+                  }
+               }
+            }
+
+            // Emit specific-code notification handlers
+            bool first_code = true;
+            for (auto& [code_name, action_map] : notify_by_code) {
+               uint64_t code_value = string_to_name(code_name.c_str());
+               ss << "    " << (first_code ? "if" : "else if");
+               ss << " (code == " << code_value << "ULL) {\n";
+
+               bool first_notify_action = true;
+               for (auto& [action_name, symbol_name] : action_map) {
+                  uint64_t action_value = string_to_name(action_name.c_str());
+                  ss << "      " << (first_notify_action ? "if" : "else if");
+                  ss << " (action == " << action_value << "ULL) {\n";
+                  ss << "        " << symbol_name << "(receiver, code);\n";
+                  ss << "      }\n";
+                  first_notify_action = false;
+               }
+               ss << "    }\n";
+               first_code = false;
+            }
+
+            // Wildcard handlers (code == "*") go in the else branch
+            if (!wildcard_handlers.empty()) {
+               if (!notify_by_code.empty()) {
+                  ss << "    else {\n";
+               }
+               bool first_wc = true;
+               for (auto& [action_name, symbol_name] : wildcard_handlers) {
+                  uint64_t action_value = string_to_name(action_name.c_str());
+                  ss << "      " << (first_wc ? "if" : "else if");
+                  ss << " (action == " << action_value << "ULL) {\n";
+                  ss << "        " << symbol_name << "(receiver, code);\n";
+                  ss << "      }\n";
+                  first_wc = false;
+               }
+               ss << "      else {\n";
+               ss << "        \" << post_dispatch_call << \";\n";
+               ss << "      }\n";
+               if (!notify_by_code.empty()) {
+                  ss << "    }\n";
+               }
+            } else if (!notify_by_code.empty()) {
+               // No wildcard handlers — post_dispatch in the else after all code checks
+               ss << "    else {\n";
+               ss << "      \" << post_dispatch_call << \";\n";
+               ss << "    }\n";
+            } else {
+               // No notification handlers at all
+               ss << "    \" << post_dispatch_call << \";\n";
+            }
+
+            ss << "  }\n"; // end of code != receiver
+            ss << "  __cxa_finalize(0);\n";
+            ss << "}\n"; // end of apply()
+            ss << "}\n"; // end of extern "C"
+         }
+
+         // Generate the sync_call() entry point as C++ source code.
+         static void generate_sync_call(std::stringstream& ss, codegen& cg) {
+            ss << "\n// --- Generated sync_call() dispatch ---\n";
+            ss << "extern \"C\" {\n";
+
+            // Forward declarations
+            ss << "__attribute__((core_net_wasm_import))\n";
+            ss << "void core_net_set_contract_name(uint64_t);\n";
+            ss << "void __wasm_call_ctors();\n";
+            ss << "void __cxa_finalize(void*);\n";
+
+            // Forward declare get_sync_call_data helpers (already generated by codegen)
+            ss << "void* __eos_get_sync_call_data_(unsigned long);\n";
+            ss << "void* __eos_get_sync_call_data_header_(void*);\n";
+
+            // Forward declare all call dispatch stub functions
+            for (auto& [call_name, symbol_name] : cg.call_dispatch_map) {
+               ss << "void " << symbol_name << "(unsigned long long, unsigned long long, size_t, void*);\n";
+            }
+
+            ss << "\n__attribute__((used))\nlong long sync_call(unsigned long long sender, unsigned long long receiver, size_t data_size) {\n";
+            ss << "  core_net_set_contract_name(receiver);\n";
+            ss << "  __wasm_call_ctors();\n";
+
+            // Retrieve call data
+            ss << "  void* data = __eos_get_sync_call_data_(data_size);\n";
+            ss << "  void* header_ptr = __eos_get_sync_call_data_header_(data);\n";
+
+            // Check header version (offset 0, uint32_t)
+            ss << "  unsigned int version = *((unsigned int*)header_ptr);\n";
+            ss << "  if (version != 0) {\n";
+            ss << "    __cxa_finalize(0);\n";
+            ss << "    return -10000LL;\n"; // SYNC_CALL_UNSUPPORTED_HEADER_VERSION
+            ss << "  }\n";
+
+            // Load function ID (offset 4 after version, uint64_t — but check actual layout)
+            // call_data_header is { uint32_t version; uint64_t func_name; } — packed
+            // In the Writer.cpp implementation, func_name is at offset 8 (aligned)
+            ss << "  unsigned long long func_id = *((unsigned long long*)((char*)header_ptr + 8));\n";
+
+            // Dispatch by hash ID
+            bool first_call = true;
+            for (auto& [call_name, symbol_name] : cg.call_dispatch_map) {
+               uint64_t hash = to_hash_id(call_name);
+               ss << "  " << (first_call ? "if" : "else if");
+               ss << " (func_id == " << hash << "ULL) {\n";
+               ss << "    " << symbol_name << "(sender, receiver, data_size, data);\n";
+               ss << "  }\n";
+               first_call = false;
+            }
+            ss << "  else {\n";
+            ss << "    __cxa_finalize(0);\n";
+            ss << "    return -10001LL;\n"; // SYNC_CALL_UNKNOWN_FUNCTION
+            ss << "  }\n";
+
+            ss << "  __cxa_finalize(0);\n";
+            ss << "  return 0LL;\n"; // SYNC_CALL_EXECUTED
+            ss << "}\n"; // end of sync_call()
+            ss << "}\n"; // end of extern "C"
+         }
+
 
          virtual void HandleTranslationUnit(ASTContext &Context) {
             codegen& cg = codegen::get();
@@ -649,29 +933,21 @@ namespace core_net { namespace cdt {
                      llvm::sys::fs::make_absolute(abs_file_path);
                      out << "#include \"" << abs_file_path.c_str() << "\"\n";
                   }
-                  const auto& quoted = [](const std::string& s) {
-                     std::stringstream ss;
-                     for (char c : s) {
-                        if (c == '"' || c == '\\')
-                           ss << '\\';
-                        ss << c;
-                     }
-                     return ss.str();
-                  };
-
-                  // generate apply stub with abi
                   std::stringstream& ss = visitor->get_ss();
-                  ss << "\n";
-                  ss << "extern \"C\" {\n";
-                  ss << "__attribute__((core_net_wasm_import))\n";
-                  ss << "void core_net_assert_code(uint32_t, uint64_t);";
-                  ss << "\t__attribute__((weak, core_net_wasm_entry, core_net_wasm_abi(";
-                  ss << "\"" << quoted(cg.abi) << "\"";
-                  ss << ")))\n";
-                  ss << "\tvoid __insert_core_net_abi(unsigned long long r, unsigned long long c, unsigned long long a){";
-                  ss << "core_net_assert_code(false, 1);";
-                  ss << "}\n";
-                  ss << "}";
+
+                  // Embed ABI as a data section
+                  if (!cg.abi.empty()) {
+                     ss << "\n__attribute__((used, section(\".core_net_abi\")))\n";
+                     ss << "static const char __core_net_abi_data[] = R\"abi_delim(" << cg.abi << ")abi_delim\";\n";
+                  }
+
+                  // Generate apply() and sync_call() if user didn't define their own apply
+                  if (!visitor->apply_was_found) {
+                     generate_apply(ss, cg, visitor->pre_dispatch_found, visitor->post_dispatch_found);
+                  }
+                  if (!cg.call_dispatch_map.empty() && !visitor->sync_call_was_found) {
+                     generate_sync_call(ss, cg);
+                  }
 
                   out << ss.rdbuf();
                   cg.tmp_files.emplace(main_file, fn.str());
