@@ -385,7 +385,7 @@ namespace core_net { namespace cdt {
             static std::set<std::string> _notify_set; //used for validations
             static std::set<std::string> _call_set; //used for validations
 
-            if (decl->isCoreNetAction()) {
+            if (attrs::isCoreNetAction(decl)) {
                name = generation_utils::get_action_name(decl);
                validate_name(name, [&](auto s) {
                   CDT_ERROR("codegen_error", decl->getLocation(), std::string("action name (")+s+") is not a valid name");
@@ -403,11 +403,11 @@ namespace core_net { namespace cdt {
                   cg.actions.insert(full_action_name); // insert the method action, so we don't create the dispatcher twice
                }
 
-               if (decl->isCoreNetReadOnly()) {
+               if (attrs::isCoreNetReadOnly(decl)) {
                   read_only_actions.insert(decl);
                }
             }
-            else if (decl->isCoreNetNotify()) {
+            else if (attrs::isCoreNetNotify(decl)) {
                name = generation_utils::get_notify_pair(decl);
                auto first = name.substr(0, name.find("::"));
                if (first != "*")
@@ -434,7 +434,7 @@ namespace core_net { namespace cdt {
             }
 
             // We allow a method to be tagged as both `action` and `call`
-            if (decl->isCoreNetCall()) {
+            if (attrs::isCoreNetCall(decl)) {
                static std::unordered_map<uint64_t, std::string> _call_id_map;
 
                name = generation_utils::get_call_name(decl);
@@ -617,7 +617,7 @@ namespace core_net { namespace cdt {
          }
 
          virtual bool VisitCXXRecordDecl(CXXRecordDecl* decl) {
-            if (decl->isCoreNetContract()) {
+            if (attrs::isCoreNetContract(decl)) {
                auto process_data_member = [this]( CXXRecordDecl* rd ) {
                   for (auto it = rd->decls_begin(); it != rd->decls_end(); ++it) {
                      if (auto* f = dyn_cast<FieldDecl>(*it) ) {
