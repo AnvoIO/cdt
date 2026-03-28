@@ -1,29 +1,39 @@
 ### set targets
 # In LLVM 18, WebAssembly is a full target (not experimental).
-# We override LLVM_TARGETS_TO_BUILD to include only what CDT needs.
+# We build X86 + WebAssembly, plus the host architecture for native builds.
 function(set_llvm_targets)
+  # Determine host architecture target
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")
+    set(CDT_HOST_TARGET "AArch64")
+  else()
+    set(CDT_HOST_TARGET "X86")
+  endif()
+
+  # Build targets: host arch + WebAssembly (deduplicated if host is X86)
+  if(CDT_HOST_TARGET STREQUAL "X86")
+    set(CDT_LLVM_TARGETS "X86;WebAssembly")
+  else()
+    set(CDT_LLVM_TARGETS "${CDT_HOST_TARGET};X86;WebAssembly")
+  endif()
+
   if(EXISTS ${LLVM_DEST}/llvm/CMakeLists.txt)
     file(READ ${LLVM_DEST}/llvm/CMakeLists.txt ROOT_LLVM_CMAKE_CONTENTS)
-    # validate strings we want to replace exist
     string(FIND "${ROOT_LLVM_CMAKE_CONTENTS}"
            "set(LLVM_TARGETS_TO_BUILD \"all\""
            IDX_LLVM_BUILD_TARGETS)
 
-    # debug purposes check if replacements already made
     string(FIND "${ROOT_LLVM_CMAKE_CONTENTS}"
-           "set(LLVM_TARGETS_TO_BUILD \"X86;WebAssembly\""
+           "set(LLVM_TARGETS_TO_BUILD \"${CDT_LLVM_TARGETS}\""
            IDX_RESOLVED_LLVM_BUILD_TARGETS)
 
-    # only replace if strings match and replace needed
     if(IDX_LLVM_BUILD_TARGETS GREATER 0)
       string(REPLACE
            "set(LLVM_TARGETS_TO_BUILD \"all\""
-           "set(LLVM_TARGETS_TO_BUILD \"X86;WebAssembly\""
+           "set(LLVM_TARGETS_TO_BUILD \"${CDT_LLVM_TARGETS}\""
            NEW_ROOT_LLVM_CMAKE_CONTENTS
            "${ROOT_LLVM_CMAKE_CONTENTS}")
       file(WRITE ${LLVM_DEST}/llvm/CMakeLists.txt "${NEW_ROOT_LLVM_CMAKE_CONTENTS}")
     else()
-      # cannot find strings to replace, already replaced
       if(NOT IDX_RESOLVED_LLVM_BUILD_TARGETS GREATER 0)
         message(FATAL_ERROR,"Cannot find TARGETS_TO_BUILD in ${LLVM_DEST}/llvm/CMakeLists.txt")
       endif()
