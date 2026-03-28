@@ -2,6 +2,7 @@
 
 #include <new>
 #include <cstdlib>
+#include <__memory/aligned_alloc.h>
 
 #include "include/atomic_support.h"
 
