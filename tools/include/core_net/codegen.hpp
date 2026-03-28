@@ -202,11 +202,7 @@ namespace core_net { namespace cdt {
                   ss << "__attribute__((core_net_wasm_import))\n";
                   ss << "void set_action_return_value(void*, size_t);\n";
                }
-               ss << "__attribute__((weak, " << attr << "(\"";
-               ss << get_str(decl);
-               ss << ":";
-               ss << func_name << nm;
-               ss << "\"))) void " << func_name << nm << "(unsigned long long r, unsigned long long c) {\n";
+               ss << "__attribute__((weak)) void " << func_name << nm << "(unsigned long long r, unsigned long long c) {\n";
                ss << "size_t as = ::action_data_size();\n";
                ss << "void* buff = nullptr;\n";
                ss << "if (as > 0) {\n";
@@ -297,11 +293,7 @@ namespace core_net { namespace cdt {
                   ss << "__attribute__((core_net_wasm_import))\n";
                   ss << "void set_call_return_value(void*, size_t);\n";
                }
-               ss << "__attribute__((weak, " << attr << "(\"";
-               ss << call_name;
-               ss << ":";
-               ss << func_name << nm;
-               ss << "\"))) void " << func_name << nm << "(unsigned long long sender, unsigned long long receiver, size_t data_size, void* data) {\n";
+               ss << "__attribute__((weak)) void " << func_name << nm << "(unsigned long long sender, unsigned long long receiver, size_t data_size, void* data) {\n";
                ss << "core_net::datastream<const char*> ds{(char*)data, data_size};\n";
                ss << "core_net::call_data_header header; ds >> header;\n";
                int i=0;
@@ -672,10 +664,10 @@ namespace core_net { namespace cdt {
             ss << "\n// --- Generated apply() dispatch ---\n";
             ss << "extern \"C\" {\n";
 
-            // Forward declarations for host functions and dispatch helpers
-            ss << "__attribute__((core_net_wasm_import))\n";
+            // Forward declarations for dispatch helpers
+            // Host functions (core_net_assert_code, core_net_set_contract_name) are already
+            // declared in the CDT headers included via the original source file.
             ss << "void core_net_assert_code(uint32_t, uint64_t);\n";
-            ss << "__attribute__((core_net_wasm_import))\n";
             ss << "void core_net_set_contract_name(uint64_t);\n";
             ss << "void __wasm_call_ctors();\n";
             ss << "void __cxa_finalize(void*);\n";
@@ -844,8 +836,7 @@ namespace core_net { namespace cdt {
             ss << "\n// --- Generated sync_call() dispatch ---\n";
             ss << "extern \"C\" {\n";
 
-            // Forward declarations
-            ss << "__attribute__((core_net_wasm_import))\n";
+            // Forward declarations (host functions already declared in CDT headers)
             ss << "void core_net_set_contract_name(uint64_t);\n";
             ss << "void __wasm_call_ctors();\n";
             ss << "void __cxa_finalize(void*);\n";

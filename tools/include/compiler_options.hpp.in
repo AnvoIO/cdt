@@ -537,10 +537,7 @@ static void GetLdDefaults(std::vector<std::string>& ldopts) {
          ldopts.emplace_back(mllvm_opt);
       }
 
-      if (!system_account_opt.empty())
-         ldopts.emplace_back("--system-account=" + system_account_opt);
-      else
-         ldopts.emplace_back("--system-account=core");
+      // system-account is now handled by codegen (Phase 1), not the linker
 
    } else {
 #ifdef __APPLE__
