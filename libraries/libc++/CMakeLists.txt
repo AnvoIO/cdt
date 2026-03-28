@@ -32,7 +32,6 @@ SET(LIBCXX_SOURCES
    ${LIBCXX_ROOT}/src/string.cpp
    ${LIBCXX_ROOT}/src/system_error.cpp
    ${LIBCXX_ROOT}/src/typeinfo.cpp
-   ${LIBCXX_ROOT}/src/utility.cpp
    ${LIBCXX_ROOT}/src/valarray.cpp
    ${LIBCXX_ROOT}/src/variant.cpp
    ${LIBCXX_ROOT}/src/vector.cpp

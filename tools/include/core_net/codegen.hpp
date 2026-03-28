@@ -892,11 +892,11 @@ namespace core_net { namespace cdt {
             codegen& cg = codegen::get();
             auto& src_mgr = Context.getSourceManager();
             auto& f_mgr = src_mgr.getFileManager();
-            auto main_fe = f_mgr.getFile(main_file);
+            auto main_fe = f_mgr.getFileRef(main_file);
             if (main_fe) {
                auto fid = src_mgr.getOrCreateFileID(*main_fe, SrcMgr::CharacteristicKind::C_User);
                visitor->set_main_fid(fid);
-               visitor->set_main_name((*main_fe)->getName());
+               visitor->set_main_name(main_fe->getName());
                visitor->TraverseDecl(Context.getTranslationUnitDecl());
                visitor->process_read_only_actions();
 
@@ -916,7 +916,7 @@ namespace core_net { namespace cdt {
 
                   std::ofstream out(fn.c_str());
                   {
-                     llvm::SmallString<64> abs_file_path((*main_fe)->getName());
+                     llvm::SmallString<64> abs_file_path(main_fe->getName());
                      llvm::sys::fs::make_absolute(abs_file_path);
                      out << "#include \"" << abs_file_path.c_str() << "\"\n";
                   }

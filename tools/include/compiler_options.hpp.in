@@ -408,6 +408,13 @@ static void GetCompDefaults(std::vector<std::string>& copts) {
    copts.emplace_back(std::string("-D__core_net_cdt_patchlevel__=")+"${VERSION_PATCH}");
    if (!fnative_opt) {
       copts.emplace_back("--target=wasm32");
+      // Disable post-MVP WASM features that LLVM 18 enables by default.
+      // V1 contracts must use MVP-only opcodes for VM compatibility.
+      // See issue #27 for the V2 versioning design.
+      copts.emplace_back("-mno-sign-ext");
+      copts.emplace_back("-mno-mutable-globals");
+      copts.emplace_back("-mno-bulk-memory");
+      copts.emplace_back("-mno-nontrapping-fptoint");
       copts.emplace_back("-ffreestanding");
       copts.emplace_back("-nostdlib");
       copts.emplace_back("-fno-builtin");
@@ -443,7 +450,7 @@ static void GetCompDefaults(std::vector<std::string>& copts) {
       copts.emplace_back("-fno-rtti");
       // get core_net type and fstream include errors when moving to
       // -std=c++20 -fmodules
-      copts.emplace_back("-fmodules-ts");
+      // -fmodules-ts was removed in Clang 18; standard C++20 modules used instead
       copts.emplace_back("-D_GNU_SOURCE=1");
 #endif
       copts.emplace_back("-DBOOST_DISABLE_ASSERTS");

@@ -115,7 +115,7 @@ int main(int argc, const char **argv) {
    // fix to show version info without having to have any other arguments
    for (int i=0; i < argc; i++) {
      if (argv[i] == std::string("-v")) {
-       core_net::cdt::environment::exec_subprogram("clang-16", {"-v"});
+       core_net::cdt::environment::exec_subprogram("clang-18", {"-v"});
        return 0;
      }
    }
@@ -190,7 +190,7 @@ int main(int argc, const char **argv) {
 
          new_opts.insert(new_opts.begin(), "-xc++");
 
-         if (!core_net::cdt::environment::exec_subprogram("clang-16", new_opts, false, stdin_redirect)) {
+         if (!core_net::cdt::environment::exec_subprogram("clang-18", new_opts, false, stdin_redirect)) {
             if(stdin_redirect) {
                llvm::sys::fs::remove(*stdin_redirect);
             }

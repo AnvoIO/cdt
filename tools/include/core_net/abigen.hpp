@@ -956,7 +956,7 @@ namespace core_net::cdt {
          virtual void HandleTranslationUnit(ASTContext &Context) {
             auto& src_mgr = Context.getSourceManager();
             auto& f_mgr = src_mgr.getFileManager();
-            auto main_fe = f_mgr.getFile(main_file);
+            auto main_fe = f_mgr.getFileRef(main_file);
             if (main_fe) {
                contract_class_finder cf;
                cf.TraverseDecl(Context.getTranslationUnitDecl());

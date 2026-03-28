@@ -18,8 +18,8 @@ endfunction()
 
 parse_version_line(${LLVM_DEST}/llvm/CMakeLists.txt LLVM_VERSION_MAJOR PARSE_LLVM_MAJOR_VERSION)
 
-if(NOT PARSE_LLVM_MAJOR_VERSION EQUAL 16)
-  message(FATAL_ERROR, "Only Supporting LLVM version 16, detected version ${PARSE_LLVM_MAJOR_VERSION} exiting")
+if(NOT PARSE_LLVM_MAJOR_VERSION EQUAL 18)
+  message(FATAL_ERROR, "Only Supporting LLVM version 18, detected version ${PARSE_LLVM_MAJOR_VERSION} exiting")
 endif()
 
 message("-- Starting LLVM patches (LLVMPatch.txt)")
