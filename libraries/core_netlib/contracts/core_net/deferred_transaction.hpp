@@ -12,11 +12,9 @@
 namespace core_net {
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((core_net_wasm_import))
-         void send_deferred(const uint128_t&, uint64_t, const char*, size_t, uint32_t);
+                  void send_deferred(const uint128_t&, uint64_t, const char*, size_t, uint32_t);
 
-         __attribute__((core_net_wasm_import))
-         int cancel_deferred(const uint128_t&);
+                  int cancel_deferred(const uint128_t&);
       }
    }
 

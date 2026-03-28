@@ -11,14 +11,11 @@ namespace core_net {
 
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((core_net_wasm_import))
-         void core_net_assert( uint32_t test, const char* msg );
+                  void core_net_assert( uint32_t test, const char* msg );
 
-         __attribute__((core_net_wasm_import))
-         void core_net_assert_message( uint32_t test, const char* msg, uint32_t msg_len );
+                  void core_net_assert_message( uint32_t test, const char* msg, uint32_t msg_len );
 
-         __attribute__((core_net_wasm_import))
-         void core_net_assert_code( uint32_t test, uint64_t code );
+                  void core_net_assert_code( uint32_t test, uint64_t code );
       }
    }
 

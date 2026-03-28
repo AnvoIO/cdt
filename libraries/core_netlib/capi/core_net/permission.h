@@ -28,7 +28,6 @@ extern "C" {
  *
  *  @return 1 if the transaction is authorized, 0 otherwise
  */
-__attribute__((core_net_wasm_import))
 int32_t
 check_transaction_authorization( const char* trx_data,     uint32_t trx_size,
                                  const char* pubkeys_data, uint32_t pubkeys_size,
@@ -48,7 +47,6 @@ check_transaction_authorization( const char* trx_data,     uint32_t trx_size,
  *
  *  @return 1 if the permission is authorized, 0 otherwise
  */
-__attribute__((core_net_wasm_import))
 int32_t
 check_permission_authorization( capi_name account,
                                 capi_name permission,
@@ -65,7 +63,6 @@ check_permission_authorization( capi_name account,
  *
  *  @return the last used time (in microseconds since Unix epoch) of the permission
  */
-__attribute__((core_net_wasm_import))
 int64_t get_permission_last_used( capi_name account, capi_name permission );
 
 
@@ -76,7 +73,6 @@ int64_t get_permission_last_used( capi_name account, capi_name permission );
  *
  *  @return the creation time (in microseconds since Unix epoch) of the account
  */
-__attribute__((core_net_wasm_import))
 int64_t get_account_creation_time( capi_name account );
 
 #ifdef __cplusplus

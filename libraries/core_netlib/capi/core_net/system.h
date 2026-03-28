@@ -29,7 +29,6 @@ extern "C" {
  *
  *  @param msg - a null terminated string explaining the reason for failure
  */
-__attribute__((core_net_wasm_import))
 void  core_net_assert( uint32_t test, const char* msg );
 
 /**
@@ -39,7 +38,6 @@ void  core_net_assert( uint32_t test, const char* msg );
  *  @param msg - a pointer to the start of string explaining the reason for failure
  *  @param msg_len - length of the string
  */
-__attribute__((core_net_wasm_import))
 void  core_net_assert_message( uint32_t test, const char* msg, uint32_t msg_len );
 
 /**
@@ -49,7 +47,6 @@ void  core_net_assert_message( uint32_t test, const char* msg, uint32_t msg_len 
  *  @param test - 0 to abort, 1 to ignore
  *  @param code - the error code
  */
-__attribute__((core_net_wasm_import))
 void  core_net_assert_code( uint32_t test, uint64_t code );
 
  /**
@@ -65,7 +62,7 @@ void  core_net_assert_code( uint32_t test, uint64_t code );
  *  core_net_exit(3);
  *  @endcode
  */
-__attribute__((core_net_wasm_import, noreturn))
+__attribute__((noreturn))
 void core_net_exit( int32_t code );
 
 /**
@@ -73,7 +70,6 @@ void core_net_exit( int32_t code );
  *
  *  @return time in microseconds from 1970 of the current block
  */
-__attribute__((core_net_wasm_import))
 uint64_t  current_time( void );
 
 /**
@@ -81,7 +77,6 @@ uint64_t  current_time( void );
  *
  *  @return current block number 
  */
-__attribute__((core_net_wasm_import))
 uint32_t  get_block_num( void );
 
 /**
@@ -90,7 +85,6 @@ uint32_t  get_block_num( void );
  * @param feature_digest - digest of the protocol feature
  * @return true if the specified protocol feature has been activated, false otherwise
  */
-__attribute__((core_net_wasm_import))
 bool is_feature_activated( const struct capi_checksum256* feature_digest );
 
 /**
@@ -98,7 +92,6 @@ bool is_feature_activated( const struct capi_checksum256* feature_digest );
  *
  * @return name of account that sent the current inline action (empty name if not called from inline action)
  */
-__attribute__((core_net_wasm_import))
 capi_name get_sender( void );
 
 #ifdef __cplusplus

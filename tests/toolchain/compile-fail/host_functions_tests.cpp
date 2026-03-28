@@ -26,38 +26,38 @@ set_finalizers : yes
 #include <core_net/time.hpp>
 
 
-extern "C" __attribute__((core_net_wasm_import)) void set_resource_limit(int64_t, int64_t, int64_t);
-extern "C" __attribute__((core_net_wasm_import)) void set_blockchain_parameters_packed( char* data, uint32_t datalen );
-extern "C" __attribute__((core_net_wasm_import)) uint32_t get_blockchain_parameters_packed( char* data, uint32_t datalen );
+extern "C" void set_resource_limit(int64_t, int64_t, int64_t);
+extern "C" void set_blockchain_parameters_packed( char* data, uint32_t datalen );
+extern "C" uint32_t get_blockchain_parameters_packed( char* data, uint32_t datalen );
 
 typedef uint64_t capi_name;
-extern "C" __attribute__((core_net_wasm_import)) int32_t db_store_i64(uint64_t scope, capi_name table, capi_name payer, uint64_t id,  const void* data, uint32_t len);
-extern "C" __attribute__((core_net_wasm_import)) void db_update_i64(int32_t iterator, capi_name payer, const void* data, uint32_t len);
-extern "C" __attribute__((core_net_wasm_import)) void db_remove_i64(int32_t iterator);
-extern "C" __attribute__((core_net_wasm_import)) int32_t db_idx64_store(uint64_t scope, capi_name table, capi_name payer, uint64_t id, const uint64_t* secondary);
-extern "C" __attribute__((core_net_wasm_import)) void db_idx64_update(int32_t iterator, capi_name payer, const uint64_t* secondary);
-extern "C" __attribute__((core_net_wasm_import)) void db_idx64_remove(int32_t iterator);
-extern "C" __attribute__((core_net_wasm_import)) int32_t db_idx128_store(uint64_t scope, capi_name table, capi_name payer, uint64_t id, const uint128_t* secondary);
-extern "C" __attribute__((core_net_wasm_import)) void db_idx128_update(int32_t iterator, capi_name payer, const uint128_t* secondary);
-extern "C" __attribute__((core_net_wasm_import)) void db_idx128_remove(int32_t iterator);
-extern "C" __attribute__((core_net_wasm_import)) int32_t db_idx256_store(uint64_t scope, capi_name table, capi_name payer, uint64_t id, const uint128_t* data, uint32_t data_len );
-extern "C" __attribute__((core_net_wasm_import)) void db_idx256_update(int32_t iterator, capi_name payer, const uint128_t* data, uint32_t data_len);
-extern "C" __attribute__((core_net_wasm_import)) void db_idx256_remove(int32_t iterator);
-extern "C" __attribute__((core_net_wasm_import)) int32_t db_idx_double_store(uint64_t scope, capi_name table, capi_name payer, uint64_t id, const double* secondary);
-extern "C" __attribute__((core_net_wasm_import)) void db_idx_double_update(int32_t iterator, capi_name payer, const double* secondary);
-extern "C" __attribute__((core_net_wasm_import)) void db_idx_double_remove(int32_t iterator);
-extern "C" __attribute__((core_net_wasm_import)) int32_t db_idx_long_double_store(uint64_t scope, capi_name table, capi_name payer, uint64_t id, const long double* secondary);
-extern "C" __attribute__((core_net_wasm_import)) void db_idx_long_double_update(int32_t iterator, capi_name payer, const long double* secondary);
-extern "C" __attribute__((core_net_wasm_import)) void db_idx_long_double_remove(int32_t iterator);
+extern "C" int32_t db_store_i64(uint64_t scope, capi_name table, capi_name payer, uint64_t id,  const void* data, uint32_t len);
+extern "C" void db_update_i64(int32_t iterator, capi_name payer, const void* data, uint32_t len);
+extern "C" void db_remove_i64(int32_t iterator);
+extern "C" int32_t db_idx64_store(uint64_t scope, capi_name table, capi_name payer, uint64_t id, const uint64_t* secondary);
+extern "C" void db_idx64_update(int32_t iterator, capi_name payer, const uint64_t* secondary);
+extern "C" void db_idx64_remove(int32_t iterator);
+extern "C" int32_t db_idx128_store(uint64_t scope, capi_name table, capi_name payer, uint64_t id, const uint128_t* secondary);
+extern "C" void db_idx128_update(int32_t iterator, capi_name payer, const uint128_t* secondary);
+extern "C" void db_idx128_remove(int32_t iterator);
+extern "C" int32_t db_idx256_store(uint64_t scope, capi_name table, capi_name payer, uint64_t id, const uint128_t* data, uint32_t data_len );
+extern "C" void db_idx256_update(int32_t iterator, capi_name payer, const uint128_t* data, uint32_t data_len);
+extern "C" void db_idx256_remove(int32_t iterator);
+extern "C" int32_t db_idx_double_store(uint64_t scope, capi_name table, capi_name payer, uint64_t id, const double* secondary);
+extern "C" void db_idx_double_update(int32_t iterator, capi_name payer, const double* secondary);
+extern "C" void db_idx_double_remove(int32_t iterator);
+extern "C" int32_t db_idx_long_double_store(uint64_t scope, capi_name table, capi_name payer, uint64_t id, const long double* secondary);
+extern "C" void db_idx_long_double_update(int32_t iterator, capi_name payer, const long double* secondary);
+extern "C" void db_idx_long_double_remove(int32_t iterator);
 
-extern "C" __attribute__((core_net_wasm_import)) void send_deferred(const uint128_t&, uint64_t, const char*, size_t, uint32_t);
-extern "C" __attribute__((core_net_wasm_import)) int64_t set_proposed_producers( char*, uint32_t );
-extern "C" __attribute__((core_net_wasm_import)) int64_t set_proposed_producers_ex( uint64_t producer_data_format, char *producer_data, uint32_t producer_data_size );
-extern "C" __attribute__((core_net_wasm_import)) void set_wasm_parameters_packed(const void*, std::size_t);
-extern "C" __attribute__((core_net_wasm_import)) void set_parameters_packed( const char* params, uint32_t params_size );
+extern "C" void send_deferred(const uint128_t&, uint64_t, const char*, size_t, uint32_t);
+extern "C" int64_t set_proposed_producers( char*, uint32_t );
+extern "C" int64_t set_proposed_producers_ex( uint64_t producer_data_format, char *producer_data, uint32_t producer_data_size );
+extern "C" void set_wasm_parameters_packed(const void*, std::size_t);
+extern "C" void set_parameters_packed( const char* params, uint32_t params_size );
 
-extern "C" __attribute__((core_net_wasm_import)) void send_inline(char *serialized_action, size_t size);
-extern "C" __attribute__((core_net_wasm_import)) void send_context_free_inline(char *serialized_action, size_t size);
+extern "C" void send_inline(char *serialized_action, size_t size);
+extern "C" void send_context_free_inline(char *serialized_action, size_t size);
 
 #define ACTION_TYPE  [[core_net::action, core_net::read_only]]
 

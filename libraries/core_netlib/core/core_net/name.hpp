@@ -14,8 +14,7 @@
 namespace core_net {
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((core_net_wasm_import))
-         void printn(uint64_t);
+                  void printn(uint64_t);
       }
    }
 

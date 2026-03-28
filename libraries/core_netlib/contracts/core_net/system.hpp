@@ -11,21 +11,18 @@
 namespace core_net {
   namespace internal_use_do_not_use {
     extern "C" {
-      __attribute__((core_net_wasm_import, noreturn))
+      __attribute__((noreturn))
       void core_net_exit( int32_t code );
 
       struct  __attribute__((aligned (16))) capi_checksum256 {
          uint8_t hash[32];
       };
 
-      __attribute__((core_net_wasm_import))
-      bool is_feature_activated( const capi_checksum256* feature_digest );
+            bool is_feature_activated( const capi_checksum256* feature_digest );
 
-      __attribute__((core_net_wasm_import))
-      uint64_t get_sender();
+            uint64_t get_sender();
       
-      __attribute__((core_net_wasm_import))
-      uint32_t get_block_num();
+            uint32_t get_block_num();
 
     }
   }

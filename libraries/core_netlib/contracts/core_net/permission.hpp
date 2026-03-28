@@ -15,20 +15,16 @@
 namespace core_net {
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((core_net_wasm_import))
-         int32_t check_transaction_authorization(const char*,  uint32_t,
+                  int32_t check_transaction_authorization(const char*,  uint32_t,
                                           const char*, uint32_t,
                                           const char*, uint32_t);
-         __attribute__((core_net_wasm_import))
-         int32_t check_permission_authorization( uint64_t, uint64_t,
+                  int32_t check_permission_authorization( uint64_t, uint64_t,
                                                  const char*, uint32_t,
                                                  const char*, uint32_t,
                                                  uint64_t);
-         __attribute__((core_net_wasm_import))
-         int64_t get_permission_last_used(uint64_t, uint64_t);
+                  int64_t get_permission_last_used(uint64_t, uint64_t);
 
-         __attribute__((core_net_wasm_import))
-         int64_t get_account_creation_time(uint64_t);
+                  int64_t get_account_creation_time(uint64_t);
       }
    }
 

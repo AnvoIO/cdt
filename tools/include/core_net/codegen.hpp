@@ -193,13 +193,10 @@ namespace core_net { namespace cdt {
                ss << "\n\n#include <core_net/datastream.hpp>\n";
                ss << "#include <core_net/name.hpp>\n";
                ss << "extern \"C\" {\n";
-               ss << "__attribute__((core_net_wasm_import))\n";
                ss << "uint32_t action_data_size();\n";
-               ss << "__attribute__((core_net_wasm_import))\n";
                ss << "uint32_t read_action_data(void*, uint32_t);\n";
                const auto& return_ty = decl->getReturnType().getAsString();
                if (return_ty != "void") {
-                  ss << "__attribute__((core_net_wasm_import))\n";
                   ss << "void set_action_return_value(void*, size_t);\n";
                }
                ss << "__attribute__((weak)) void " << func_name << nm << "(unsigned long long r, unsigned long long c) {\n";
@@ -290,7 +287,6 @@ namespace core_net { namespace cdt {
                ss << "extern \"C\" {\n";
                const auto& return_ty = decl->getReturnType().getAsString();
                if (return_ty != "void") {
-                  ss << "__attribute__((core_net_wasm_import))\n";
                   ss << "void set_call_return_value(void*, size_t);\n";
                }
                ss << "__attribute__((weak)) void " << func_name << nm << "(unsigned long long sender, unsigned long long receiver, size_t data_size, void* data) {\n";
@@ -363,7 +359,7 @@ namespace core_net { namespace cdt {
             ss << "\n\n#include <core_net/datastream.hpp>\n";
             ss << "#include <core_net/name.hpp>\n";
             ss << "extern \"C\" {\n";
-            ss << "__attribute__((core_net_wasm_import)) uint32_t get_call_data(void*, uint32_t);\n";
+            ss << "uint32_t get_call_data(void*, uint32_t);\n";
             ss << "__attribute__((weak)) void* __eos_get_sync_call_data_(unsigned long size) {\n";
             ss << "void* data = malloc(size);\n";   // store data in linear memory
             ss << "::get_call_data(data, size);\n";

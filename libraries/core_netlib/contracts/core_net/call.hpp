@@ -15,17 +15,13 @@ namespace core_net {
 
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((core_net_wasm_import))
-         int64_t call(uint64_t receiver, uint64_t flags, const char* data, size_t data_size);
+                  int64_t call(uint64_t receiver, uint64_t flags, const char* data, size_t data_size);
 
-         __attribute__((core_net_wasm_import))
-         uint32_t get_call_return_value( void* mem, uint32_t len );
+                  uint32_t get_call_return_value( void* mem, uint32_t len );
 
-         __attribute__((core_net_wasm_import))
-         uint32_t get_call_data( void* mem, uint32_t len );
+                  uint32_t get_call_data( void* mem, uint32_t len );
 
-         __attribute__((core_net_wasm_import))
-         void set_call_return_value( void* mem, uint32_t len );
+                  void set_call_return_value( void* mem, uint32_t len );
       }
    };
 

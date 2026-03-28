@@ -21,8 +21,8 @@
  And finally, combine all four in a chain of aliases
 */
 
-extern "C" __attribute__((core_net_wasm_import)) void set_resource_limit(int64_t, int64_t, int64_t);
-extern "C" __attribute__((core_net_wasm_import)) void foo_bar(int64_t, int64_t, int64_t);
+extern "C" void set_resource_limit(int64_t, int64_t, int64_t);
+extern "C" void foo_bar(int64_t, int64_t, int64_t);
 
 #define ACTION_TYPE  [[core_net::action, core_net::read_only]]
 
