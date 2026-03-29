@@ -6,7 +6,7 @@ CONTRACT enf: public contract {
    public:
       using contract::contract;
 
-      [[core_net::action]] void fixtransfer() {
+      [[clang::annotate("core_net::action")]] void fixtransfer() {
             action(
                 permission_level{get_self(), name("active")},
                 name("core.token"),

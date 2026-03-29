@@ -15,9 +15,9 @@
  * Helper macros to reduce the verbosity for common contracts
  * @ingroup contract
  */
-#define CONTRACT class [[core_net::contract]]
-#define ACTION   [[core_net::action]] void
-#define TABLE struct [[core_net::table]]
+#define CONTRACT class [[clang::annotate("core_net::contract")]]
+#define ACTION   [[clang::annotate("core_net::action")]] void
+#define TABLE struct [[clang::annotate("core_net::table")]]
 
 namespace core_net {
 

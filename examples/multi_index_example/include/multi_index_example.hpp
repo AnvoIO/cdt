@@ -1,13 +1,13 @@
 #include <core_net/core_net.hpp>
 using namespace core_net;
 
-class [[core_net::contract]] multi_index_example : public contract {
+class [[clang::annotate("core_net::contract")]] multi_index_example : public contract {
    public:
       using contract::contract;
       multi_index_example( name receiver, name code, datastream<const char*> ds )
          : contract(receiver, code, ds), testtab(receiver, receiver.value) {}
 
-      struct [[core_net::table]] test_table {
+      struct [[clang::annotate("core_net::table")]] test_table {
          name test_primary;
          name secondary;
          uint64_t datum;
@@ -22,15 +22,15 @@ class [[core_net::contract]] multi_index_example : public contract {
 
       test_tables testtab;
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void set(name user);
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void print( name user );
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void bysec( name secid );
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void mod( name user, uint32_t n );
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void del( name user );
 
       using set_action = action_wrapper<"set"_n, &multi_index_example::set>;

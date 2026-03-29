@@ -8,14 +8,14 @@ namespace test {
 
 using My_Bool = float;
 
-class [[core_net::contract]] bool_template : public core_net::contract {
+class [[clang::annotate("core_net::contract")]] bool_template : public core_net::contract {
    public:
       using contract::contract;
 
-      [[core_net::action]] void test1(std::optional<bool> a) {}
-      [[core_net::action]] void test2(std::variant<uint64_t, bool> a) {}
-      [[core_net::action]] void test3(bool a) {}
+      [[clang::annotate("core_net::action")]] void test1(std::optional<bool> a) {}
+      [[clang::annotate("core_net::action")]] void test2(std::variant<uint64_t, bool> a) {}
+      [[clang::annotate("core_net::action")]] void test3(bool a) {}
 
-      [[core_net::action]] void test4(test::_Bool a) {}
-      [[core_net::action]] void test5(My_Bool a) {}
+      [[clang::annotate("core_net::action")]] void test4(test::_Bool a) {}
+      [[clang::annotate("core_net::action")]] void test5(My_Bool a) {}
 };

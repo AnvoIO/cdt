@@ -5,7 +5,7 @@ CONTRACT enf: public contract {
    public:
       using contract::contract;
 
-      [[core_net::action]] uint64_t readnumber(){
+      [[clang::annotate("core_net::action")]] uint64_t readnumber(){
          return 42;
       }
 };

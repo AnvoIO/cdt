@@ -11,17 +11,17 @@
 using std::variant;
 using namespace core_net;
 
-class[[core_net::contract("hello")]] hello : public contract
+class[[clang::annotate("core_net::contract", "hello")]] hello : public contract
 {
 public:
    using contract::contract;
 
-   [[core_net::action]] void hi(name user) {
+   [[clang::annotate("core_net::action")]] void hi(name user) {
       require_auth(user);
       print("Hello, ", user);
    }
 
-   struct [[core_net::table]] greeting {
+   struct [[clang::annotate("core_net::table")]] greeting {
       uint64_t id;
       variant<int32_t, int64_t> t;
       uint64_t primary_key() const { return id; }

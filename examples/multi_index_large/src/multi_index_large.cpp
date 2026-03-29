@@ -1,6 +1,6 @@
 #include <multi_index_large.hpp>
 
-[[core_net::action]] 
+[[clang::annotate("core_net::action")]] 
 void multi_index_large::set( uint64_t id, uint64_t u64, uint128_t u128,
    double f64, long double f128, core_net::checksum256 chk256 ) {
    auto itr = testtab.find(id);
@@ -15,14 +15,14 @@ void multi_index_large::set( uint64_t id, uint64_t u64, uint128_t u128,
    }
 }
 
-[[core_net::action]] 
+[[clang::annotate("core_net::action")]] 
 void multi_index_large::print( uint64_t id ) {
    auto itr = testtab.find(id);
    check( itr != testtab.end(), "id does not exist in table" );
    core_net::print_f("Test Table : {%, %, %, %}\n", itr->id, itr->f128, itr->u128, itr->chk256);
 }
 
-[[core_net::action]] 
+[[clang::annotate("core_net::action")]] 
 void multi_index_large::byf( double f64 ) {
    auto idx = testtab.get_index<"byf"_n>();
    for ( auto itr = idx.begin(); itr != idx.end(); itr++ ) {
@@ -32,7 +32,7 @@ void multi_index_large::byf( double f64 ) {
    }
 }
 
-[[core_net::action]] 
+[[clang::annotate("core_net::action")]] 
 void multi_index_large::byff( long double f128 ) {
    auto idx = testtab.get_index<"byff"_n>();
    for ( auto itr = idx.begin(); itr != idx.end(); itr++ ) {
@@ -42,7 +42,7 @@ void multi_index_large::byff( long double f128 ) {
    }
 }
 
-[[core_net::action]] 
+[[clang::annotate("core_net::action")]] 
 void multi_index_large::byuuuu( uint128_t u128 ) {
    auto idx = testtab.get_index<"byuuuu"_n>();
    for ( auto itr = idx.begin(); itr != idx.end(); itr++ ) {
@@ -52,7 +52,7 @@ void multi_index_large::byuuuu( uint128_t u128 ) {
    }
 }
 
-[[core_net::action]] 
+[[clang::annotate("core_net::action")]] 
 void multi_index_large::bychkb( core_net::checksum256 chk256 ) {
    auto idx = testtab.get_index<"bychkb"_n>();
    for ( auto itr = idx.begin(); itr != idx.end(); itr++ ) {
@@ -62,7 +62,7 @@ void multi_index_large::bychkb( core_net::checksum256 chk256 ) {
    }
 }
 
-[[core_net::action]] 
+[[clang::annotate("core_net::action")]] 
 void multi_index_large::mod( uint64_t id, uint64_t u64, uint128_t u128,
    double f64, long double f128, core_net::checksum256 chk256 ) {
    auto itr = testtab.find(id);
@@ -75,7 +75,7 @@ void multi_index_large::mod( uint64_t id, uint64_t u64, uint128_t u128,
    });
 }
 
-[[core_net::action]]
+[[clang::annotate("core_net::action")]]
 void multi_index_large::del( uint64_t id ) {
    // check if the user already exists
    auto itr = testtab.find(id);

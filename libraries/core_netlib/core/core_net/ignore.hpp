@@ -17,7 +17,7 @@ namespace core_net {
     * @note This restriction will be relaxed in a later release. Currently non-ignore types can not succeed an ignore type in a method definition, i.e. void foo(float, ignore<int>) is allowed and void foo(float, ignore<int>, int) is not allowed.
     */
    template <typename T>
-   struct [[core_net::ignore]] ignore {};
+   struct [[clang::annotate("core_net::ignore")]] ignore {};
 
     /**
     * Wrapper class to allow sending inline actions with the correct payload

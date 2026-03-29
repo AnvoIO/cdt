@@ -7,7 +7,7 @@
 
 
 
-struct [[core_net::table]] out_of_class {
+struct [[clang::annotate("core_net::table")]] out_of_class {
     uint64_t id;
     uint64_t primary_key() const { return id; }
 };
@@ -23,14 +23,14 @@ using  config552 = core_net::singleton<"config552"_n, out_of_class>;
 using smpl_conf552 = smpl_conf551;
 using config553 = config551;
 
-class [[core_net::contract("singleton_contract_simple2")]] singleton_contract_simple2 : public core_net::contract {
+class [[clang::annotate("core_net::contract", "singleton_contract_simple2")]] singleton_contract_simple2 : public core_net::contract {
     public:
         using core_net::contract::contract;
         
-    [[core_net::action]]
+    [[clang::annotate("core_net::action")]]
         void whatever() {};
     
-    struct [[core_net::table]] inside_class {
+    struct [[clang::annotate("core_net::table")]] inside_class {
         uint64_t id;
         uint64_t primary_key() const { return id; }
     };

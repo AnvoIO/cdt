@@ -9,11 +9,11 @@
 
 namespace core_net {
 
-class [[core_net::contract]] sync_call_cust_entry : public contract {
+class [[clang::annotate("core_net::contract")]] sync_call_cust_entry : public contract {
 public:
    using contract::contract;
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void cusentrytst1() {
       // Make a sync call to "receiver"_n account, pass function ID in `data`,
       // go to `sync_call()` entry function, and dispatch the call to `get_10()`
@@ -29,7 +29,7 @@ public:
       core_net::check(core_net::unpack<uint32_t>(return_value) == 10, "return value is not 10");
    }
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void cusentrytst2() {
       // Make a sync call to "receiver"_n account, pass function ID in `data`,
       // go to `sync_call()` entry function, and dispatch the call to `get_20()`
@@ -50,7 +50,7 @@ public:
       return 10;
    }
 
-   [[core_net::call]]
+   [[clang::annotate("core_net::call")]]
    uint32_t get_20() {
       return 20;
    }
@@ -58,7 +58,7 @@ public:
 } /// namespace core_net
 
 extern "C" {
-   [[core_net::wasm_entry]]
+   [[clang::annotate("core_net::wasm_entry")]]
    int64_t sync_call(uint64_t sender, uint64_t receiver, uint32_t data_size) {
       core_net::datastream<const char*> ds(nullptr, 0); // for testing, not used
       core_net::sync_call_cust_entry obj(core_net::name{receiver}, core_net::name{receiver}, ds);

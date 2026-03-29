@@ -1,13 +1,13 @@
 #include <core_net/core_net.hpp>
 using namespace core_net;
 
-class [[core_net::contract]] multi_index_large : public contract {
+class [[clang::annotate("core_net::contract")]] multi_index_large : public contract {
    public:
       using contract::contract;
       multi_index_large( name receiver, name code, datastream<const char*> ds )
          : contract(receiver, code, ds), testtab(receiver, receiver.value) {}
 
-      struct [[core_net::table("data")]] main_record {
+      struct [[clang::annotate("core_net::table", "data")]] main_record {
          uint64_t           id         = 0;
 
          uint64_t           u64 = 0;
@@ -40,29 +40,29 @@ class [[core_net::contract]] multi_index_large : public contract {
       >;
       test_tables testtab;
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void set( uint64_t id, uint64_t u64, uint128_t u128,
          double f64, long double f128, core_net::checksum256 chk256 );
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void print( uint64_t id );
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void byf( double f64);
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void byff( long double f128 );
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void byuuuu( uint128_t u128 );
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void bychkb(core_net::checksum256 chk256);
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void mod( uint64_t id, uint64_t u64, uint128_t u128,
          double f64, long double f128, core_net::checksum256 chk256 );
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void del( uint64_t id );
 };
