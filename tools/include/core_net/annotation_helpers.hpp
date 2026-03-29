@@ -22,7 +22,13 @@ static inline const clang::AnnotateAttr* findAnnotation(const clang::Decl* D, ll
 
 static inline std::string getAnnotationArg(const clang::AnnotateAttr* A) {
    if (A && A->args_size() > 0) {
-      if (const auto* SL = llvm::dyn_cast<clang::StringLiteral>(*A->args_begin()))
+      const clang::Expr* arg = *A->args_begin();
+      // LLVM 18 wraps annotation args in ConstantExpr — unwrap if needed.
+      if (const auto* CE = llvm::dyn_cast<clang::ConstantExpr>(arg))
+         arg = CE->getSubExpr();
+      // Strip implicit casts to get the underlying StringLiteral.
+      arg = arg->IgnoreImplicit();
+      if (const auto* SL = llvm::dyn_cast<clang::StringLiteral>(arg))
          return SL->getString().str();
    }
    return "";

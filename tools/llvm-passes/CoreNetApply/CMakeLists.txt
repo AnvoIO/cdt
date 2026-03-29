@@ -7,13 +7,16 @@ if(NOT LLVM_REQUIRES_RTTI)
   endif()
 endif()
 
-add_library(LLVMCoreNetApply MODULE CoreNetApply.cpp)
-target_include_directories(LLVMCoreNetApply PRIVATE ${LLVM_INCLUDE_DIRS})
-target_compile_definitions(LLVMCoreNetApply PRIVATE ${LLVM_DEFINITIONS})
-set_target_properties(LLVMCoreNetApply PROPERTIES
+# Use a distinct target name to avoid collision with IMPORTED targets from the
+# LLVM build tree cmake config, but produce the expected output filename.
+add_library(cdt_pass_apply MODULE CoreNetApply.cpp)
+target_include_directories(cdt_pass_apply PRIVATE ${LLVM_INCLUDE_DIRS})
+target_compile_definitions(cdt_pass_apply PRIVATE ${LLVM_DEFINITIONS})
+set_target_properties(cdt_pass_apply PROPERTIES
   CXX_STANDARD 17
   PREFIX ""
+  OUTPUT_NAME "LLVMCoreNetApply"
 )
-target_compile_options(LLVMCoreNetApply PRIVATE -fno-rtti)
-add_custom_command(TARGET LLVMCoreNetApply POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:LLVMCoreNetApply> ${CMAKE_BINARY_DIR}/bin/)
+target_compile_options(cdt_pass_apply PRIVATE -fno-rtti)
+add_custom_command(TARGET cdt_pass_apply POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:cdt_pass_apply> ${CMAKE_BINARY_DIR}/bin/)

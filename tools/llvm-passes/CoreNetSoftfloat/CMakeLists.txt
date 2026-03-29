@@ -7,13 +7,16 @@ if(NOT LLVM_REQUIRES_RTTI)
   endif()
 endif()
 
-add_library(LLVMCoreNetSoftfloat MODULE CoreNetSoftfloat.cpp)
-target_include_directories(LLVMCoreNetSoftfloat PRIVATE ${LLVM_INCLUDE_DIRS})
-target_compile_definitions(LLVMCoreNetSoftfloat PRIVATE ${LLVM_DEFINITIONS})
-set_target_properties(LLVMCoreNetSoftfloat PROPERTIES
+# Use a distinct target name to avoid collision with IMPORTED targets from the
+# LLVM build tree cmake config, but produce the expected output filename.
+add_library(cdt_pass_softfloat MODULE CoreNetSoftfloat.cpp)
+target_include_directories(cdt_pass_softfloat PRIVATE ${LLVM_INCLUDE_DIRS})
+target_compile_definitions(cdt_pass_softfloat PRIVATE ${LLVM_DEFINITIONS})
+set_target_properties(cdt_pass_softfloat PROPERTIES
   CXX_STANDARD 17
   PREFIX ""
+  OUTPUT_NAME "LLVMCoreNetSoftfloat"
 )
-target_compile_options(LLVMCoreNetSoftfloat PRIVATE -fno-rtti)
-add_custom_command(TARGET LLVMCoreNetSoftfloat POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:LLVMCoreNetSoftfloat> ${CMAKE_BINARY_DIR}/bin/)
+target_compile_options(cdt_pass_softfloat PRIVATE -fno-rtti)
+add_custom_command(TARGET cdt_pass_softfloat POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:cdt_pass_softfloat> ${CMAKE_BINARY_DIR}/bin/)
