@@ -10,10 +10,11 @@ function(set_llvm_targets)
   endif()
 
   # Build targets: host arch + WebAssembly (deduplicated if host is X86)
+  # Include BPF and RISCV for future contract targets (issues #28, #29)
   if(CDT_HOST_TARGET STREQUAL "X86")
-    set(CDT_LLVM_TARGETS "X86;WebAssembly")
+    set(CDT_LLVM_TARGETS "X86;WebAssembly;BPF;RISCV")
   else()
-    set(CDT_LLVM_TARGETS "${CDT_HOST_TARGET};X86;WebAssembly")
+    set(CDT_LLVM_TARGETS "${CDT_HOST_TARGET};X86;WebAssembly;BPF;RISCV")
   endif()
 
   if(EXISTS ${LLVM_DEST}/llvm/CMakeLists.txt)
