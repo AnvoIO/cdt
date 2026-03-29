@@ -28,39 +28,9 @@ message("-- Starting LLVM patches (LLVMPatch.txt)")
 include(${EXTENSION_SOURCE}/SetLLVMTargets.txt)
 set_llvm_targets()
 
-### Patches CLANG — custom contract attribute definitions
-# These define CoreNetActionAttr, CoreNetTableAttr, etc. parsed from [[core_net::action]] syntax.
-# Required while contract source code uses this attribute syntax.
-# Will be removed when contracts migrate to [[clang::annotate("core_net::action")]].
-file(COPY_FILE ${EXTENSION_SOURCE}/clang/include/clang/AST/DeclCXX.h ${LLVM_DEST}/clang/include/clang/AST/DeclCXX.h)
-file(COPY_FILE ${EXTENSION_SOURCE}/clang/include/clang/AST/Decl.h ${LLVM_DEST}/clang/include/clang/AST/Decl.h)
-file(COPY_FILE ${EXTENSION_SOURCE}/clang/include/clang/Basic/AttrDocs.td ${LLVM_DEST}/clang/include/clang/Basic/AttrDocs.td)
-file(COPY_FILE ${EXTENSION_SOURCE}/clang/include/clang/Basic/Attr.td ${LLVM_DEST}/clang/include/clang/Basic/Attr.td)
-file(COPY_FILE ${EXTENSION_SOURCE}/clang/lib/AST/Decl.cpp ${LLVM_DEST}/clang/lib/AST/Decl.cpp)
-file(COPY_FILE ${EXTENSION_SOURCE}/clang/lib/Sema/SemaDeclAttr.cpp ${LLVM_DEST}/clang/lib/Sema/SemaDeclAttr.cpp)
-
 ### Patches CLANG — WebAssembly target (size_t = uint32_t)
 # Cannot be replaced with compiler flags (-D__SIZE_TYPE__) because operator new
 # requires size_t to match the target's built-in type definition.
 file(COPY_FILE ${EXTENSION_SOURCE}/clang/lib/Basic/Targets/WebAssembly.h ${LLVM_DEST}/clang/lib/Basic/Targets/WebAssembly.h)
-
-### Add Custom Transform Passes into LLVM source
-# CoreNetApply: injects ctor/dtor calls into user-defined apply() functions
-# CoreNetSoftfloat: replaces hardware float ops with deterministic software float calls
-# Both use PassPlugin API and are loaded via -fpass-plugin=
-if(EXISTS ${LLVM_DEST}/llvm/lib/Transforms)
-  file(COPY ${EXTENSION_SOURCE}/llvm/lib/Transforms/CoreNetApply DESTINATION ${LLVM_DEST}/llvm/lib/Transforms )
-  file(COPY ${EXTENSION_SOURCE}/llvm/lib/Transforms/CoreNetSoftfloat DESTINATION ${LLVM_DEST}/llvm/lib/Transforms )
-  set(LLVM_LIB_TRANSFORMS_CMAKE ${LLVM_DEST}/llvm/lib/Transforms/CMakeLists.txt)
-  file(READ ${LLVM_LIB_TRANSFORMS_CMAKE} LLVM_LIB_CMAKE_CONTENTS)
-  if(NOT LLVM_LIB_CMAKE_CONTENTS MATCHES "CoreNetApply")
-    file(APPEND ${LLVM_LIB_TRANSFORMS_CMAKE} "add_subdirectory(CoreNetApply)\n")
-  endif()
-  if(NOT LLVM_LIB_CMAKE_CONTENTS MATCHES "CoreNetSoftfloat")
-    file(APPEND ${LLVM_LIB_TRANSFORMS_CMAKE} "add_subdirectory(CoreNetSoftfloat)\n")
-  endif()
-else()
-  message(FATAL_ERROR "Cannot find LLVM source please load git submodules and try again")
-endif()
 
 message("-- Completed LLVM patches")

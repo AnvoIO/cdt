@@ -2,11 +2,11 @@
 
 using namespace core_net;
 
-class [[core_net::contract]] ricardian_contract_test : public contract {
+class [[clang::annotate("core_net::contract")]] ricardian_contract_test : public contract {
   public:
       using contract::contract;
       
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void test() {
       }
 };

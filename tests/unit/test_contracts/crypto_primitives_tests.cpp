@@ -4,11 +4,11 @@
 
 using namespace core_net;
 
-class [[core_net::contract]] crypto_primitives_tests : public contract{
+class [[clang::annotate("core_net::contract")]] crypto_primitives_tests : public contract{
    public:
       using contract::contract;
 
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void sha3test(std::string val, core_net::checksum256 sha3_dg) {
          auto hash = core_net::sha3(val.c_str(), val.size());
 
@@ -16,7 +16,7 @@ class [[core_net::contract]] crypto_primitives_tests : public contract{
          core_net::assert_sha3(val.c_str(), val.size(), sha3_dg);
       }
 
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void keccaktest(std::string val, core_net::checksum256 sha3_dg) {
          auto hash = core_net::keccak(val.c_str(), val.size());
 
@@ -32,7 +32,7 @@ class [[core_net::contract]] crypto_primitives_tests : public contract{
       }
 
       // test add where points are constructed from x and y
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void addtest(std::vector<char>& x1, std::vector<char>& y1, std::vector<char>& x2, std::vector<char>& y2, std::vector<char>& expected_x, std::vector<char>& expected_y) {
          // point
          core_net::g1_point point1 {x1, y1};
@@ -50,7 +50,7 @@ class [[core_net::contract]] crypto_primitives_tests : public contract{
       }
 
       // test add where points are constructed from other points
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void addtest1(std::vector<char>& p1, std::vector<char>& p2, std::vector<char>& expected_x, std::vector<char>& expected_y) {
          // point
          core_net::g1_point point1 {p1};
@@ -74,7 +74,7 @@ class [[core_net::contract]] crypto_primitives_tests : public contract{
          core_net::check(result.y == expected_y, "alt_bn128_mul: Result y does not match");
       }
 
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void multest(std::vector<char>& g1_x, std::vector<char>& g1_y, std::vector<char>& scalar, std::vector<char>& expected_x, std::vector<char>& expected_y) {
          core_net::bigint s {scalar};
 
@@ -98,7 +98,7 @@ class [[core_net::contract]] crypto_primitives_tests : public contract{
       }
 
       // test pairtest where points are constructed from x and y
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void pairtest(std::vector<char>& g1_a_x, std::vector<char>& g1_a_y, std::vector<char>& g2_a_x, std::vector<char>& g2_a_y, std::vector<char>& g1_b_x, std::vector<char>& g1_b_y, std::vector<char>& g2_b_x, std::vector<char>& g2_b_y, int32_t expected) {
          // point
          core_net::g1_point g1_a {g1_a_x, g1_a_y};
@@ -122,7 +122,7 @@ class [[core_net::contract]] crypto_primitives_tests : public contract{
       }
 
       // test pairtest where points are constructed from other points
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void pairtest1(std::vector<char>& g1a, std::vector<char>& g2a, std::vector<char>& g1b, std::vector<char>& g2b, int32_t expected) {
          // point
          core_net::g1_point g1_a { g1a };
@@ -139,7 +139,7 @@ class [[core_net::contract]] crypto_primitives_tests : public contract{
          pairtest_helper( g1_view_a, g2_view_a, g1_view_b, g2_view_b, expected );
       }
 
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void modexptest(std::vector<char>& base, std::vector<char>& exp, std::vector<char>& modulo, int32_t expected_rc, const std::vector<char>& expected_result) {
          core_net::bigint base_val {base};
          core_net::bigint exp_val {exp};
@@ -151,7 +151,7 @@ class [[core_net::contract]] crypto_primitives_tests : public contract{
          core_net::check(result == expected_result, "Result does not match");
       }
 
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void blake2ftest(uint32_t rounds, const std::vector<char>& state, const std::vector<char>& msg, const std::vector<char>& t0_offset, const std::vector<char>& t1_offset, bool final, int32_t expected_rc, const std::vector<char>& expected_result) {
          std::vector<char> result(core_net::blake2f_result_size);
 

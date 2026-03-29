@@ -5,14 +5,14 @@
 // `sync_call` entry point is not generated.
 // Any sync calls to this contract will return a status indicating
 // sync calls are not supported by the receiver.
-class [[core_net::contract]] sync_call_not_supported : public core_net::contract{
+class [[clang::annotate("core_net::contract")]] sync_call_not_supported : public core_net::contract{
 public:
    using contract::contract;
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void voidfunc();
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    int intfunc();
 
    using void_func = core_net::call_wrapper<"voidfunc"_i, &sync_call_not_supported::voidfunc>;  // default behavior: abort when called

@@ -24,7 +24,7 @@
 extern "C" void set_resource_limit(int64_t, int64_t, int64_t);
 extern "C" void foo_bar(int64_t, int64_t, int64_t);
 
-#define ACTION_TYPE  [[core_net::action, core_net::read_only]]
+#define ACTION_TYPE  [[clang::annotate("core_net::action")]] [[clang::annotate("core_net::read_only")]]
 
 using func = void (*)(int64_t, int64_t, int64_t);
 
@@ -33,7 +33,7 @@ func srl_g2 = set_resource_limit;
 func srl_g3;
 func fb_g = foo_bar;
 
-class [[core_net::contract]] hf_indirect_call_tests : public core_net::contract {
+class [[clang::annotate("core_net::contract")]] hf_indirect_call_tests : public core_net::contract {
 public:
    using contract::contract;
    func srl_m1 = set_resource_limit;

@@ -74,9 +74,9 @@ typedef vector<uint32_t> vec_uint32;
 typedef vector<vec_uint32> vecvec_uint32;
 
 
-class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contract {
+class [[clang::annotate("core_net::contract", "nestcontn2a")]] nestcontn2a : public core_net::contract {
     private:
-        struct [[core_net::table]] person2 {
+        struct [[clang::annotate("core_net::table")]] person2 {
             name key;
 
             //  Each container/object is represented by one letter: v-vector, m-map, s-mystruct,o-optional, p-pair,
@@ -143,14 +143,14 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         nestcontn2a(name receiver, name code,  datastream<const char*> ds): contract(receiver, code, ds) {}
 
 
-        //[[core_net::action]] void settuple(name user, const tuple<uint16_t>& tp) {}
+        //[[clang::annotate("core_net::action")]] void settuple(name user, const tuple<uint16_t>& tp) {}
         //  cdt-cpp compile error for std::tuple: Tried to get a nested template type of a template not containing one
 
          /*Examples:
           * core-cli --verbose push action nestcontn2a setv '["alice", [100,200,300,600]]' -p alice@active
           * core-cli --verbose push action nestcontn2a setv '["bob", []]' -p bob@active
           */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setv(name user, const vector<uint16_t>& v)
         {
             SETCONTAINERVAL(v);
@@ -164,7 +164,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a prntv '["bob"]' -p bob@active
          *      output: >> size of stored v:0 vals of v:
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntv(name user)
         {
             PRNTCHECK();
@@ -178,7 +178,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a setst '["alice", [101,201,301]]' -p alice@active
          *  core-cli --verbose push action nestcontn2a setst '["bob", []]' -p bob@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setst(name user, const set<uint16_t> & st)
         {
             SETCONTAINERVAL(st);
@@ -192,7 +192,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a prntst '["bob"]' -p bob@active
          *      output: >> size of stored st:0 vals:
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntst(name user)
         {
             PRNTCHECK();
@@ -212,7 +212,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          * To pass an empty map:
          *   core-cli --verbose push action nestcontn2a setm '["bob", []]' -p bob@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setm(name user, const map<string,string>  & m)
         {
             SETCONTAINERVAL(m);
@@ -229,7 +229,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a prntm '["bob"]' -p bob@active
          *      output: >> size of stored m:0 vals of m:
         */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntm(name user)
         {
             PRNTCHECK();
@@ -240,7 +240,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         }
 
         //Example: core-cli --verbose push action nestcontn2a sets '["alice", {"_count":18, "_strID":"dumstr"}]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void sets(name user, const mystruct& s)
         {
             SETCONTAINERVAL(s);
@@ -251,7 +251,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          * core-cli --verbose push action nestcontn2a  prnts '["alice"]' -p alice@active
          *      output: >> stored mystruct val:18,dumstr
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prnts(name user)
         {
             PRNTCHECK();
@@ -259,7 +259,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         }
 
         //Example: core-cli --verbose push action nestcontn2a sets2 '["alice", {"_structfld":{"_count":18, "_strID":"dumstr"}, "_strID2":"dumstr2"}]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void sets2(name user, const mystruct2& s2)
         {
             SETCONTAINERVAL(s2);
@@ -270,7 +270,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a  prnts2 '["alice"]' -p alice@active
          *      output: >> stored mystruct2 val:18,dumstr,dumstr2
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prnts2(name user)
         {
             PRNTCHECK();
@@ -280,7 +280,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         /*Example:
          *  core-cli --verbose push action nestcontn2a setvs '["alice", [{"_count":18, "_strID":"dumstr"},{"_count":19, "_strID":"dumstr2"}]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setvs(name user, const vector<mystruct>& vs)
         {
             SETCONTAINERVAL(vs);
@@ -293,7 +293,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> 18,dumstr
          *              >> 19,dumstr2
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntvs(name user)
         {
             PRNTCHECK();
@@ -312,7 +312,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *      core-cli --verbose push action nestcontn2a seto '["alice","hello strval22"]' -p alice@active
          *
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void seto(name user, const optional<string>& o)
         {
             SETCONTAINERVAL(o);
@@ -326,7 +326,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a  prnto '["alice"]' -p alice@active
          *      output: >> stored optional<string> =hello strval22
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prnto(name user)
         {
             PRNTCHECK();
@@ -337,7 +337,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         }
 
         //Example: core-cli --verbose push action nestcontn2a setp '["alice", {"first":183, "second":269}]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setp(name user, const pair<uint16_t, uint16_t>& p)
         {
             SETCONTAINERVAL(p);
@@ -348,7 +348,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a  prntp '["alice"]' -p alice@active
          *      output: tored pair<uint16_t,uint16_t> val:183,269
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntp(name user)
         {
             PRNTCHECK();
@@ -359,7 +359,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         //=== 1. Try vector - set,vector,optional,map,pair
 
         //Example: core-cli --verbose push action nestcontn2a setvst '["alice", [[10,20],[3], [400,500,600]]]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setvst(name user, const vector<set_uint16>& vst)
         {
             SETCONTAINERVAL(vst);
@@ -374,7 +374,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> 3
          *              >> 400 500 600
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntvst(name user)
         {
 
@@ -390,7 +390,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
 
 
         //Example: core-cli --verbose push action nestcontn2a setvv '["alice", [[1,2],[30], [40,50,60]]]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setvv(name user, const vector<vec_uint16>& vv)
         {
             SETCONTAINERVAL(vv);
@@ -405,7 +405,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> 30
          *              >> 40 50 60
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntvv(name user)
         {
 
@@ -424,7 +424,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *        ******user data can NOT be pushed into the chain, core-cli get table will not work if using setvo
          *  vector<optional<T> > is  NOT supported currently!
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setvo(name user, const vector<op_uint16>& vo)
         {
             SETCONTAINERVAL(vo);
@@ -433,7 +433,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
 
         //Example: core-cli --verbose push action nestcontn2a  prntvo '["alice"]' -p alice@active
         //          NOT supported
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntvo(name user)
         {
             PRNTCHECK();
@@ -451,7 +451,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         /*Example:
          *  core-cli --verbose push action nestcontn2a setvm '["alice", [ [{"first":10,"second":100},{"first":11,"second":101}], [{"first":80,"second":800},{"first":81,"second":9009}] ]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setvm(name user, const vector<mp_uint16>& vm)
         {
             SETCONTAINERVAL(vm);
@@ -467,7 +467,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> Element 1--->
          *              >> 	80:800  81:9009
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntvm(name user)
         {
             PRNTCHECK();
@@ -486,7 +486,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         /*Example:
          *  core-cli --verbose push action nestcontn2a setvp '["alice", [{"first":18, "second":28}, {"first":19, "second":29}]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setvp(name user, const vector<pair<uint32_t, uint32_t> >& vp)
         {
             SETCONTAINERVAL(vp);
@@ -499,7 +499,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> 18,28
          *              >> 19,29
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntvp(name user)
         {
             PRNTCHECK();
@@ -513,7 +513,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         //=== 2. Try set - set,vector,optional,map,pair
 
         //Example: core-cli --verbose push action nestcontn2a setstst '["alice", [[10,20],[3], [400,500,600]]]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setstst(name user, const set<set_uint16>& stst)
         {
             SETCONTAINERVAL(stst);
@@ -528,7 +528,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> 10 20
          *              >> 400 500 600
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntstst(name user)
         {
 
@@ -543,7 +543,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         }
 
          //Example: core-cli --verbose push action nestcontn2a setstv '["alice", [[16,26],[36], [46,506,606]]]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setstv(name user, const set<vec_uint16>& stv)
         {
             SETCONTAINERVAL(stv);
@@ -557,7 +557,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> 36
          *              >> 46 506 606
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntstv(name user)
         {
 
@@ -576,7 +576,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *        ***user data can NOT be pushed into the chain, core-cli get table will not work if using setsto
          *  set<optional<T> > is  NOT supported currently!
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setsto(name user, const set<op_uint16>& sto)
         {
             SETCONTAINERVAL(sto);
@@ -585,7 +585,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
 
         //Example: core-cli --verbose push action nestcontn2a  prntsto '["alice"]' -p alice@active
         //          NOT supported
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntsto(name user)
         {
             PRNTCHECK();
@@ -602,7 +602,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         /*Example:
          * core-cli --verbose push action nestcontn2a setstm '["alice", [ [{"first":30,"second":300},{"first":31,"second":301}], [{"first":60,"second":600},{"first":61,"second":601}] ]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setstm(name user, const set<mp_uint16>& stm)
         {
             SETCONTAINERVAL(stm);
@@ -618,7 +618,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> Element 1--->
          *              >> 	60:600  61:601
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntstm(name user)
         {
             PRNTCHECK();
@@ -636,7 +636,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         /*Example:
          *  core-cli --verbose push action nestcontn2a setstp '["alice", [{"first":68, "second":128}, {"first":69, "second":129}]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setstp(name user, const set<pair<uint32_t, uint32_t> >& stp)
         {
             SETCONTAINERVAL(stp);
@@ -649,7 +649,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> 68,128
          *              >> 69,129
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntstp(name user)
         {
             PRNTCHECK();
@@ -667,7 +667,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a setost '["bob", null]' -p bob@active
          *  core-cli --verbose push action nestcontn2a setost '["alice", [1006,2006, 3006]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setost(name user, const optional<set_uint16>& ost)
         {
             SETCONTAINERVAL(ost);
@@ -683,7 +683,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *      output: >> stored optional<set_uint16>  vals:
          *              >> 1006 2006 3006
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntost(name user)
         {
             PRNTCHECK();
@@ -704,7 +704,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *
          *  core-cli --verbose push action nestcontn2a setov '["alice", [1001,2001, 3001]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setov(name user, const optional<vec_uint16>& ov)
         {
             SETCONTAINERVAL(ov);
@@ -720,7 +720,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *      output: >> stored optional<vec_uint16>  vals:
          *              >> 1001 2001 3001
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntov(name user)
         {
             PRNTCHECK();
@@ -741,7 +741,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *
          *  core-cli --verbose push action nestcontn2a setoo '["alice",123]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setoo(name user, const optional<op_uint16>& oo)
         {
             SETCONTAINERVAL(oo);
@@ -755,7 +755,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a  prntoo '["alice"]' -p alice@active
          *      output: >> stored optional<optional<T>> val:123
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntoo(name user)
         {
             PRNTCHECK();
@@ -771,7 +771,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *
          *  core-cli --verbose push action nestcontn2a  setom '["bob", null ]' -p bob@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setom(name user, const optional<mp_uint16>& om)
         {
             SETCONTAINERVAL(om);
@@ -785,7 +785,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a  prntom '["bob"]' -p bob@active
          *      output: >> optional<mp_uint16> has NULL value
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntom(name user)
         {
             PRNTCHECK();
@@ -807,7 +807,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *
          *  core-cli --verbose push action nestcontn2a setop '["bob", null]' -p bob@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setop(name user, const optional<pr_unit16> & op)
         {
             SETCONTAINERVAL(op);
@@ -821,7 +821,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a  prntop '["bob"]' -p bob@active
          *      output: >> optional<pr_unit16> has NULL value
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntop(name user)
         {
             PRNTCHECK();
@@ -837,7 +837,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         /*Example:
          *  core-cli --verbose push action nestcontn2a setmst '["alice", [{"key":1,"value":[10,11,12,16]},  {"key":2,"value":[200,300]} ]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setmst(name user, const map<uint16_t, set_uint16> & mst)
         {
             SETCONTAINERVAL(mst);
@@ -850,7 +850,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> 1:vals 10 11 12 16
          *              >> 2:vals 200 300
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntmst(name user)
         {
             PRNTCHECK();
@@ -871,7 +871,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         /*Example:
          * core-cli --verbose push action nestcontn2a setmv '["alice", [{"key":1,"value":[10,11,12,16]},  {"key":2,"value":[200,300]} ]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setmv(name user, const map<uint16_t, vec_uint16>& mv)
         {
             SETCONTAINERVAL(mv);
@@ -884,7 +884,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> 1:vals 10 11 12 16
          *              >> 2:vals 200 300
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntmv(name user)
         {
             PRNTCHECK();
@@ -904,7 +904,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         /*Example:
          *  core-cli --verbose push action nestcontn2a setmo '["alice", [{"key":10,"value":1000},{"key":11,"value":null}]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setmo(name user, const map<uint16_t, op_uint16>& mo)
         {
             SETCONTAINERVAL(mo);
@@ -916,7 +916,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *      output: >> size of stored mo:2 vals
          *              >> 10:1000 11:NULL
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntmo(name user)
         {
             PRNTCHECK();
@@ -936,7 +936,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *       Attention: please note the core-cli input of mm or map<K1, map<K2, V> > is a combination of strings key/value and first/second !
          *       i.e the "value" part of mm is an array of <first,second> pairs!
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setmm(name user, const map<uint16_t, mp_uint16>& mm)
         {
             SETCONTAINERVAL(mm);
@@ -953,7 +953,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> 	300:3000
          *              >> 	301:3001
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntmm(name user)
         {
             PRNTCHECK();
@@ -971,7 +971,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         /*Example:
          *  core-cli --verbose push action nestcontn2a setmp '["alice", [{"key":36,"value":{"first":300, "second":301}}, {"key":37,"value":{"first":600, "second":601}} ]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setmp(name user, const map<uint16_t, pr_unit16> & mp)
         {
             SETCONTAINERVAL(mp);
@@ -984,7 +984,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> 36:300 301
          *              >> 37:600 601
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntmp(name user)
         {
             PRNTCHECK();
@@ -998,7 +998,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         /*Example:
          *  core-cli --verbose push action nestcontn2a setpst '["alice", {"first":20, "second":[200,201,202]}]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setpst(name user, const pair<uint32_t, set_uint16>& pst)
         {
             SETCONTAINERVAL(pst);
@@ -1010,7 +1010,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *      output: >> content of stored pair<uint32_t, set_uint16>: first=20
          *              >> second=200 201 202
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntpst(name user)
         {
             PRNTCHECK();
@@ -1022,7 +1022,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         /*Example:
          *  core-cli --verbose push action nestcontn2a setpv '["alice", {"first":10, "second":[100,101,102]}]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setpv(name user, const pair<uint32_t, vec_uint16>& pv)
         {
             SETCONTAINERVAL(pv);
@@ -1034,7 +1034,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *      output: >> content of stored pair<uint32_t, vec_uint16>: first=10
          *              >> second=100 101 102
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntpv(name user)
         {
             PRNTCHECK();
@@ -1048,7 +1048,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *
          *  core-cli --verbose push action nestcontn2a setpo '["bob", {"first":70, "second":null}]' -p bob@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setpo(name user, const pair<uint32_t, op_uint16> & po)
         {
             SETCONTAINERVAL(po);
@@ -1064,7 +1064,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *      output: >> content of stored pair<uint16_t, op_unit16>: first=70
          *              >> second=NULL
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntpo(name user)
         {
             PRNTCHECK();
@@ -1079,7 +1079,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a setpm '["alice", {"key":6, "value":[{"first":20,"second":300}, {"first":21,"second":301}] }]' -p alice@active
          *      Remark: the data input for pm uses a combination of key/vale and first/second
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setpm(name user, const pair<uint16_t, mp_uint16> & pm)
         {
             SETCONTAINERVAL(pm);
@@ -1091,7 +1091,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *      output: >> content of stored pair<uint16_t, mp_uint16>: first=6
          *              >> second=20:300  21:301
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntpm(name user)
         {
             PRNTCHECK();
@@ -1105,7 +1105,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *  core-cli --verbose push action nestcontn2a setpp '["alice", {"key":30, "value":{"first":301, "second":302} }]' -p alice@active
          *      Remark: input data for pp or pair-pair is a combination of key/value and first/second
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setpp(name user, const pair<uint16_t, pr_unit16> & pp)
         {
             SETCONTAINERVAL(pp);
@@ -1117,7 +1117,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *      output: >> content of stored pair<uint16_t, pr_unit16>: first=30
          *              >> second=301 302
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntpp(name user)
         {
             PRNTCHECK();
@@ -1131,7 +1131,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         /*Example:
          *  core-cli --verbose push action nestcontn2a setovv '["alice", [[21,22],[230], [240,250,260,280]]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setovv(name user, const optional<vecvec_uint32>& ovv)
         {
             // try type-defined 3-layer nested container optional<vector<vector<T> > > here
@@ -1147,7 +1147,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
          *              >> 230
          *              >> 240 250 260 280
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntovv(name user)
         {
             PRNTCHECK();
@@ -1167,7 +1167,7 @@ class [[core_net::contract("nestcontn2a")]] nestcontn2a : public core_net::contr
         }
 
         //Example: core-cli --verbose push action nestcontn2a erase '["alice"]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void erase(name user)
         {
             require_auth(user);

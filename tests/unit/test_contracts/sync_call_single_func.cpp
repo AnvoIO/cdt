@@ -2,11 +2,11 @@
 #include <core_net/print.hpp>
 #include <core_net/core_net.hpp>
 
-class [[core_net::contract]] sync_call_single_func : public core_net::contract{
+class [[clang::annotate("core_net::contract")]] sync_call_single_func : public core_net::contract{
 public:
    using contract::contract;
 
-   [[core_net::call]]
+   [[clang::annotate("core_net::call")]]
    uint32_t return_ten() {
       return 10;
    }

@@ -119,7 +119,7 @@ namespace core_net {
  */
 #define CORE_NET_DISPATCH( TYPE, MEMBERS ) \
 extern "C" { \
-   [[core_net::wasm_entry]] \
+   [[clang::annotate("core_net::wasm_entry")]] \
    void apply( uint64_t receiver, uint64_t code, uint64_t action ) { \
       if( code == receiver ) { \
          switch( action ) { \

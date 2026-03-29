@@ -3,13 +3,13 @@
 using namespace core_net;
 
 // TODO: chained assigmnets in volatile not supported
-class [[core_net::contract]] malloc_tests : public contract{
+class [[clang::annotate("core_net::contract")]] malloc_tests : public contract{
    public:
       using contract::contract;
 
       static constexpr size_t max_heap = 33*1024*1024;
 
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void mallocpass() {
          // make sure that malloc allocates non-overlapping writable memory
          volatile char * ptr0 = (char*)malloc(1);
@@ -56,7 +56,7 @@ class [[core_net::contract]] malloc_tests : public contract{
          malloc(1);
          core_net::check((uintptr_t)malloc(sizeof(T)) % alignof(T) == 0, "insufficient alignment");
       }
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void mallocalign() {
          malloc_align_test<short>();
          malloc_align_test<int>();
@@ -69,7 +69,7 @@ class [[core_net::contract]] malloc_tests : public contract{
          malloc_align_test<__int128_t>();
       }
 
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void mallocfail() {
          malloc(max_heap);
       }

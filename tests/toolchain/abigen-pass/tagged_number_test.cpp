@@ -7,11 +7,11 @@ struct TaggedNumber {
     uint64_t value;
 };
 
-class [[core_net::contract]] tagged_number_test : public contract {
+class [[clang::annotate("core_net::contract")]] tagged_number_test : public contract {
   public:
       using contract::contract;
       
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       void test(TaggedNumber<"a.tag"_n.value>) {
       }
 };

@@ -17,11 +17,11 @@ using bar = foo;
 struct baz : bar {
 };
 
-class [[core_net::contract]] struct_base_typedefd : public contract {
+class [[clang::annotate("core_net::contract")]] struct_base_typedefd : public contract {
 public:
    using contract::contract;
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void hi(baz b) {
       print(b.value);
    }

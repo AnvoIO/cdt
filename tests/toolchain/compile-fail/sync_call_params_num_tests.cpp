@@ -6,11 +6,11 @@
 // .../build/bin/../include/core_netlib/contracts/core_net/detail.hpp:72:7: error: static_assert failed due to requirement 'sizeof...(Ts) == std::tuple_size<std::__1::tuple<unsigned int, unsigned int, unsigned int>>::value'
 //    static_assert(sizeof...(Ts) == std::tuple_size<deduced<Function>>::value);
 
-class [[core_net::contract]] sync_call_invalid_arg_nums : public core_net::contract{
+class [[clang::annotate("core_net::contract")]] sync_call_invalid_arg_nums : public core_net::contract{
 public:
    using contract::contract;
 
-   [[core_net::call]]
+   [[clang::annotate("core_net::call")]]
    uint32_t sum(uint32_t a, uint32_t b, uint32_t c) {
       return a + b + c;
    }
@@ -18,13 +18,13 @@ public:
    using sum_func = core_net::call_wrapper<"sum"_i, &sync_call_invalid_arg_nums::sum>;
 
    // Fewer number of arguments
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void fewerargs() {
       sum_func{"callee"_n}(1, 2);
    }
 
    // More number of arguments
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void moreargs() {
       sum_func{"callee"_n}(1, 2, 3, 4);
    }
