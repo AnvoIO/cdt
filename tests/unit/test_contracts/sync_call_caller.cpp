@@ -6,12 +6,12 @@
 
 using namespace core_net;
 
-class [[core_net::contract]] sync_call_caller : public core_net::contract{
+class [[clang::annotate("core_net::contract")]] sync_call_caller : public core_net::contract{
 public:
    using contract::contract;
 
    // Using host function directly
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void hstretvaltst() {
       call_data_header header{ .version = 0, .func_name = "return_ten"_i.id };
       const std::vector<char> data{ core_net::pack(header) };
@@ -26,14 +26,14 @@ public:
    }
 
    // Using call_wrapper
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void wrpretvaltst() {
       sync_call_callee::return_ten_func return_ten{ "callee"_n };
       core_net::check(return_ten() == 10u, "return value not 10");
    }
 
    // Using host function directly, testing one parameter passing
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void hstoneprmtst() {
       // `echo_input(uint32_t p)` returns p
       call_data_header header{ .version = 0, .func_name = "echo_input"_i.id };
@@ -49,14 +49,14 @@ public:
    }
 
    // Using call_wrapper, testing one parameter passing
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void wrponeprmtst() {
       sync_call_callee::echo_input_func echo_input{ "callee"_n };
       core_net::check(echo_input(5) == 5u, "return value not 5");
    }
 
    // Using host function directly, testing multiple parameters passing
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void hstmulprmtst() {
       call_data_header header{ .version = 0, .func_name = "sum"_i.id };
       const std::vector<char> data{ core_net::pack(std::make_tuple(header, 10, 20, 30)) };
@@ -71,14 +71,14 @@ public:
    }
 
    // Using call_wrapper, testing multiple parameters passing
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void wrpmulprmtst() {
       sync_call_callee::sum_func sum{ "callee"_n };
       core_net::check(sum(10, 20, 30) == 60u, "sum of 10, 20, and 30 not 60");
    }
 
    // Verify single struct parameter passing
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void structtest() {
       sync_call_callee::pass_single_struct_func func{ "callee"_n };
       struct1_t input = { 10, 20 };
@@ -88,7 +88,7 @@ public:
    }
 
    // Verify mix of struct and integer parameters passing
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void structinttst() {
       sync_call_callee::pass_multi_structs_func func{ "callee"_n };
       struct1_t input1 = { 10, 20 };
@@ -102,7 +102,7 @@ public:
       core_net::check(output.b == m * input1.b + input2.d, "field b of output is not correct");
    }
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void hstvodfuntst() {
       call_data_header header{ .version = 0, .func_name = "void_func"_i.id };
       const std::vector<char> data{ core_net::pack(header) };
@@ -110,55 +110,55 @@ public:
       core_net::check(expected_size == 0, "call did not return 0"); // void function. return value size should be 0
    }
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void wrpvodfuntst() {
       sync_call_callee::void_func_func void_func{ "callee"_n };
       void_func();
    }
 
    // Verify void call. void_func uses default support_mode::abort
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void voidfncabort() {
       sync_call_not_supported::void_func void_func_abort{ "callee"_n };
       void_func_abort();  // Will throw. Tester will verify that.
    }
 
    // void_func uses support_mode::no_op
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void voidfncnoop() {
       sync_call_not_supported::void_no_op_func void_func_no_op{ "callee"_n };
       check(void_func_no_op() == std::nullopt, "void_func_io_op did not return std::nullopt");
    }
 
    // verify non-void call. int_func uses default support_mode::abort
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void intfuncabort() {
       sync_call_not_supported::int_func int_func_abort{ "callee"_n };
       int_func_abort(); // Will throw. Tester will verify that.
    }
 
    // int_func uses support_mode::no_opabort
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void intfuncnoop() {
       sync_call_not_supported::int_no_op_func int_func_no_op{ "callee"_n };
       check(int_func_no_op() == std::nullopt, "void_func_io_op did not return std::nullopt");
    }
 
    // void_io_op_success_func uses support_mode::no_op
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void voidnoopsucc() {
       sync_call_callee::void_no_op_success_func f{ "callee"_n };
       check(f().has_value(), "void_io_op_success_func did not return a value");
    }
 
    // void_io_op_success_func uses support_mode::no_op
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void sumnoopsucc() {
       sync_call_callee::sum_no_op_success_func f{ "callee"_n };
       check(*f(7, 8, 9) == 24, "sum_io_op_success_func did not return a value");
    }
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void hdrvaltest() {
       // Verify function name validation works
       call_data_header unkwn_func_header{ .version = 0, .func_name = "unknwnfunc"_i.id };
@@ -174,7 +174,7 @@ public:
    }
 
    // Call issynccall as a sync call and return its return value
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    bool makesynccall() {
       sync_call_callee::issynccall_func is_sync_call_func{ "callee"_n };
       return is_sync_call_func();

@@ -12,10 +12,10 @@ namespace foo {
 typedef std::string str;
 }
 
-class [[core_net::contract]] using_nested_typedef : public contract {
+class [[clang::annotate("core_net::contract")]] using_nested_typedef : public contract {
 public:
    using contract::contract;
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void hi(foo::str s) {
       print(s);
    }

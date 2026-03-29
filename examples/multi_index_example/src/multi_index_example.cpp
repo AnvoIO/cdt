@@ -1,5 +1,5 @@
 #include <multi_index_example.hpp>
-[[core_net::action]] 
+[[clang::annotate("core_net::action")]] 
 void multi_index_example::set( name user ) {
    auto itr = testtab.find(user.value);
    if ( itr == testtab.end() ) {
@@ -11,14 +11,14 @@ void multi_index_example::set( name user ) {
    }
 }
 
-[[core_net::action]] 
+[[clang::annotate("core_net::action")]] 
 void multi_index_example::print( name user ) {
    auto itr = testtab.find(user.value);
    check( itr != testtab.end(), "user does not exist in table" );
    core_net::print_f("Test Table : {%, %, %}\n", itr->test_primary, itr->secondary, itr->datum);
 }
 
-[[core_net::action]] 
+[[clang::annotate("core_net::action")]] 
 void multi_index_example::bysec( name secid ) {
    auto idx = testtab.get_index<"secid"_n>();
    for ( auto itr = idx.begin(); itr != idx.end(); itr++ ) {
@@ -26,7 +26,7 @@ void multi_index_example::bysec( name secid ) {
    }
 }
 
-[[core_net::action]] 
+[[clang::annotate("core_net::action")]] 
 void multi_index_example::mod( name user, uint32_t n ) {
    auto itr = testtab.find(user.value);
    check( itr != testtab.end(), "user does not exist in table" );
@@ -36,7 +36,7 @@ void multi_index_example::mod( name user, uint32_t n ) {
    });
 }
 
-[[core_net::action]]
+[[clang::annotate("core_net::action")]]
 void multi_index_example::del( name user ) {
   // check if the user already exists
   auto itr = testtab.find(user.value);

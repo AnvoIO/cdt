@@ -57,9 +57,9 @@ typedef pair<uint16_t, uint16_t> pr_uint16;
 
 typedef tuple<uint16_t, uint16_t> tup_uint16;
 
-class [[core_net::contract("tupletest")]] tupletest : public core_net::contract {
+class [[clang::annotate("core_net::contract", "tupletest")]] tupletest : public core_net::contract {
     private:
-        struct [[core_net::table]] person2 {
+        struct [[clang::annotate("core_net::table")]] person2 {
             name key;
 
             //  Each container/object is represented by one letter: v-vector, m-map, s-mystruct,o-optional, p-pair, t - tuple
@@ -99,7 +99,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          * core-cli --verbose push action tupletest sett '["alice", [100,"strA"]]' -p alice@active
          * core-cli --verbose push action tupletest sett '["bob", [200, "strB"]]' -p bob@active
           */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void sett(name user, const tuple<uint16_t, string>& t)
         {
             SETCONTAINERVAL(t);
@@ -113,7 +113,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *  core-cli --verbose push action tupletest prntt '["bob"]' -p bob@active
          *      output: >> elements of stored tuple t:200, strB
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntt(name user)
         {
             PRNTCHECK();
@@ -123,7 +123,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
         //=== 1. Try other containers (vector,set,optional,map,pair,tuple)  of tuples
 
         //Example: core-cli --verbose push action tupletest setvt '["alice", [[10,20],[30,60], [80,90]]]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setvt(name user, const vector<tup_uint16>& vt)
         {
             SETCONTAINERVAL(vt);
@@ -138,7 +138,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *              >> 30 60
          *              >> 80 90
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntvt(name user)
         {
 
@@ -152,7 +152,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
         }
 
         //Example: core-cli --verbose push action tupletest  setstt '["alice", [[1,2],[3,6], [8,9]]]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setstt(name user, const set<tup_uint16> & stt)
         {
             SETCONTAINERVAL(stt);
@@ -167,7 +167,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *              >> 3 6
          *              >> 8 9
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntstt(name user)
         {
 
@@ -186,7 +186,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *
          *  core-cli --verbose push action tupletest setot '["alice", [1001,2001]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setot(name user, const optional<tup_uint16> & ot)
         {
             SETCONTAINERVAL(ot);
@@ -202,7 +202,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *      output: >> stored optional<tup_uint16>  vals:
          *              >> 1001 2001
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntot(name user)
         {
             PRNTCHECK();
@@ -220,7 +220,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
         /*Example:
          * core-cli --verbose push action tupletest setmt '["alice", [{"key":1,"value":[10,11]},  {"key":2,"value":[200,300]} ]]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setmt(name user, const map<uint16_t, tup_uint16> & mt)
         {
             SETCONTAINERVAL(mt);
@@ -233,7 +233,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *              >> 1:vals 10 11
          *              >> 2:vals 200 300
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntmt(name user)
         {
             PRNTCHECK();
@@ -249,7 +249,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
         /*Example:
          *  core-cli --verbose push action tupletest setpt '["alice", {"first":10, "second":[100,101]}]' -p alice@active
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setpt(name user, const pair<uint32_t, tup_uint16>& pt)
         {
             SETCONTAINERVAL(pt);
@@ -261,7 +261,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *      output: >> content of stored pair<uint32_t, tup_uint16>: first=10
          *              >> second=100 101
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntpt(name user)
         {
             PRNTCHECK();
@@ -270,7 +270,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
         }
 
         //Example: core-cli --verbose push action tupletest settt '["alice", [[1,2],[30,40], [50,60]]]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void settt(name user, const tuple<tup_uint16, tup_uint16,  tup_uint16>& tt)
         {
             SETCONTAINERVAL(tt);
@@ -285,7 +285,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *              >> 30 40
          *              >> 50 60
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prnttt(name user)
         {
 
@@ -303,7 +303,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
         //=== 2. Try tuple of other containers (vector,set,optional,map,pair)
 
          //Example: core-cli --verbose push action tupletest settv '["alice", [16,[26,36], [46,506,606]]]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void settv(name user, const tuple<uint16_t, vec_uint16, vec_uint16>& tv)
         {
             SETCONTAINERVAL(tv);
@@ -317,7 +317,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *              >> ele1: 26 36
          *              >> ele2: 46 506 606
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prnttv(name user)
         {
 
@@ -336,7 +336,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
         }
 
          //Example: core-cli --verbose push action tupletest settst '["alice", [10,[21,31], [41,51,61]]]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void settst(name user, const tuple<uint16_t, set_uint16, set_uint16>& tst)
         {
             SETCONTAINERVAL(tst);
@@ -350,7 +350,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *              >> ele1: 21 31
          *              >> ele2: 41 51 61
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prnttst(name user)
         {
 
@@ -374,7 +374,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *  core-cli --verbose push action tupletest  setto '["bob", [null, null, 10, null, 20]]' -p bob@active
          *      Remark: Yes, tuple of optionals is supported here !
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void setto(name user, const tuple<op_uint16, op_uint16, op_uint16,op_uint16,op_uint16> & to)
         {
             SETCONTAINERVAL(to);
@@ -390,7 +390,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *      output: >> stored tuple<op_uint16, op_uint16, op_uint16,op_uint16,op_uint16> vals:
          *              >> NULL NULL 10 NULL 20
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prntto(name user)
         {
             PRNTCHECK();
@@ -413,7 +413,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
 
         //Example: core-cli --verbose push action tupletest settm '["alice", [126, [{"key":10,"value":100},{"key":11,"value":101}], [{"key":80,"value":800},{"key":81,"value":9009}] ]]' -p alice@active
         //         ******Note: The input format of settm is different from that of setvm in nestcontn2a.cpp!
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void settm(name user, const tuple<uint16_t, mp_uint16, mp_uint16>& tm)
         {
             SETCONTAINERVAL(tm);
@@ -427,7 +427,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *              >> ele1: 10:100 11:101
          *              >> ele2: 80:800 81:9009
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prnttm(name user)
         {
 
@@ -447,7 +447,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
 
         //Example:  core-cli --verbose push action tupletest settp '["alice", [127, {"key":18, "value":28}, {"key":19, "value":29}]]' -p alice@active
         //         ******Note: The input format of settp is different from that of setvp in nestcontn2a.cpp!
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void settp(name user, const tuple<uint16_t, pr_uint16, pr_uint16>& tp)
         {
             SETCONTAINERVAL(tp);
@@ -461,7 +461,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *              >> ele1: 18:28
          *              >> ele2: 19:29
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prnttp(name user)
         {
 
@@ -479,7 +479,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
         }
 
         //Example: core-cli --verbose push action tupletest settmisc '["alice", ["strHere", [10,11,12,16], {"key":86,"value":96}] ]' -p alice@active
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void settmisc(name user, const tuple<string, vec_uint16, pr_uint16>  & tmisc)
         {
             SETCONTAINERVAL(tmisc);
@@ -493,7 +493,7 @@ class [[core_net::contract("tupletest")]] tupletest : public core_net::contract 
          *              >> ele1: 10 11 12 16
          *              >> ele2: 86:96
          */
-        [[core_net::action]]
+        [[clang::annotate("core_net::action")]]
         void prnttmisc(name user)
         {
 

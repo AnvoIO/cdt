@@ -13,33 +13,33 @@ struct struct2_t {
    uint64_t d;
 };
 
-class [[core_net::contract]] sync_call_callee : public core_net::contract{
+class [[clang::annotate("core_net::contract")]] sync_call_callee : public core_net::contract{
 public:
    using contract::contract;
 
-   [[core_net::call]]
+   [[clang::annotate("core_net::call")]]
    uint32_t return_ten();
 
-   [[core_net::call]]
+   [[clang::annotate("core_net::call")]]
    uint32_t echo_input(uint32_t in);
 
-   [[core_net::call]]
+   [[clang::annotate("core_net::call")]]
    void void_func();
 
-   [[core_net::action, core_net::call]]
+   [[clang::annotate("core_net::action")]] [[clang::annotate("core_net::call")]]
    uint32_t sum(uint32_t a, uint32_t b, uint32_t c);
 
    // pass in a struct and return it
-   [[core_net::call]]
+   [[clang::annotate("core_net::call")]]
    struct1_t pass_single_struct(struct1_t s);
 
    // pass in two structs and an integer, multiply each field in the struct by
    // the integer, add last two fields of the second struct, and return the result
-   [[core_net::call]]
+   [[clang::annotate("core_net::call")]]
    struct1_t pass_multi_structs(struct1_t s1, int32_t m, struct2_t s2);
 
    // return is_sync_call()
-   [[core_net::action, core_net::call]]
+   [[clang::annotate("core_net::action")]] [[clang::annotate("core_net::call")]]
    bool issynccall();
    using issynccall_func = core_net::call_wrapper<"issynccall"_i, &sync_call_callee::issynccall>;
 

@@ -6,51 +6,51 @@
 
 using namespace core_net;
 
-class [[core_net::contract]] simple_tests : public contract {
+class [[clang::annotate("core_net::contract")]] simple_tests : public contract {
    public:
       using contract::contract;
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void test1(name nm) {
          check(nm == "bucky"_n, "not bucky");
       }
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void test2(int arg0, std::string arg1) {
          check(arg0 == 33, "33 does not match");
          check(arg1 == "some string", "some string does not match");
       }
 
-      [[core_net::action("test4")]] 
+      [[clang::annotate("core_net::action", "test4")]] 
       void test4(name to) {
          transfer_contract::transfer_action trans("core.token"_n, {_self, "active"_n});
          trans.send(_self, to, asset{100, {"TST", 4}}, "memo");
       }
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void test5(name to) {
          transfer_contract::transfer_action trans("someone"_n, {_self, "active"_n});
          trans.send(_self, to, asset{100, {"TST", 4}}, "memo");
       }
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void testa(name to) {
          transfer_contract::transfer2_action trans("someone"_n, {_self, "active"_n});
          trans.send(_self, to, asset{100, {"TST", 4}}, "memo");
       }
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void testb(name to) {
          transfer_contract::transfer3_action trans("someone"_n, {_self, "active"_n});
          trans.send(_self, to, asset{100, {"TST", 4}}, "memo");
       }
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void testc(name nm) {
          check(nm == "bucky"_n, "should be bucky");
       }
 
-      [[core_net::action]] 
+      [[clang::annotate("core_net::action")]] 
       void testd(name nm) {
          deferred_transaction t;
          action act;
@@ -62,7 +62,7 @@ class [[core_net::contract]] simple_tests : public contract {
          t.send(nm.value, get_self());
       }
 
-      [[core_net::action]]
+      [[clang::annotate("core_net::action")]]
       core_net::bitset testbs(core_net::bitset b) {
          for (size_t i=0; i<b.size(); ++i) {
             if (b[i])
@@ -73,19 +73,19 @@ class [[core_net::contract]] simple_tests : public contract {
          return b;
       }
 
-      [[core_net::on_notify("core.token::transfer")]]
+      [[clang::annotate("core_net::on_notify", "core.token::transfer")]]
       void on_transfer(name from, name to, asset quant, std::string memo) {
          check(get_first_receiver() == "core.token"_n, "should be core.token");
          print_f("On notify : % % % %", from, to, quant, memo);
       }
 
-      [[core_net::on_notify("*::transfer")]] 
+      [[clang::annotate("core_net::on_notify", "*::transfer")]] 
       void on_transfer2(name from, name to, asset quant, std::string memo) {
          check(get_first_receiver() != "core.token"_n, "should not be core.token");
          print_f("On notify 2 : % % % %", from, to, quant, memo);
       }
 
-      [[core_net::on_notify("*::transfer2")]] 
+      [[clang::annotate("core_net::on_notify", "*::transfer2")]] 
       void on_transfer3(name from, name to, asset quant, std::string memo) {
          print_f("On notify 3 : % % % %", from, to, quant, memo);
       }

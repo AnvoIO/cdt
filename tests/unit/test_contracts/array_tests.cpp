@@ -4,7 +4,7 @@
 
 using namespace core_net;
 
-class [[core_net::contract]] array_tests : public contract {
+class [[clang::annotate("core_net::contract")]] array_tests : public contract {
    public:
       using contract::contract;
 
@@ -32,7 +32,7 @@ class [[core_net::contract]] array_tests : public contract {
    };
 
    // test inside using std::array
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void testin(std::string message) {
       tests_table _tests(get_self(), get_self().value);
 
@@ -66,7 +66,7 @@ class [[core_net::contract]] array_tests : public contract {
    }
 
    // test parameter using std::array
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void testpa(std::array<int,4> input){
       std::array<int,4> arr = input;
       for(int i = 0; i < 4; ++i){
@@ -76,7 +76,7 @@ class [[core_net::contract]] array_tests : public contract {
    }
 
    // test parameter and return value using std::array
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    // core-cli -v push action core testre '[[1,2,3,4]]' -p core@active
    std::array<int,4> testre(std::array<int,4> input){
       std::array<int,4> arr = input;
@@ -85,7 +85,7 @@ class [[core_net::contract]] array_tests : public contract {
    }
 
    // test return value using std::array
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    // core-cli -v push action core testre2 '[[1,2,3,4]]' -p core@active
    std::array<int,4> testre2(std::vector<int> input){
       std::array<int,4> arr;
@@ -94,7 +94,7 @@ class [[core_net::contract]] array_tests : public contract {
    }
 
    // test return using std::vector
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    // core-cli -v push action core testrev '[[1,2,3,4]]' -p core@active
    std::vector<int> testrev(std::vector<int> input){
       std::vector<int> vec = input;
@@ -103,7 +103,7 @@ class [[core_net::contract]] array_tests : public contract {
    }
 
    // test nested array
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void testne() {
       std::array<tests,2> nest;
       std::array<uint8_t, 32> str = {'a','a','a','a','a','a','a','a',
@@ -133,7 +133,7 @@ class [[core_net::contract]] array_tests : public contract {
    }
 
    // test complex data
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void testcom(name user) {
       require_auth(user);
       tests_table _tests(get_self(), get_self().value);

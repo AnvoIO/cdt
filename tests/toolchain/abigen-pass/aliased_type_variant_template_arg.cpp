@@ -10,11 +10,11 @@ using namespace core_net;
 
 using str = std::string;
 
-class [[core_net::contract]] aliased_type_variant_template_arg : public contract {
+class [[clang::annotate("core_net::contract")]] aliased_type_variant_template_arg : public contract {
 public:
    using contract::contract;
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void hi(std::variant<uint64_t,str> v) {
       if (std::holds_alternative<uint64_t>(v)) {
       } else if (std::holds_alternative<str>(v)) {

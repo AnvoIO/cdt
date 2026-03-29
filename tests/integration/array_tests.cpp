@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_SUITE(array_tests)
 
 BOOST_FIXTURE_TEST_CASE( std_array_param, tester ) try {
    /* -----------  testpa action tests --------------------------------------------------
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void testpa(std::array<int,4> input){
       std::array<int,4> arr = input;
       for(int i = 0; i < 4; ++i){
@@ -50,7 +50,7 @@ BOOST_FIXTURE_TEST_CASE( std_array_param, tester ) try {
 
 BOOST_FIXTURE_TEST_CASE( std_array_return_value, tester ) try {
    /* -----------  testre action tests --------------------------------------------------
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    std::array<int,4> testre(std::array<int,4> input){
       std::array<int,4> arr = input;
       for(auto & v : arr) v += 1;
@@ -73,7 +73,7 @@ BOOST_FIXTURE_TEST_CASE( std_array_return_value, tester ) try {
 
 BOOST_FIXTURE_TEST_CASE( std_vector_return_value, tester ) try {
    /* -----------  testrev action tests --------------------------------------------------
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    std::vector<int> testrev(std::vector<int> input){
       std::vector<int> vec = input;
       for(auto & v : vec) v += 1;

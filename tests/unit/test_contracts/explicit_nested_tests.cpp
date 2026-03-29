@@ -38,7 +38,7 @@ CONTRACT explicit_nested_tests : public contract {
    };
    using test_data_idx = multi_index<"testdata"_n, testdata>;
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
     //usage: core-cli -v push action core vvstr '[[["abc", "cde"],["def","fgh"]]]' -p core@active
    std::vector<std::vector<std::string>> vvstr(std::vector<std::vector<std::string>> input) {
       std::vector<std::vector<std::string>> output = input;
@@ -50,7 +50,7 @@ CONTRACT explicit_nested_tests : public contract {
       }
       return output;
    } 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    // usage : core-cli -v push action core vvvstr '[[[["abc", "cde"],["def","fgh"]]]]' -p core@active
    std::vector<std::vector<std::vector<std::string>>> vvvstr(std::vector<std::vector<std::vector<std::string>>> input) {
       std::vector<std::vector<std::vector<std::string>>> output = input;
@@ -65,42 +65,42 @@ CONTRACT explicit_nested_tests : public contract {
       return output;
    } 
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    //usage : core-cli -v push action core mapo '[[{"key":1,"value":2.0},{"key":2,"value":3.9}]]'  -p core@active
    std::map<uint64_t, std::optional<float> >  mapo(std::map<uint64_t, std::optional<float>>  input){
       std::map<uint64_t, std::optional<float>> output = input;
       return output;
    }
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    // usage : core-cli -v push action core vecop '[[{"first":1,"second":2.0},{"first":2,"second":3.9}]]'  -p core@active
    std::vector<std::optional<std::pair<uint64_t,float>>>  vecop(std::vector<std::optional<std::pair<uint64_t,float>>>  input){
       std::vector<std::optional<std::pair<uint64_t,float>>> output = input;
       return output;
    }
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
     // usage : core-cli -v push action core vecpo '[[{"first":1,"second":2.0},{"first":2,"second":3.9}]]'  -p core@active
    std::vector<std::pair<uint64_t, opt_float >>  vecpo(std::vector<std::pair<uint64_t, opt_float >>  input){
       std::vector<std::pair<uint64_t, opt_float >> output = input;
       return output;
    }
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    // usage : core-cli -v push action core vecpoe '[[{"first":1,"second":2.0},{"first":2,"second":3.9}]]'  -p core@active
    std::vector<std::pair<uint64_t, std::optional<float> >>  vecpoe(std::vector<std::pair<uint64_t, std::optional<float> >>  input){
       std::vector<std::pair<uint64_t, std::optional<float> >> output = input;
       return output;
    }
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    // usage : core-cli -v push action core tup '[{"field_0":1,"field_1":2.0,"field_2":[4,5,6,7]}]'  -p core@active
    std::tuple<uint64_t, std::optional<float>, std::vector<int>>  tup(std::tuple<uint64_t, std::optional<float>, std::vector<int>>  input){
       std::tuple<uint64_t, std::optional<float>, std::vector<int>> output = input;
       return output;
    }
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
     // usage : core-cli -v push action core var '[["uint64",8]]'  -p core@active
     // usage : core-cli -v push action core var '[["B_optional_B_pair_int32_float32_E_E", {"first":1,"second":2.0}]]'  -p core@active
     // usage : core-cli -v push action core var '[["B_vector_int32_E", [2,3,4]]]'  -p core@active
@@ -109,7 +109,7 @@ CONTRACT explicit_nested_tests : public contract {
       return output;
    }
 
-   [[core_net::action]]  // sdl means set deque list , as we support them should test them as well.
+   [[clang::annotate("core_net::action")]]  // sdl means set deque list , as we support them should test them as well.
    // usage : core-cli -v push action core sdlstr '[[[["abc", "cde"],["def","fgh"]]]]' -p core@active
    std::set<std::deque<std::list<std::string>>> sdlstr(std::set<std::deque<std::list<std::string>>> input) {
       std::set<std::deque<std::list<std::string>>> output = input;
@@ -125,7 +125,7 @@ CONTRACT explicit_nested_tests : public contract {
    }
 
    typedef std::vector<std::vector<std::string>>  vecvecstr;
-   [[core_net::action]]   // this test is for the whole type is not explicit nested by the inside type is a alias of explicit nested.
+   [[clang::annotate("core_net::action")]]   // this test is for the whole type is not explicit nested by the inside type is a alias of explicit nested.
    // usage : core-cli -v push action core vivvstr '[[[["abc", "cde"],["def","fgh"]]]]' -p core@active
    std::vector<vecvecstr> vivvstr(std::vector<vecvecstr> input) {
       std::vector<vecvecstr> output = input;
@@ -143,7 +143,7 @@ CONTRACT explicit_nested_tests : public contract {
    typedef vector<vector<vector<int> > > myvec3;
    typedef set<myvec3> myset;
 
-   [[core_net::action]]   // this test is for the whole type is not explicit nested by the inside type is a alias of explicit nested.
+   [[clang::annotate("core_net::action")]]   // this test is for the whole type is not explicit nested by the inside type is a alias of explicit nested.
    // usage : core-cli -v push action core sivvvi '[[[[[1, 2],[3,4]]]]]' -p core@active
    myset sivvvi(myset input) {
       myset output = input;
@@ -160,13 +160,13 @@ CONTRACT explicit_nested_tests : public contract {
       return output;
    }
 
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    std::vector<std::vector<_mystruct>>  vvmystr(){
       std::vector<std::vector<_mystruct>> output = {{{56,5.6, {{"test"}} }, {78,7.8, {{"passed"}} }}};
       return output;
    }
 
-   [[core_net::action]]   // this test is for the put simple data to table, so as to check the the data read from table is the same
+   [[clang::annotate("core_net::action")]]   // this test is for the put simple data to table, so as to check the the data read from table is the same
    // usage : core-cli -v push action core putd '[core]' -p core@active
    //             core-cli -v get table core core testdata
    void putd(name user) {

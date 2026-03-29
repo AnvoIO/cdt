@@ -6,14 +6,14 @@ CONTRACT enf: public contract {
    public:
       using contract::contract;
 
-      [[core_net::action]] void declare() {
+      [[clang::annotate("core_net::action")]] void declare() {
          print("Hello World!\n");    
       }
 
 };
 
 extern "C" {
-   [[core_net::wasm_entry]]
+   [[clang::annotate("core_net::wasm_entry")]]
    void apply( uint64_t receiver, uint64_t code, uint64_t action ) {
    }
 } 

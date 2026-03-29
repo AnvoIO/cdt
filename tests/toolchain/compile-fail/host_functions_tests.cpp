@@ -59,9 +59,9 @@ extern "C" void set_parameters_packed( const char* params, uint32_t params_size 
 extern "C" void send_inline(char *serialized_action, size_t size);
 extern "C" void send_context_free_inline(char *serialized_action, size_t size);
 
-#define ACTION_TYPE  [[core_net::action, core_net::read_only]]
+#define ACTION_TYPE  [[clang::annotate("core_net::action")]] [[clang::annotate("core_net::read_only")]]
 
-class [[core_net::contract]] host_functions_tests : public core_net::contract {
+class [[clang::annotate("core_net::contract")]] host_functions_tests : public core_net::contract {
 public:
    using contract::contract;
     

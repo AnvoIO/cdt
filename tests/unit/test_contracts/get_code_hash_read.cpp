@@ -4,14 +4,14 @@
 
 #include "get_code_hash_table.hpp"
 
-class [[core_net::contract]] get_code_hash_tests : public contract {
+class [[clang::annotate("core_net::contract")]] get_code_hash_tests : public contract {
 public:
    using contract::contract;
 
    using hash_table = multi_index<name("code.hash"), code_hash>;
 
    // Read the old code's hash from database and verify new code's hash differs
-   [[core_net::action]]
+   [[clang::annotate("core_net::action")]]
    void theaction() {
       require_auth(get_self());
       hash_table hashes(get_self(), get_self().value);

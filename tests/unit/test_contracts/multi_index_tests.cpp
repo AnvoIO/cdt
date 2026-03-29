@@ -345,73 +345,73 @@ namespace _test_multi_index
 
 } /// _test_multi_index
 
-class [[core_net::contract]] test_multi_index : public core_net::contract
+class [[clang::annotate("core_net::contract")]] test_multi_index : public core_net::contract
 {
 public:
     using core_net::contract::contract;
 
-    [[core_net::action("s1g")]] void idx64_general() {
+    [[clang::annotate("core_net::action", "s1g")]] void idx64_general() {
         _test_multi_index::idx64_store_only<"indextable2"_n.value>( get_self() );
         _test_multi_index::idx64_check_without_storing<"indextable2"_n.value>( get_self() );
     }
 
-    [[core_net::action("s1store")]] void idx64_store_only() {
+    [[clang::annotate("core_net::action", "s1store")]] void idx64_store_only() {
         _test_multi_index::idx64_store_only<"indextable1"_n.value>(get_self());
     }
 
-    [[core_net::action("s1check")]] void idx64_check_without_storing() {
+    [[clang::annotate("core_net::action", "s1check")]] void idx64_check_without_storing() {
         _test_multi_index::idx64_check_without_storing<"indextable1"_n.value>( get_self() );
     }
 
-    [[core_net::action("s1findfail1")]] void idx64_require_find_fail() {
+    [[clang::annotate("core_net::action", "s1findfail1")]] void idx64_require_find_fail() {
         _test_multi_index::idx64_store_only<"indextable5"_n.value>( get_self() );
         _test_multi_index::idx64_require_find_fail<"indextable5"_n.value>( get_self() );
     }
 
-    [[core_net::action("s1findfail2")]] void idx64_require_find_fail_with_msg() {
+    [[clang::annotate("core_net::action", "s1findfail2")]] void idx64_require_find_fail_with_msg() {
         _test_multi_index::idx64_store_only<"indextablea"_n.value>( get_self() ); // Making the name smaller fixes this?
         _test_multi_index::idx64_require_find_fail_with_msg<"indextablea"_n.value>( get_self() ); // Making the name smaller fixes this?
     }
 
-    [[core_net::action("s1findfail3")]] void idx64_require_find_sk_fail() {
+    [[clang::annotate("core_net::action", "s1findfail3")]] void idx64_require_find_sk_fail() {
         _test_multi_index::idx64_store_only<"indextableb"_n.value>( get_self() );
         _test_multi_index::idx64_require_find_sk_fail<"indextableb"_n.value>( get_self() );
     }
 
-    [[core_net::action("s1findfail4")]] void idx64_require_find_sk_fail_with_msg() {
+    [[clang::annotate("core_net::action", "s1findfail4")]] void idx64_require_find_sk_fail_with_msg() {
         _test_multi_index::idx64_store_only<"indextablec"_n.value>( get_self() );
         _test_multi_index::idx64_require_find_sk_fail_with_msg<"indextablec"_n.value>( get_self() );
     }
 
-    [[core_net::action("s1pkend")]] void idx64_pk_iterator_exceed_end() {
+    [[clang::annotate("core_net::action", "s1pkend")]] void idx64_pk_iterator_exceed_end() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
         auto end_itr = table.end();
         // Should fail
         ++end_itr;
     }
 
-    [[core_net::action("s1skend")]] void idx64_sk_iterator_exceed_end() {
+    [[clang::annotate("core_net::action", "s1skend")]] void idx64_sk_iterator_exceed_end() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
         auto end_itr = table.get_index<"bysecondary"_n>().end();
         // Should fail
         ++end_itr;
     }
 
-    [[core_net::action("s1pkbegin")]] void idx64_pk_iterator_exceed_begin() {
+    [[clang::annotate("core_net::action", "s1pkbegin")]] void idx64_pk_iterator_exceed_begin() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
         auto begin_itr = table.begin();
         // Should fail
         --begin_itr;
     }
 
-    [[core_net::action("s1skbegin")]] void idx64_sk_iterator_exceed_begin() {
+    [[clang::annotate("core_net::action", "s1skbegin")]] void idx64_sk_iterator_exceed_begin() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
         auto begin_itr = table.get_index<"bysecondary"_n>().begin();
         // Should fail
         --begin_itr;
     }
 
-    [[core_net::action("s1pkref")]] void idx64_pass_pk_ref_to_other_table() {
+    [[clang::annotate("core_net::action", "s1pkref")]] void idx64_pass_pk_ref_to_other_table() {
         auto table1 = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
         auto table2 = _test_multi_index::idx64_table<"indextable2"_n.value, "bysecondary"_n.value>( get_self() );
 
@@ -422,7 +422,7 @@ public:
         table2.iterator_to(*table1_pk_itr);
     }
 
-    [[core_net::action("s1skref")]] void idx64_pass_sk_ref_to_other_table() {
+    [[clang::annotate("core_net::action", "s1skref")]] void idx64_pass_sk_ref_to_other_table() {
         auto table1 = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
         auto table2 = _test_multi_index::idx64_table<"indextable2"_n.value, "bysecondary"_n.value>( get_self() );
 
@@ -434,14 +434,14 @@ public:
         table2_sec_index.iterator_to(*table1_pk_itr);
     }
 
-    [[core_net::action("s1pkitrto")]] void idx64_pass_pk_end_itr_to_iterator_to() {
+    [[clang::annotate("core_net::action", "s1pkitrto")]] void idx64_pass_pk_end_itr_to_iterator_to() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
         auto end_itr = table.end();
         // Should fail
         table.iterator_to(*end_itr);
     }
 
-    [[core_net::action("s1pkmodify")]] void idx64_pass_pk_end_itr_to_modify() {
+    [[clang::annotate("core_net::action", "s1pkmodify")]] void idx64_pass_pk_end_itr_to_modify() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
         auto end_itr = table.end();
 
@@ -449,7 +449,7 @@ public:
         table.modify( end_itr, get_self(), [](auto&){} );
     }
 
-    [[core_net::action("s1pkerase")]] void idx64_pass_pk_end_itr_to_erase() {
+    [[clang::annotate("core_net::action", "s1pkerase")]] void idx64_pass_pk_end_itr_to_erase() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
         auto end_itr = table.end();
 
@@ -457,7 +457,7 @@ public:
         table.erase(end_itr);
     }
 
-    [[core_net::action("s1skitrto")]] void idx64_pass_sk_end_itr_to_iterator_to() {
+    [[clang::annotate("core_net::action", "s1skitrto")]] void idx64_pass_sk_end_itr_to_iterator_to() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
         auto sec_index = table.get_index<"bysecondary"_n>();
         auto end_itr = sec_index.end();
@@ -466,7 +466,7 @@ public:
         sec_index.iterator_to(*end_itr);
     }
 
-    [[core_net::action("s1skmodify")]] void idx64_pass_sk_end_itr_to_modify() {
+    [[clang::annotate("core_net::action", "s1skmodify")]] void idx64_pass_sk_end_itr_to_modify() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
         auto sec_index = table.get_index<"bysecondary"_n>();
         auto end_itr = sec_index.end();
@@ -475,7 +475,7 @@ public:
         sec_index.modify( end_itr, get_self(), [](auto&){} );
     }
 
-    [[core_net::action("s1skerase")]] void idx64_pass_sk_end_itr_to_erase() {
+    [[clang::annotate("core_net::action", "s1skerase")]] void idx64_pass_sk_end_itr_to_erase() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
         auto sec_index = table.get_index<"bysecondary"_n>();
         auto end_itr = sec_index.end();
@@ -484,7 +484,7 @@ public:
         sec_index.erase(end_itr);
     }
 
-    [[core_net::action("s1modpk")]] void idx64_modify_primary_key() {
+    [[clang::annotate("core_net::action", "s1modpk")]] void idx64_modify_primary_key() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
 
         auto pk_itr = table.find(781);
@@ -496,7 +496,7 @@ public:
         });
     }
 
-    [[core_net::action("s1exhaustpk")]] void idx64_run_out_of_avl_pk() {
+    [[clang::annotate("core_net::action", "s1exhaustpk")]] void idx64_run_out_of_avl_pk() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
 
         auto pk_itr = table.find(781);
@@ -519,7 +519,7 @@ public:
         table.available_primary_key();
     }
 
-    [[core_net::action("s1skcache")]] void idx64_sk_cache_pk_lookup() {
+    [[clang::annotate("core_net::action", "s1skcache")]] void idx64_sk_cache_pk_lookup() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
 
         auto sec_index = table.get_index<"bysecondary"_n>();
@@ -531,7 +531,7 @@ public:
         core_net::check( prev_itr->id == 265 && prev_itr->sec == "alice"_n.value, "idx64_sk_cache_pk_lookup - previous record" );
     }
 
-    [[core_net::action("s1pkcache")]] void idx64_pk_cache_sk_lookup() {
+    [[clang::annotate("core_net::action", "s1pkcache")]] void idx64_pk_cache_sk_lookup() {
         auto table = _test_multi_index::idx64_table<"indextable1"_n.value, "bysecondary"_n.value>( get_self() );
 
 
@@ -544,20 +544,20 @@ public:
         core_net::check( next_itr->id == 781 && next_itr->sec == "bob"_n.value, "idx64_pk_cache_sk_lookup - next record" );
     }
 
-    [[core_net::action("s2g")]] void idx128_general() {
+    [[clang::annotate("core_net::action", "s2g")]] void idx128_general() {
         _test_multi_index::idx128_store_only<"indextable4"_n.value>( get_self() );
         _test_multi_index::idx128_check_without_storing<"indextable4"_n.value>( get_self() );
     }
 
-    [[core_net::action("s2store")]] void idx128_store_only() {
+    [[clang::annotate("core_net::action", "s2store")]] void idx128_store_only() {
         _test_multi_index::idx128_store_only<"indextable3"_n.value>( get_self() );
     }
 
-    [[core_net::action("s2check")]] void idx128_check_without_storing() {
+    [[clang::annotate("core_net::action", "s2check")]] void idx128_check_without_storing() {
         _test_multi_index::idx128_check_without_storing<"indextable3"_n.value>( get_self() );
     }
 
-    [[core_net::action("s2autoinc")]] void idx128_autoincrement_test() {
+    [[clang::annotate("core_net::action", "s2autoinc")]] void idx128_autoincrement_test() {
         using namespace _test_multi_index;
 
         typedef record_idx128 record;
@@ -602,7 +602,7 @@ public:
         core_net::check( table.available_primary_key() == 101, "idx128_autoincrement_test - next_primary_key was not correct after record modify" );
     }
 
-    [[core_net::action("s2autoinc1")]] void idx128_autoincrement_test_part1() {
+    [[clang::annotate("core_net::action", "s2autoinc1")]] void idx128_autoincrement_test_part1() {
         using namespace _test_multi_index;
 
         typedef record_idx128 record;
@@ -631,7 +631,7 @@ public:
         core_net::check( expected_key == 0, "idx128_autoincrement_test_part1 - did not iterate through secondary index properly" );
     }
 
-    [[core_net::action("s2autoinc2")]] void idx128_autoincrement_test_part2() {
+    [[clang::annotate("core_net::action", "s2autoinc2")]] void idx128_autoincrement_test_part2() {
         using namespace _test_multi_index;
 
         typedef record_idx128 record;
@@ -685,7 +685,7 @@ public:
         core_net::check( table.available_primary_key() == 101, "idx128_autoincrement_test_part2 - next_primary_key was not correct after record update" );
     }
 
-    [[core_net::action("s3g")]] void idx256_general() {
+    [[clang::annotate("core_net::action", "s3g")]] void idx256_general() {
         using namespace _test_multi_index;
 
         typedef record_idx256 record;
@@ -789,7 +789,7 @@ public:
         }
     }
 
-    [[core_net::action("sdg")]] void idx_double_general() {
+    [[clang::annotate("core_net::action", "sdg")]] void idx_double_general() {
         using namespace _test_multi_index;
 
         typedef record_idx_double record;
@@ -841,7 +841,7 @@ public:
         }
     }
 
-    [[core_net::action("sldg")]] void idx_long_double_general() {
+    [[clang::annotate("core_net::action", "sldg")]] void idx_long_double_general() {
         using namespace _test_multi_index;
 
         typedef record_idx_long_double record;

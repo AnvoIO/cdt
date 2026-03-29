@@ -7,14 +7,14 @@
  
 using namespace core_net;
 
-struct [[core_net::table]] out_of_class2 {
+struct [[clang::annotate("core_net::table")]] out_of_class2 {
     uint64_t id;
     uint64_t primary_key() const { return id; }
 };
 typedef core_net::multi_index<"mi.config5"_n, out_of_class2> out_of_class_index51;
 using uout_of_class_index51 = core_net::multi_index<"mi.config51"_n, out_of_class2>;
 
-struct [[core_net::table, core_net::contract("singleton_contract")]] out_of_class3 {
+struct [[clang::annotate("core_net::table")]] [[clang::annotate("core_net::contract", "singleton_contract")]] out_of_class3 {
     uint64_t id;
     uint64_t primary_key() const { return id; }
 };
@@ -29,14 +29,14 @@ using  config52 = core_net::singleton<"config52"_n, out_of_class2>;
 using smpl_conf52 = smpl_conf51;
 using config53 = config51;
 
-class [[core_net::contract("singleton_contract")]] singleton_contract : public contract {
+class [[clang::annotate("core_net::contract", "singleton_contract")]] singleton_contract : public contract {
     public:
         using contract::contract;
         
-    [[core_net::action]]
+    [[clang::annotate("core_net::action")]]
         void whatever() {};
  
-    struct [[core_net::table]] tbl_config {
+    struct [[clang::annotate("core_net::table")]] tbl_config {
         uint64_t y;
         uint64_t x;
     };
