@@ -396,6 +396,7 @@ struct Options {
    bool has_o_opt;
    bool has_contract_opt;
    bool warn_action_read_only;
+   std::string system_account;
 };
 
 static void GetCompDefaults(std::vector<std::string>& copts) {
@@ -407,6 +408,13 @@ static void GetCompDefaults(std::vector<std::string>& copts) {
    copts.emplace_back(std::string("-D__core_net_cdt_patchlevel__=")+"${VERSION_PATCH}");
    if (!fnative_opt) {
       copts.emplace_back("--target=wasm32");
+      // Disable post-MVP WASM features that LLVM 18 enables by default.
+      // V1 contracts must use MVP-only opcodes for VM compatibility.
+      // See issue #27 for the V2 versioning design.
+      copts.emplace_back("-mno-sign-ext");
+      copts.emplace_back("-mno-mutable-globals");
+      copts.emplace_back("-mno-bulk-memory");
+      copts.emplace_back("-mno-nontrapping-fptoint");
       copts.emplace_back("-ffreestanding");
       copts.emplace_back("-nostdlib");
       copts.emplace_back("-fno-builtin");
@@ -442,7 +450,7 @@ static void GetCompDefaults(std::vector<std::string>& copts) {
       copts.emplace_back("-fno-rtti");
       // get core_net type and fstream include errors when moving to
       // -std=c++20 -fmodules
-      copts.emplace_back("-fmodules-ts");
+      // -fmodules-ts was removed in Clang 18; standard C++20 modules used instead
       copts.emplace_back("-D_GNU_SOURCE=1");
 #endif
       copts.emplace_back("-DBOOST_DISABLE_ASSERTS");
@@ -536,10 +544,7 @@ static void GetLdDefaults(std::vector<std::string>& ldopts) {
          ldopts.emplace_back(mllvm_opt);
       }
 
-      if (!system_account_opt.empty())
-         ldopts.emplace_back("--system-account=" + system_account_opt);
-      else
-         ldopts.emplace_back("--system-account=core");
+      // system-account is now handled by codegen (Phase 1), not the linker
 
    } else {
 #ifdef __APPLE__
@@ -964,8 +969,8 @@ static Options CreateOptions(bool add_defaults=true) {
    }
 
 #ifndef ONLY_LD
-   return {output_fn, inputs, link, abigen, no_missing_ricardian_clause_opt, pp_only, pp_dir, abigen_output, abigen_contract, copts, ldopts, agopts, agresources, debug, fnative_opt, {abi_version_major, abi_version_minor}, has_o_opt, has_contract_opt, warn_action_read_only};
+   return {output_fn, inputs, link, abigen, no_missing_ricardian_clause_opt, pp_only, pp_dir, abigen_output, abigen_contract, copts, ldopts, agopts, agresources, debug, fnative_opt, {abi_version_major, abi_version_minor}, has_o_opt, has_contract_opt, warn_action_read_only, system_account_opt.empty() ? "core" : system_account_opt.getValue()};
 #else
-   return {output_fn, {}, link, abigen, no_missing_ricardian_clause_opt, pp_only, pp_dir, abigen_output, abigen_contract, copts, ldopts, agopts, agresources, debug, fnative_opt, {abi_version_major, abi_version_minor}, has_o_opt, has_contract_opt, warn_action_read_only};
+   return {output_fn, {}, link, abigen, no_missing_ricardian_clause_opt, pp_only, pp_dir, abigen_output, abigen_contract, copts, ldopts, agopts, agresources, debug, fnative_opt, {abi_version_major, abi_version_minor}, has_o_opt, has_contract_opt, warn_action_read_only, system_account_opt.empty() ? "core" : system_account_opt.getValue()};
 #endif
 }

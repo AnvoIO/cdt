@@ -10,16 +10,11 @@ extern "C" volatile void core_net_set_contract_name(uint64_t n) { core_net_contr
 
 namespace core_net {
    extern "C" {
-      __attribute__((core_net_wasm_import))
-      uint64_t current_time();
-     __attribute__((core_net_wasm_import))
-     void set_blockchain_parameters_packed(char*, uint32_t);
-     __attribute__((core_net_wasm_import))
-     uint32_t get_blockchain_parameters_packed(char*, uint32_t);
-     __attribute__((core_net_wasm_import))
-     int64_t set_proposed_producers( char *producer_data, uint32_t producer_data_size );
-     __attribute__((core_net_wasm_import))
-     uint32_t get_active_producers(uint64_t*, uint32_t);
+            uint64_t current_time();
+          void set_blockchain_parameters_packed(char*, uint32_t);
+          uint32_t get_blockchain_parameters_packed(char*, uint32_t);
+          int64_t set_proposed_producers( char *producer_data, uint32_t producer_data_size );
+          uint32_t get_active_producers(uint64_t*, uint32_t);
    }
 
    // producer_schedule.hpp

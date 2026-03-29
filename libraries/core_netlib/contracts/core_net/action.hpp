@@ -17,41 +17,29 @@ namespace core_net {
 
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((core_net_wasm_import))
-         uint32_t read_action_data( void* msg, uint32_t len );
+                  uint32_t read_action_data( void* msg, uint32_t len );
 
-         __attribute__((core_net_wasm_import))
-         uint32_t action_data_size();
+                  uint32_t action_data_size();
 
-         __attribute__((core_net_wasm_import))
-         void require_recipient( uint64_t name );
+                  void require_recipient( uint64_t name );
 
-         __attribute__((core_net_wasm_import))
-         void require_auth( uint64_t name );
+                  void require_auth( uint64_t name );
 
-         __attribute__((core_net_wasm_import))
-         bool has_auth( uint64_t name );
+                  bool has_auth( uint64_t name );
 
-         __attribute__((core_net_wasm_import))
-         void require_auth2( uint64_t name, uint64_t permission );
+                  void require_auth2( uint64_t name, uint64_t permission );
 
-         __attribute__((core_net_wasm_import))
-         bool is_account( uint64_t name );
+                  bool is_account( uint64_t name );
 
-         __attribute__((core_net_wasm_import))
-         void send_inline(char *serialized_action, size_t size);
+                  void send_inline(char *serialized_action, size_t size);
 
-         __attribute__((core_net_wasm_import))
-         void send_context_free_inline(char *serialized_action, size_t size);
+                  void send_context_free_inline(char *serialized_action, size_t size);
 
-         __attribute__((core_net_wasm_import))
-         uint64_t  publication_time();
+                  uint64_t  publication_time();
 
-         __attribute__((core_net_wasm_import))
-         uint64_t current_receiver();
+                  uint64_t current_receiver();
 
-         __attribute__((core_net_wasm_import))
-         uint32_t get_code_hash( uint64_t account, uint32_t struct_version, char* result_buffer, size_t buffer_size );
+                  uint32_t get_code_hash( uint64_t account, uint32_t struct_version, char* result_buffer, size_t buffer_size );
       }
    };
 

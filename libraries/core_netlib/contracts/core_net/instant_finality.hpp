@@ -16,8 +16,7 @@
 namespace core_net {
     namespace internal_use_do_not_use {
         extern "C" {
-            __attribute__((core_net_wasm_import))
-            void set_finalizers( uint64_t packed_finalizer_format, const char* data, uint32_t len );
+                        void set_finalizers( uint64_t packed_finalizer_format, const char* data, uint32_t len );
         } // extern "C"
     } //internal_use_do_not_use
 

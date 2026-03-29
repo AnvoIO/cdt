@@ -4,7 +4,6 @@ set(EXTENSION_SOURCE ${CMAKE_SOURCE_DIR}/cdt-llvm-extensions)
 set(LLVM_DEST ${CMAKE_SOURCE_DIR}/llvm)
 
 # Get LLVM Major Version
-# Function to extract version from a line
 function(parse_version_line file_path version_string output_var)
   if(EXISTS ${file_path})
     file(READ ${file_path} input_text)
@@ -17,11 +16,10 @@ function(parse_version_line file_path version_string output_var)
   endif()
 endfunction()
 
-# function call to get version number
 parse_version_line(${LLVM_DEST}/llvm/CMakeLists.txt LLVM_VERSION_MAJOR PARSE_LLVM_MAJOR_VERSION)
 
-if(NOT PARSE_LLVM_MAJOR_VERSION EQUAL 16)
-  message(FATAL_ERROR, "Only Supporting LLVM version 16, detected version ${PARSE_LLVM_MAJOR_VERSION} exiting")
+if(NOT PARSE_LLVM_MAJOR_VERSION EQUAL 18)
+  message(FATAL_ERROR, "Only Supporting LLVM version 18, detected version ${PARSE_LLVM_MAJOR_VERSION} exiting")
 endif()
 
 message("-- Starting LLVM patches (LLVMPatch.txt)")
@@ -30,56 +28,29 @@ message("-- Starting LLVM patches (LLVMPatch.txt)")
 include(${EXTENSION_SOURCE}/SetLLVMTargets.txt)
 set_llvm_targets()
 
-### Patches CLANG
-# adds definition and declaration for contract attribute types
-# support for C and C++
+### Patches CLANG — custom contract attribute definitions
+# These define CoreNetActionAttr, CoreNetTableAttr, etc. parsed from [[core_net::action]] syntax.
+# Required while contract source code uses this attribute syntax.
+# Will be removed when contracts migrate to [[clang::annotate("core_net::action")]].
 file(COPY_FILE ${EXTENSION_SOURCE}/clang/include/clang/AST/DeclCXX.h ${LLVM_DEST}/clang/include/clang/AST/DeclCXX.h)
 file(COPY_FILE ${EXTENSION_SOURCE}/clang/include/clang/AST/Decl.h ${LLVM_DEST}/clang/include/clang/AST/Decl.h)
 file(COPY_FILE ${EXTENSION_SOURCE}/clang/include/clang/Basic/AttrDocs.td ${LLVM_DEST}/clang/include/clang/Basic/AttrDocs.td)
 file(COPY_FILE ${EXTENSION_SOURCE}/clang/include/clang/Basic/Attr.td ${LLVM_DEST}/clang/include/clang/Basic/Attr.td)
 file(COPY_FILE ${EXTENSION_SOURCE}/clang/lib/AST/Decl.cpp ${LLVM_DEST}/clang/lib/AST/Decl.cpp)
-file(COPY_FILE ${EXTENSION_SOURCE}/clang/lib/Basic/Targets/WebAssembly.h ${LLVM_DEST}/clang/lib/Basic/Targets/WebAssembly.h)
-
-### Patches CLANG
-# implements decl-related attribute processing
-# coordinates the per-module state used while generating code
-# top level handling of macro expansion for the preprocessor 
-file(COPY_FILE ${EXTENSION_SOURCE}/clang/lib/CodeGen/CodeGenModule.cpp ${LLVM_DEST}/clang/lib/CodeGen/CodeGenModule.cpp)
-file(COPY_FILE ${EXTENSION_SOURCE}/clang/lib/Lex/PPMacroExpansion.cpp ${LLVM_DEST}/clang/lib/Lex/PPMacroExpansion.cpp)
 file(COPY_FILE ${EXTENSION_SOURCE}/clang/lib/Sema/SemaDeclAttr.cpp ${LLVM_DEST}/clang/lib/Sema/SemaDeclAttr.cpp)
 
-### Patches WASM
-# creates, allocates, and populates structures needed to generate WASM
-# includes ABI, Notify, Actions custom sections
-file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/InputFiles.cpp ${LLVM_DEST}/lld/wasm/InputFiles.cpp)
-file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/InputFiles.h ${LLVM_DEST}/lld/wasm/InputFiles.h)
-file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/Writer.cpp ${LLVM_DEST}/lld/wasm/Writer.cpp)
-file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/Driver.cpp ${LLVM_DEST}/lld/wasm/Driver.cpp)
-file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/Options.td ${LLVM_DEST}/lld/wasm/Options.td)
-file(COPY_FILE ${EXTENSION_SOURCE}/lld/wasm/Config.h ${LLVM_DEST}/lld/wasm/Config.h)
-
-### Patches LLVM
-# defines all attributes for LLVM
-# defines WASM Object
-# entry point to LTO (link time optimization)
-file(COPY_FILE ${EXTENSION_SOURCE}/llvm/include/llvm/IR/Attributes.td ${LLVM_DEST}/llvm/include/llvm/IR/Attributes.td)
-file(COPY_FILE ${EXTENSION_SOURCE}/llvm/include/llvm/LTO/LTO.h ${LLVM_DEST}/llvm/include/llvm/LTO/LTO.h)
-file(COPY_FILE ${EXTENSION_SOURCE}/llvm/include/llvm/Object/Wasm.h ${LLVM_DEST}/llvm/include/llvm/Object/Wasm.h)
-
-### Patches WebAssembly
-# WebAssembly Object 
-# WebAssembly LLVM assembly writer
-file(COPY_FILE ${EXTENSION_SOURCE}/llvm/lib/Object/WasmObjectFile.cpp ${LLVM_DEST}/llvm/lib/Object/WasmObjectFile.cpp)
-file(COPY_FILE ${EXTENSION_SOURCE}/llvm/lib/Target/WebAssembly/WebAssemblyAsmPrinter.cpp ${LLVM_DEST}/llvm/lib/Target/WebAssembly/WebAssemblyAsmPrinter.cpp)
+### Patches CLANG — WebAssembly target (size_t = uint32_t)
+# Cannot be replaced with compiler flags (-D__SIZE_TYPE__) because operator new
+# requires size_t to match the target's built-in type definition.
+file(COPY_FILE ${EXTENSION_SOURCE}/clang/lib/Basic/Targets/WebAssembly.h ${LLVM_DEST}/clang/lib/Basic/Targets/WebAssembly.h)
 
 ### Add Custom Transform Passes into LLVM source
-# adds directories to Transforms cmake
-# registered as added step to parsing
-# Implement as PassManager to upgrade to LLVM 17+
+# CoreNetApply: injects ctor/dtor calls into user-defined apply() functions
+# CoreNetSoftfloat: replaces hardware float ops with deterministic software float calls
+# Both use PassPlugin API and are loaded via -fpass-plugin=
 if(EXISTS ${LLVM_DEST}/llvm/lib/Transforms)
   file(COPY ${EXTENSION_SOURCE}/llvm/lib/Transforms/CoreNetApply DESTINATION ${LLVM_DEST}/llvm/lib/Transforms )
   file(COPY ${EXTENSION_SOURCE}/llvm/lib/Transforms/CoreNetSoftfloat DESTINATION ${LLVM_DEST}/llvm/lib/Transforms )
-  # Add new targets to cmake if needed
   set(LLVM_LIB_TRANSFORMS_CMAKE ${LLVM_DEST}/llvm/lib/Transforms/CMakeLists.txt)
   file(READ ${LLVM_LIB_TRANSFORMS_CMAKE} LLVM_LIB_CMAKE_CONTENTS)
   if(NOT LLVM_LIB_CMAKE_CONTENTS MATCHES "CoreNetApply")
@@ -92,31 +63,4 @@ else()
   message(FATAL_ERROR "Cannot find LLVM source please load git submodules and try again")
 endif()
 
-### Modifies AddLLD cmake targeting cdt tooling
-# must be a better way to inlcude these 
-# - read in AddLLD cmake
-# - add new targets
-# - then write back file
-if (EXISTS ${LLVM_DEST}/lld/cmake/modules/AddLLD.cmake) 
-  file(READ ${LLVM_DEST}/lld/cmake/modules/AddLLD.cmake INPUT_ADDLLD_CMAKE)
-  string(FIND "${INPUT_ADDLLD_CMAKE}" 
-         "set_target_properties(\${name} PROPERTIES FOLDER \"lld libraries\")"
-         IDX_ADDLLD_TARGET_PROPS)
-  string(FIND ${INPUT_ADDLLD_CMAKE} 
-         "\${CDT_TOOLS_SOURCE_DIR}/jsoncons/include"
-         IDX_ADDLLD_TOOLS_INCLUDE)
-  # Found target properties did not found tools/jsoncons/include 
-  # Only add if target string exists 
-  # AND do not add if tools/jsonccons/include already exists
-  if(IDX_ADDLLD_TARGET_PROPS GREATER 0 AND IDX_ADDLLD_TOOLS_INCLUDE LESS 0)
-    # Two space nesting 
-    # not sure about relative paths
-    string(REPLACE 
-         "  set_target_properties(\${name} PROPERTIES FOLDER \"lld libraries\")"
-         "  set_target_properties(\${name} PROPERTIES FOLDER \"lld libraries\")\n  set(CDT_TOOLS_SOURCE_DIR \"${CMAKE_SOURCE_DIR}/tools\")\n  target_compile_options(\${name} PUBLIC -fexceptions -Wno-reorder -Wno-sign-compare -Wno-unused-local-typedefs -fno-omit-frame-pointer)\n  target_include_directories(\${name} PUBLIC \${CDT_TOOLS_SOURCE_DIR}/jsoncons/include)\n  target_include_directories(\${name} PUBLIC \${CDT_TOOLS_SOURCE_DIR}/include)\n"
-         OUTPUT_ADDLLD_CMAKE
-         "${INPUT_ADDLLD_CMAKE}")
-    file(WRITE ${LLVM_DEST}/lld/cmake/modules/AddLLD.cmake "${OUTPUT_ADDLLD_CMAKE}")
-  endif()
-endif()
 message("-- Completed LLVM patches")

@@ -37,7 +37,6 @@ extern "C" {
  *  core_net::print("sha256 hash generated from data equals provided hash");
  *  @endcode
  */
-__attribute__((core_net_wasm_import))
 void assert_sha256( const char* data, uint32_t length, const struct capi_checksum256* hash );
 
 /**
@@ -62,7 +61,6 @@ void assert_sha256( const char* data, uint32_t length, const struct capi_checksu
  *  core_net::print("sha1 hash generated from data equals provided hash");
  *  @endcode
  */
-__attribute__((core_net_wasm_import))
 void assert_sha1( const char* data, uint32_t length, const struct capi_checksum160* hash );
 
 /**
@@ -87,7 +85,6 @@ void assert_sha1( const char* data, uint32_t length, const struct capi_checksum1
  *  core_net::print("sha512 hash generated from data equals provided hash");
  *  @endcode
  */
-__attribute__((core_net_wasm_import))
 void assert_sha512( const char* data, uint32_t length, const struct capi_checksum512* hash );
 
 /**
@@ -111,7 +108,6 @@ void assert_sha512( const char* data, uint32_t length, const struct capi_checksu
  *  core_net::print("ripemod160 hash generated from data equals provided hash");
  *  @endcode
  */
-__attribute__((core_net_wasm_import))
 void assert_ripemd160( const char* data, uint32_t length, const struct capi_checksum160* hash );
 
 /**
@@ -129,7 +125,6 @@ void assert_ripemd160( const char* data, uint32_t length, const struct capi_chec
  *  eos_assert( calc_hash == hash, "invalid hash" );
  *  @endcode
  */
-__attribute__((core_net_wasm_import))
 void sha256( const char* data, uint32_t length, struct capi_checksum256* hash );
 
 /**
@@ -147,7 +142,6 @@ void sha256( const char* data, uint32_t length, struct capi_checksum256* hash );
  *  eos_assert( calc_hash == hash, "invalid hash" );
  *  @endcode
  */
-__attribute__((core_net_wasm_import))
 void sha1( const char* data, uint32_t length, struct capi_checksum160* hash );
 
 /**
@@ -165,7 +159,6 @@ void sha1( const char* data, uint32_t length, struct capi_checksum160* hash );
  *  eos_assert( calc_hash == hash, "invalid hash" );
  *  @endcode
  */
-__attribute__((core_net_wasm_import))
 void sha512( const char* data, uint32_t length, struct capi_checksum512* hash );
 
 /**
@@ -183,7 +176,6 @@ void sha512( const char* data, uint32_t length, struct capi_checksum512* hash );
  *  eos_assert( calc_hash == hash, "invalid hash" );
  *  @endcode
  */
-__attribute__((core_net_wasm_import))
 void ripemd160( const char* data, uint32_t length, struct capi_checksum160* hash );
 
 /**
@@ -201,7 +193,6 @@ void ripemd160( const char* data, uint32_t length, struct capi_checksum160* hash
  *  @code
  *  @endcode
  */
-__attribute__((core_net_wasm_import))
 int recover_key( const struct capi_checksum256* digest, const char* sig, size_t siglen, char* pub, size_t publen );
 
 /**
@@ -229,7 +220,6 @@ int recover_key( const struct capi_checksum256* digest, const char* sig, size_t 
  *  core_net::print("pub key matches the pub key generated from digest");
  *  @endcode
  */
-__attribute__((core_net_wasm_import))
 void assert_recover_key( const struct capi_checksum256* digest, const char* sig, size_t siglen, const char* pub, size_t publen );
 
 #ifdef __cplusplus

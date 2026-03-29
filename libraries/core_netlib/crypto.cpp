@@ -11,36 +11,26 @@ extern "C" {
    struct __attribute__((aligned (16))) capi_checksum160 { uint8_t hash[20]; };
    struct __attribute__((aligned (16))) capi_checksum256 { uint8_t hash[32]; };
    struct __attribute__((aligned (16))) capi_checksum512 { uint8_t hash[64]; };
-   __attribute__((core_net_wasm_import))
-   void assert_sha256( const char* data, uint32_t length, const capi_checksum256* hash );
+      void assert_sha256( const char* data, uint32_t length, const capi_checksum256* hash );
 
-   __attribute__((core_net_wasm_import))
-   void assert_sha1( const char* data, uint32_t length, const capi_checksum160* hash );
+      void assert_sha1( const char* data, uint32_t length, const capi_checksum160* hash );
 
-   __attribute__((core_net_wasm_import))
-   void assert_sha512( const char* data, uint32_t length, const capi_checksum512* hash );
+      void assert_sha512( const char* data, uint32_t length, const capi_checksum512* hash );
 
-   __attribute__((core_net_wasm_import))
-   void assert_ripemd160( const char* data, uint32_t length, const capi_checksum160* hash );
+      void assert_ripemd160( const char* data, uint32_t length, const capi_checksum160* hash );
 
-   __attribute__((core_net_wasm_import))
-   void sha256( const char* data, uint32_t length, capi_checksum256* hash );
+      void sha256( const char* data, uint32_t length, capi_checksum256* hash );
 
-   __attribute__((core_net_wasm_import))
-   void sha1( const char* data, uint32_t length, capi_checksum160* hash );
+      void sha1( const char* data, uint32_t length, capi_checksum160* hash );
 
-   __attribute__((core_net_wasm_import))
-   void sha512( const char* data, uint32_t length, capi_checksum512* hash );
+      void sha512( const char* data, uint32_t length, capi_checksum512* hash );
 
-   __attribute__((core_net_wasm_import))
-   void ripemd160( const char* data, uint32_t length, capi_checksum160* hash );
+      void ripemd160( const char* data, uint32_t length, capi_checksum160* hash );
 
-   __attribute__((core_net_wasm_import))
-   int recover_key( const capi_checksum256* digest, const char* sig,
+      int recover_key( const capi_checksum256* digest, const char* sig,
                     size_t siglen, char* pub, size_t publen );
 
-   __attribute__((core_net_wasm_import))
-   void assert_recover_key( const capi_checksum256* digest, const char* sig,
+      void assert_recover_key( const capi_checksum256* digest, const char* sig,
                             size_t siglen, const char* pub, size_t publen );
 }
 

@@ -13,26 +13,19 @@
 namespace core_net {
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((core_net_wasm_import))
-         size_t read_transaction(char*, size_t);
+                  size_t read_transaction(char*, size_t);
 
-         __attribute__((core_net_wasm_import))
-         size_t transaction_size();
+                  size_t transaction_size();
 
-         __attribute__((core_net_wasm_import))
-         int tapos_block_num();
+                  int tapos_block_num();
 
-         __attribute__((core_net_wasm_import))
-         int tapos_block_prefix();
+                  int tapos_block_prefix();
 
-         __attribute__((core_net_wasm_import))
-         uint32_t expiration();
+                  uint32_t expiration();
 
-         __attribute__((core_net_wasm_import))
-         int get_action( uint32_t, uint32_t, char*, size_t);
+                  int get_action( uint32_t, uint32_t, char*, size_t);
 
-         __attribute__((core_net_wasm_import))
-         int get_context_free_data( uint32_t, char*, size_t);
+                  int get_context_free_data( uint32_t, char*, size_t);
       }
    }
 

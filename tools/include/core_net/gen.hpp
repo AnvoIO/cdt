@@ -9,6 +9,7 @@
 #include "llvm/Support/raw_ostream.h"
 #include <core_net/utils.hpp>
 #include <core_net/error_emitter.hpp>
+#include <core_net/annotation_helpers.hpp>
 #include <functional>
 #include <vector>
 #include <string>
@@ -123,7 +124,7 @@ struct generation_utils {
       auto check = [&](const clang::Type* pt) {
         if (auto tst = llvm::dyn_cast<clang::TemplateSpecializationType>(pt))
          if (auto rt = llvm::dyn_cast<clang::RecordType>(tst->desugar()))
-            return rt->getDecl()->isCoreNetIgnore();
+            return attrs::isCoreNetIgnore(rt->getDecl());
 
          return false;
       };
@@ -142,7 +143,7 @@ struct generation_utils {
       auto get = [&](const clang::Type* pt) {
          if (auto tst = llvm::dyn_cast<clang::TemplateSpecializationType>(pt))
             if (auto decl = llvm::dyn_cast<clang::RecordType>(tst->desugar()))
-               return decl->getDecl()->isCoreNetIgnore() ? tst->template_arguments()[0].getAsType() : type;
+               return attrs::isCoreNetIgnore(decl->getDecl()) ? tst->template_arguments()[0].getAsType() : type;
          return type;
       };
 
@@ -172,48 +173,44 @@ struct generation_utils {
    }
 
    static inline bool has_core_net_ricardian( const clang::CXXMethodDecl* decl ) {
-      return decl->hasCoreNetRicardian();
+      return attrs::hasCoreNetRicardian(decl);
    }
    static inline bool has_core_net_ricardian( const clang::CXXRecordDecl* decl ) {
-      return decl->hasCoreNetRicardian();
+      return attrs::hasCoreNetRicardian(decl);
    }
 
    static inline std::string get_core_net_ricardian( const clang::CXXMethodDecl* decl ) {
-      return decl->getCoreNetRicardianAttr()->getName().str();
+      return attrs::getRicardianText(decl);
    }
    static inline std::string get_core_net_ricardian( const clang::CXXRecordDecl* decl ) {
-      return decl->getCoreNetRicardianAttr()->getName().str();
+      return attrs::getRicardianText(decl);
    }
 
    static inline std::string get_action_name( const clang::CXXMethodDecl* decl ) {
-      std::string action_name = "";
-      auto tmp = decl->getCoreNetActionAttr()->getName();
+      auto tmp = attrs::getActionName(decl);
       if (!tmp.empty())
-         return tmp.str();
+         return tmp;
       return decl->getNameAsString();
    }
    static inline std::string get_call_name( const clang::CXXMethodDecl* decl ) {
-      auto tmp = decl->getCoreNetCallAttr()->getName();
+      auto tmp = attrs::getCallName(decl);
       if (!tmp.empty())
-         return tmp.str();
+         return tmp;
       return decl->getNameAsString();
    }
    static inline std::string get_call_name( const clang::CXXRecordDecl* decl ) {
-      auto tmp = decl->getCoreNetCallAttr()->getName();
+      auto tmp = attrs::getCallName(decl);
       if (!tmp.empty())
-         return tmp.str();
+         return tmp;
       return decl->getName().str();
    }
    static inline std::string get_notify_pair( const clang::CXXMethodDecl* decl ) {
-      std::string notify_pair = "";
-      auto tmp = decl->getCoreNetNotifyAttr()->getName();
-      return tmp.str();
+      return attrs::getNotifyPair(decl);
    }
    static inline std::string get_action_name( const clang::CXXRecordDecl* decl ) {
-      std::string action_name = "";
-      auto tmp = decl->getCoreNetActionAttr()->getName();
+      auto tmp = attrs::getActionName(decl);
       if (!tmp.empty())
-         return tmp.str();
+         return tmp;
       return decl->getName().str();
    }
    inline std::string get_rc_filename() {
@@ -287,30 +284,30 @@ struct generation_utils {
    }
 
    static inline bool is_core_net_contract( const clang::CXXMethodDecl* decl, const std::string& cn ) {
-      llvm::StringRef name;
-      if (decl->isCoreNetContract())
-         name = decl->getCoreNetContractAttr()->getName();
-      else if (decl->getParent()->isCoreNetContract())
-         name = decl->getParent()->getCoreNetContractAttr()->getName();
+      std::string name;
+      if (attrs::isCoreNetContract(decl))
+         name = attrs::getContractName(decl);
+      else if (attrs::isCoreNetContract(decl->getParent()))
+         name = attrs::getContractName(decl->getParent());
       if (name.empty()) {
-         name = decl->getParent()->getName();
+         name = decl->getParent()->getName().str();
       }
-      parsed_contract_name = name.str();
+      parsed_contract_name = name;
       return cn == parsed_contract_name;
    }
 
    static inline bool is_core_net_contract( const clang::CXXRecordDecl* decl, const std::string& cn ) {
-      llvm::StringRef name;
+      std::string name;
       auto pd = llvm::dyn_cast<clang::CXXRecordDecl>(decl->getParent());
-      if (decl->isCoreNetContract()) {
-         auto nm = decl->getCoreNetContractAttr()->getName();
-         name = nm.empty() ? decl->getName() : nm;
+      if (attrs::isCoreNetContract(decl)) {
+         auto nm = attrs::getContractName(decl);
+         name = nm.empty() ? decl->getName().str() : nm;
       }
-      else if (pd && pd->isCoreNetContract()) {
-         auto nm = pd->getCoreNetContractAttr()->getName();
-         name = nm.empty() ? pd->getName() : nm;
+      else if (pd && attrs::isCoreNetContract(pd)) {
+         auto nm = attrs::getContractName(pd);
+         name = nm.empty() ? pd->getName().str() : nm;
       }
-      parsed_contract_name = name.str();
+      parsed_contract_name = name;
       return cn == parsed_contract_name;
    }
 

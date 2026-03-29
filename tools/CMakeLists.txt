@@ -63,6 +63,7 @@ macro (add_tool name)
      clangSerialization
      clangParse
      clangSema
+     clangAPINotes
      clangSupport
      clangAnalysis
      clangAST

@@ -10,29 +10,26 @@ set(LIBCXX_PATCHES ${CMAKE_CURRENT_SOURCE_DIR}/patches)
 # Apply patches: overlay our files on top of upstream
 # __config_site: WASM-specific feature flags
 file(COPY_FILE ${LIBCXX_PATCHES}/__config_site ${LIBCXX_ROOT}/include/__config_site)
+# __assertion_handler: required by LLVM 18 libc++ (normally CMake-generated)
+file(COPY_FILE ${LIBCXX_PATCHES}/__assertion_handler ${LIBCXX_ROOT}/include/__assertion_handler)
 # iostream: block usage in smart contracts
 file(COPY_FILE ${LIBCXX_PATCHES}/iostream ${LIBCXX_ROOT}/include/iostream)
 
 # Source files from upstream libc++
 # With _LIBCPP_HAS_NO_LOCALIZATION, we skip ios/iostream/locale/regex/strstream
 SET(LIBCXX_SOURCES
-   ${LIBCXX_ROOT}/src/algorithm.cpp
    ${LIBCXX_ROOT}/src/any.cpp
    ${LIBCXX_ROOT}/src/bind.cpp
-   ${LIBCXX_ROOT}/src/condition_variable.cpp
    ${LIBCXX_ROOT}/src/functional.cpp
-   ${LIBCXX_ROOT}/src/future.cpp
    ${LIBCXX_ROOT}/src/hash.cpp
    ${LIBCXX_ROOT}/src/legacy_pointer_safety.cpp
    ${LIBCXX_ROOT}/src/memory.cpp
-   ${LIBCXX_ROOT}/src/mutex.cpp
    ${LIBCXX_ROOT}/src/optional.cpp
    ${LIBCXX_ROOT}/src/random_shuffle.cpp
    ${LIBCXX_ROOT}/src/stdexcept.cpp
    ${LIBCXX_ROOT}/src/string.cpp
    ${LIBCXX_ROOT}/src/system_error.cpp
    ${LIBCXX_ROOT}/src/typeinfo.cpp
-   ${LIBCXX_ROOT}/src/utility.cpp
    ${LIBCXX_ROOT}/src/valarray.cpp
    ${LIBCXX_ROOT}/src/variant.cpp
    ${LIBCXX_ROOT}/src/vector.cpp

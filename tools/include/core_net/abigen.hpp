@@ -66,7 +66,7 @@ namespace core_net::cdt {
 
       void add_action( const clang::CXXRecordDecl* decl ) {
          abi_action ret;
-         auto action_name = decl->getCoreNetActionAttr()->getName();
+         auto action_name = attrs::getActionName(decl);
 
          if (!checked_actions.insert(get_action_name(decl)).second)
             CDT_CHECK_WARN(!rcs[get_action_name(decl)].empty(), "abigen_warning", decl->getLocation(), "Action <"+get_action_name(decl)+"> does not have a ricardian contract");
@@ -83,8 +83,8 @@ namespace core_net::cdt {
             ret.name = decl->getName().str();
          }
          else {
-            validate_name( action_name.str(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); });
-            ret.name = action_name.str();
+            validate_name( action_name, [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); });
+            ret.name = action_name;
          }
          ret.type = decl->getName().str();
          _abi.actions.insert(ret);
@@ -93,7 +93,7 @@ namespace core_net::cdt {
       void add_action( const clang::CXXMethodDecl* decl ) {
          abi_action ret;
 
-         auto action_name = decl->getCoreNetActionAttr()->getName();
+         auto action_name = attrs::getActionName(decl);
 
          if (!checked_actions.insert(get_action_name(decl)).second)
             CDT_CHECK_WARN(!rcs[get_action_name(decl)].empty(), "abigen_warning", decl->getLocation(), "Action <"+get_action_name(decl)+"> does not have a ricardian contract");
@@ -110,8 +110,8 @@ namespace core_net::cdt {
             ret.name = decl->getNameAsString();
          }
          else {
-            validate_name( action_name.str(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
-            ret.name = action_name.str();
+            validate_name( action_name, [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
+            ret.name = action_name;
          }
          ret.type = decl->getNameAsString();
          _abi.actions.insert(ret);
@@ -134,15 +134,15 @@ namespace core_net::cdt {
       void add_call( const clang::CXXMethodDecl* decl ) {
          abi_call ret;
 
-         auto call_name = decl->getCoreNetCallAttr()->getName();
+         auto call_name = attrs::getCallName(decl);
 
          if (call_name.empty()) {
             validate_hash_id( decl->getNameAsString(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
             ret.name = decl->getNameAsString();
          }
          else {
-            validate_hash_id( call_name.str(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
-            ret.name = call_name.str();
+            validate_hash_id( call_name, [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
+            ret.name = call_name;
          }
          ret.type = decl->getNameAsString();
          ret.id   = to_hash_id(ret.name);
@@ -256,10 +256,10 @@ namespace core_net::cdt {
          tables.insert(decl);
          abi_table t;
          t.type = decl->getNameAsString();
-         auto table_name = decl->getCoreNetTableAttr()->getName();
+         auto table_name = attrs::getTableName(decl);
          if (!table_name.empty()) {
-            validate_name( table_name.str(), [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
-            t.name = table_name.str();
+            validate_name( table_name, [&](auto s) { CDT_ERROR("abigen_error", decl->getLocation(), s); } );
+            t.name = table_name;
          }
          else {
             t.name = t.type;
@@ -815,14 +815,14 @@ namespace core_net::cdt {
                has_added_clauses = true;
             }
 
-            if (decl->isCoreNetAction() && ag.is_core_net_contract(decl, ag.get_contract_name())) {
+            if (attrs::isCoreNetAction(decl) && ag.is_core_net_contract(decl, ag.get_contract_name())) {
                ag.add_struct(decl);
                ag.add_action(decl);
                for (auto param : decl->parameters()) {
                   ag.add_type( param->getType() );
                }
             }
-            if (decl->isCoreNetCall() && ag.is_core_net_contract(decl, ag.get_contract_name())) {
+            if (attrs::isCoreNetCall(decl) && ag.is_core_net_contract(decl, ag.get_contract_name())) {
                ag.add_struct(decl);
                ag.add_call(decl);
                for (auto param : decl->parameters()) {
@@ -837,11 +837,11 @@ namespace core_net::cdt {
                ag.add_contracts(ag.parse_contracts());
                has_added_clauses = true;
             }
-            if ((decl->isCoreNetAction() || decl->isCoreNetTable()) && ag.is_core_net_contract(decl, ag.get_contract_name())) {
+            if ((attrs::isCoreNetAction(decl) || attrs::isCoreNetTable(decl)) && ag.is_core_net_contract(decl, ag.get_contract_name())) {
                ag.add_struct(decl);
-               if (decl->isCoreNetAction())
+               if (attrs::isCoreNetAction(decl))
                   ag.add_action(decl);
-               if (decl->isCoreNetTable())
+               if (attrs::isCoreNetTable(decl))
                   ag.add_table(decl);
                for (auto field : decl->fields()) {
                   ag.add_type( field->getType() );
@@ -889,10 +889,10 @@ namespace core_net::cdt {
                if (d->getName() == "multi_index" || d->getName() == "singleton") {
                   // second template parameter is table type
                   const auto* table_type = d->getTemplateArgs()[1].getAsType().getTypePtr()->getAsCXXRecordDecl();
-                  if ((table_type->isCoreNetTable() && ag.is_core_net_contract(table_type, ag.get_contract_name())) || defined_in_contract(d)) {
+                  if ((attrs::isCoreNetTable(table_type) && ag.is_core_net_contract(table_type, ag.get_contract_name())) || defined_in_contract(d)) {
                      // first parameter is table name
                      ag.add_table(d->getTemplateArgs()[0].getAsIntegral().getExtValue(), table_type);
-                     if (table_type->isCoreNetTable())
+                     if (attrs::isCoreNetTable(table_type))
                         ag.add_struct(table_type);
                   }
                }
@@ -909,7 +909,7 @@ namespace core_net::cdt {
       const clang::CXXRecordDecl* contract_class = nullptr;
    public:
       virtual bool VisitCXXRecordDecl(clang::CXXRecordDecl* cxx_decl) {
-         if (cxx_decl->isCoreNetContract()) {
+         if (attrs::isCoreNetContract(cxx_decl)) {
             bool is_core_net_contract = false;
             // on this point it could be just an attribute so let's check base classes
             for (const auto& base : cxx_decl->bases()) {
@@ -926,8 +926,8 @@ namespace core_net::cdt {
             if (!is_core_net_contract)
                return true;
             
-            auto attr_name = cxx_decl->getCoreNetContractAttr()->getName();
-            auto name = attr_name.empty() ? cxx_decl->getName() : attr_name;
+            auto attr_name = attrs::getContractName(cxx_decl);
+            std::string name = attr_name.empty() ? cxx_decl->getName().str() : attr_name;
             if (name == llvm::StringRef(ag.get_contract_name())) {
                contract_class = cxx_decl;
                return false;
@@ -956,7 +956,7 @@ namespace core_net::cdt {
          virtual void HandleTranslationUnit(ASTContext &Context) {
             auto& src_mgr = Context.getSourceManager();
             auto& f_mgr = src_mgr.getFileManager();
-            auto main_fe = f_mgr.getFile(main_file);
+            auto main_fe = f_mgr.getFileRef(main_file);
             if (main_fe) {
                contract_class_finder cf;
                cf.TraverseDecl(Context.getTranslationUnitDecl());

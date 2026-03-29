@@ -9,32 +9,24 @@ namespace core_net {
 
    namespace internal_use_do_not_use {
       extern "C" {
-         __attribute__((core_net_wasm_import))
-         bool is_privileged( uint64_t account );
+                  bool is_privileged( uint64_t account );
 
-         __attribute__((core_net_wasm_import))
-         void get_resource_limits( uint64_t account, int64_t* ram_bytes, int64_t* net_weight, int64_t* cpu_weight );
+                  void get_resource_limits( uint64_t account, int64_t* ram_bytes, int64_t* net_weight, int64_t* cpu_weight );
 
-         __attribute__((core_net_wasm_import))
-         void set_resource_limits( uint64_t account, int64_t ram_bytes, int64_t net_weight, int64_t cpu_weight );
+                  void set_resource_limits( uint64_t account, int64_t ram_bytes, int64_t net_weight, int64_t cpu_weight );
 
-         __attribute__((core_net_wasm_import))
-         void set_privileged( uint64_t account, bool is_priv );
+                  void set_privileged( uint64_t account, bool is_priv );
 
-         __attribute__((core_net_wasm_import))
-         void set_blockchain_parameters_packed( char* data, uint32_t datalen );
+                  void set_blockchain_parameters_packed( char* data, uint32_t datalen );
 
-         __attribute__((core_net_wasm_import))
-         uint32_t get_blockchain_parameters_packed( char* data, uint32_t datalen );
+                  uint32_t get_blockchain_parameters_packed( char* data, uint32_t datalen );
 
-         __attribute((core_net_wasm_import))
+         
          int64_t set_proposed_producers( char*, uint32_t );
 
-         __attribute__((core_net_wasm_import))
-         void preactivate_feature( const capi_checksum256* feature_digest );
+                  void preactivate_feature( const capi_checksum256* feature_digest );
 
-         __attribute__((core_net_wasm_import))
-         int64_t set_proposed_producers_ex( uint64_t producer_data_format, char *producer_data, uint32_t producer_data_size );
+                  int64_t set_proposed_producers_ex( uint64_t producer_data_format, char *producer_data, uint32_t producer_data_size );
       }
    }
 

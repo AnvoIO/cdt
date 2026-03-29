@@ -63,7 +63,7 @@ cdt_clang_install(llc)
 cdt_clang_install(lld)
 cdt_clang_install(ld.lld)
 cdt_clang_install(ld64.lld)
-cdt_clang_install(clang-16)
+cdt_clang_install(clang-18)
 cdt_clang_install(wasm-ld)
 
 cdt_tool_install_and_symlink(core-net-pp cdt-pp)
